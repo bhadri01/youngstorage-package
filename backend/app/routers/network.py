@@ -167,7 +167,7 @@ def getpeerconf(ipaddress: str, data: dict = Depends(Authenticator(True, UserRol
     try:
         # Execute the ping command and capture the output
         result = subprocess.run(
-            ["ping", "-c", "1", ipaddress, "-W", "0.1"], capture_output=True, text=True, timeout=5)
+            ["ping", "-c", "1", ipaddress, "-W", "1"], capture_output=True, text=True, timeout=5)
         # Check the return code to determine success or failure
         if result.returncode == 0:
             return JSONResponse(content={"message": str(result.stdout), "status": True}, status_code=200)
