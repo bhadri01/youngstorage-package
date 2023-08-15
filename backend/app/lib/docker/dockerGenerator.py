@@ -9,13 +9,14 @@ import docker
 from docker.errors import NotFound
 from ..mqttjson import MqttMsg
 from ..wg.wireguard import SanitizeFolderName
+from ..docker.dockerContainer import GetComposeFile
 
 client = docker.from_env()
 
 # create new container
 
 
-def spawnContainer(_id: str, username: str, deviceName: str , deviceType: str, background_task: BackgroundTasks):
+def spawnContainer(_id: str, username: str, deviceName: str, deviceType: str, background_task: BackgroundTasks):
     try:
         mqtt_client.publish(
             f"/topic/{username}", MqttMsg("New Instances Started.....", True).get())
@@ -26,40 +27,32 @@ def spawnContainer(_id: str, username: str, deviceName: str , deviceType: str, b
             # create two peer
             # 1-container
             ipdata = IpRange65535(ip)
-            if ipdata["status"]:
+            dockerip = IpRange65535(baselist[0]["dockerip"])
+            if ipdata["status"] and dockerip["status"]:
                 ip = ipdata["message"]
+                dockerip = dockerip["message"]
                 # very first time will create the network
                 # peer-1 for the container
                 print("still worcking fine......")
-                addWireguard(_id, username, ip,deviceName, deviceType)
+                addWireguard(_id, username, ip, deviceName, deviceType)
 
             # this will create an new collection in the mongodb
             lab = ContainerModels(_id)
             # default lab name is ubuntu
-            lab.addLab(ip, username, f"{username}@321", "ubuntu")
+            lab.addLab(ip, dockerip, username, f"{username}@321", "ubuntu")
 
             # base list update for the ip issued log
             db.baselist.update_one({"_id": baselist[0]["_id"]}, {
-                                   "$set": {"ip": ip, "ipissued": baselist[0]["ipissued"]+1, "no_client": baselist[0]["no_client"]+1}})
-
-            source = os.path.join(os.getcwd(), "source")
-
-            # create new docker file with giver username and peer vpn connection
-            with open(os.path.join(source, "Dockerfile"), "w")as dockerfile:
-                dockerfile.write(dockerGenerator(username, deviceName))
-                dockerfile.close()
-
-            # create setup.sh file to run inside the docker container after container
-            # has been spawn
-            with open(os.path.join(source, "setup.sh"), "w")as setup:
-                setup.write(setupSh(username))
-                setup.close()
-
+                                   "$set": {"ip": ip, "ipissued": baselist[0]["ipissued"]+1,
+                                            "no_client": baselist[0]["no_client"]+1,
+                                            "dockerip": dockerip,
+                                            }})
 
             # both image build and container run happens in single shot
             # this will happens in the background task
-            
-            background_task.add_task(imageBuild, _id, username)
+
+            background_task.add_task(
+                imageBuild, _id, username, dockerip, deviceName)
 
             return {"message": "Container process in background", "status": True}
         return {"message": "Issue in baselist data find", "status": False}
@@ -69,15 +62,20 @@ def spawnContainer(_id: str, username: str, deviceName: str , deviceType: str, b
 # redeploy the existing image
 
 
-def reDeploy(_id: str, username: str,background_task: BackgroundTasks):
+def reDeploy(_id: str, username: str, deviceName: str, dockerip: str, background_task: BackgroundTasks):
     try:
         mqtt_client.publish(
             f"/topic/{username}", MqttMsg(f"Container reDeploy starts.....{username}", True).get())
         # mqtt_client.publish("/topic/sample", "")
         # both image build and container run happens in single shot
         # this will happens in the background task
-        background_task.add_task(containerRun, _id, username)
+        imageid = client.images.get(f"{username}:latest").id
+        if imageid:
+            background_task.add_task(containerRun, _id, username, dockerip)
         return {"message": "Container rebuild process in background", "status": True}
+    except NotFound:
+        background_task.add_task(
+            imageBuild, _id, username, dockerip, deviceName)
     except Exception as e:
         raise (e)
 
@@ -99,8 +97,7 @@ RUN apt install -y wireguard
 RUN apt install -y zsh
 RUN apt -y install xz-utils
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x |sudo -E bash - && \
-    sudo apt install -y nodejs
-RUN sudo -S npm install -g --unsafe-perm node-red
+    apt install -y nodejs
 RUN service ssh start
 RUN echo 'root:admin' | chpasswd
 COPY wireguard /etc/init.d/
@@ -114,10 +111,10 @@ COPY /code-server/global.css /usr/lib/code-server/src/browser/pages/
 COPY /code-server/logo.png /usr/lib/code-server/src/browser/media/
 COPY /code-server/workbench.html /usr/lib/code-server/lib/vscode/out/vs/code/browser/workbench/
 COPY /index.html /var/www/html/
-COPY setup.sh /
-RUN chmod +x setup.sh
 # peer variable
 COPY {os.path.join("wgClients", username, deviceName,"wg0.conf")} /etc/wireguard/wg0.conf
+COPY setup.sh /
+RUN chmod +x setup.sh
 # username variable
 RUN adduser {username} --gecos "" --disabled-password
 RUN echo "{username}:{username}@321" | sudo chpasswd
@@ -126,6 +123,7 @@ COPY .bashrc /home/{username}/
 COPY /settings.js /home/{username}/.node-red/
 CMD ["./setup.sh"]
 '''
+
 
 def setupSh(username: str):
     return f'''#!/bin/sh
@@ -166,7 +164,6 @@ chmod o+x /home/{username}/htdocs/* #username variable
 
 #chaning permissions to htconfig
 chown -R {username}:{username} /home/{username}/htconfig
-chown -R {username}:{username} /home/{username}/.ssh
 chown -R {username}:{username} /home/{username}/.bashrc
 
 #remove password
@@ -194,12 +191,16 @@ auth: password
 password: {username}@321 
 cert: false" > config.yaml
 service apache2 start
-chown -R {username}:{username} /home/{username}/.node-red/
-npm i bcryptjs -g
+
+chown {username}:{username} /home/{username}/.ssh
+chmod go-w /home/{username}/
+chmod 700 /home/{username}/.ssh
+touch /home/{username}/.ssh/authorized_keys
+chmod 600 /home/{username}/.ssh/authorized_keys
+
 
 #username variable
 su {username} <<EOF 
-chown {username}:{username} .ssh/
 cd /home/{username} && ./init.sh
 tail -f /dev/null
 EOF
@@ -231,35 +232,41 @@ def IpRange65535(ipaddress):
 # docker image build function
 
 
-def imageBuild(_id: str, username: str):
+def imageBuild(_id: str, username: str, dockerip: str, deviceName: str):
     try:
         source = os.path.join(os.getcwd(), "source")
-        cmd = ["docker", "build", "-t", f"{username}", f"{source}"]
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+
+        # create new docker file with giver username and peer vpn connection
+        with open(os.path.join(source, "Dockerfile"), "w")as dockerfile:
+            dockerfile.write(dockerGenerator(username, deviceName))
+            dockerfile.close()
+        # create setup.sh file to run inside the docker container after container
+        # has been spawn
+        with open(os.path.join(source, "setup.sh"), "w")as setup:
+            setup.write(setupSh(username))
+            setup.close()
+
+        cmd = f"docker build -t {username}:latest {source}"
+        process = subprocess.run(cmd, shell=True, text=True)
 
         mqtt_client.publish(
             f"/topic/{username}", MqttMsg("image build started.....", True).get())
-        # Read and print the output
-        for line in process.stdout:
-            print(line.decode().rstrip())
 
-        # Wait for the process to finish
-        process.wait()
         mqtt_client.publish(f"/topic/{username}",
                             MqttMsg("image build done!!", True).get())
         # docker run happens
-        containerRun(_id, username)
+        containerRun(_id, username, dockerip)
     except Exception as e:
         mqtt_client.publish(f"/topic/{username}", str(e))
 
 # docker container run function
 
 
-def containerRun(_id: str, username: str):
+def containerRun(_id: str, username: str, dockerip: str):
     try:
 
         # container already exist flesh process
-        exContainer = client.containers.get(username)
+        exContainer = client.containers.get(f"{username}")
         if exContainer.id:
             exContainer.remove(force=True)
             mqtt_client.publish(
@@ -269,7 +276,7 @@ def containerRun(_id: str, username: str):
     # container not found build new one
     except NotFound:
         # get the build image id
-        imageId = str(client.images.get(username).id)
+        imageId = str(client.images.get(f"{username}:latest").id)
 
         # generate default trafik lable
         trafikLables = labelGenerator(imageId[len(imageId)-32:])
@@ -277,8 +284,8 @@ def containerRun(_id: str, username: str):
         # if domain exist add domain lables in traefik
         network = db.network.find_one({"userId": _id})
         if network["domainList"]:
-            trafikLables.update(domainLableGenerator(
-                username, network["domainList"]))
+            trafikLables += domainLableGenerator(
+                username, network["domainList"])
 
         mqtt_client.publish(f"/topic/{username}",
                             MqttMsg(f"build Id {imageId}........", True).get()
@@ -286,35 +293,35 @@ def containerRun(_id: str, username: str):
         mqtt_client.publish(
             f"/topic/{username}", MqttMsg("container run started.....", True).get())
 
-        container = client.containers.run(image=imageId,
-                                          hostname="youngstorage",
-                                          labels=trafikLables,
-                                          name=username,
-                                          cap_add=["NET_ADMIN"],
-                                          network="youngstorage_heart",
-                                          cpuset_cpus= "1",
-                                          mem_limit="1024M",
-                                          restart_policy={"Name": "always"},
-                                          volumes=[
-                                              f'{username}:/home/{username}'],
-                                          detach=True
-                                          )
-
-        # getting the ipaddress of the docker container using exec
-        command = f"docker exec {username} sh -c \"ip -4 address show eth0 | grep inet | awk '{{print $2}}' | cut -d'/' -f1\""
-        result = subprocess.check_output(command, shell=True, text=True)
-        ip_address = result.strip().replace('inet ', '')
-
-        # update the container details of containeripaddress,containerid,imageid
-        lab = ContainerModels(_id)
-        lab.upgradeContainerDetails(
-            container.id, ip_address, imageId[len(imageId)-32:])
-        mqtt_client.publish(f"/topic/{username}",
-                            MqttMsg(f"{container.id}", True).get())
-
-        # Wait for the process to finish
         mqtt_client.publish(
-            f"/topic/{username}", MqttMsg("container successfully running.....", True, isFinished=True).get())
+            f"/topic/{username}", MqttMsg("docker compose preparing to star.....", True).get())
+        # preparing the compose file
+        if GetComposeFile(username, dockerip, trafikLables):
+            mqtt_client.publish(
+                f"/topic/{username}", MqttMsg("docker compose preperation done.....", True).get())
+            source = os.path.join(os.getcwd(), "source", "docker-compose.yml")
+            print(source)
+            cmd = f"docker-compose -f {source} up -d"
+            # Execute the command
+            os.system(cmd)
+
+            mqtt_client.publish(
+                f"/topic/{username}", MqttMsg("container prepating to play.....", True).get())
+
+            container_id = client.containers.get(username).id
+
+            lab = ContainerModels(_id)
+            lab.upgradeContainerDetails(
+                container_id, imageId[len(imageId)-32:])
+            mqtt_client.publish(f"/topic/{username}",
+                                MqttMsg(f"{container_id}", True).get())
+
+            # Wait for the process to finish
+            mqtt_client.publish(
+                f"/topic/{username}", MqttMsg("container successfully running.....", True, isFinished=True).get())
+        else:
+            mqtt_client.publish(
+                f"/topic/{username}", MqttMsg("compose file not prepared", False, isError=False, isFinished=True).get())
 
     except Exception as e:
         mqtt_client.publish(f"/topic/{username}", str(e))

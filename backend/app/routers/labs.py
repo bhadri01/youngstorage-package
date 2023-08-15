@@ -65,7 +65,8 @@ def createContainer(background_task: BackgroundTasks, data=Depends(Authenticator
         container = db.labs.find_one({"userId": data["_id"]})
         # if container already exist redeploy happens
         if container:
-            res = reDeploy(data["_id"], data["username"], background_task)
+            res = reDeploy(data["_id"], data["username"], "Ubuntu Lab",
+                           container["dockerip"], background_task)
             return JSONResponse(content=res, status_code=200)
         else:  # container not already exist new instance will be created
             res = spawnContainer(
@@ -103,7 +104,7 @@ def upVScode(data=Depends(Authenticator(True, UserRole.user).signupJWT)):
             command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         # print(stderr)
-        
+
         # Check the command execution status
         if process.returncode == 0:
             # Print the command output
@@ -115,7 +116,7 @@ def upVScode(data=Depends(Authenticator(True, UserRole.user).signupJWT)):
 
         # commend to star the vs code
         docker_command = [
-            "docker", "exec", "-d", "-u", username, username, 
+            "docker", "exec", "-d", "-u", username, username,
             "code-server"
         ]
         try:
@@ -154,4 +155,3 @@ def generate_random_alphanumeric(length):
 
 
 # demo : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NGNkZWJjOTE2ZTE3OWVjNjZkNTViYTUiLCJ1c2VyVmVyaWZpZWQiOnRydWUsInJvbGUiOiJ1c2VyIiwiZXhwIjoxNjkxMzEwOTkyfQ.QvKH0Nw9d2ZajW7H7Xa5lJAyQya6jeBgGp6s8o2GroE
-    

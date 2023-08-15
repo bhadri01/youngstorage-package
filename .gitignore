@@ -42,6 +42,7 @@ __pycache__
 #wireguard peers
 wgClients
 ./source/Dockerfile
+./source/docker-compose.yml
 setup.sh
 .env
 code-server.sh

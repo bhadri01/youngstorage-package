@@ -7,6 +7,9 @@ RUN apt-get update && \
 
 RUN apt-get install -y qrencode
 
+RUN curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
+    
 ARG S6_OVERLAY_VERSION=3.1.0.1
 
 RUN service ssh start
@@ -15,7 +18,7 @@ COPY wireguard /etc/init.d/
 COPY requirements.txt /backend/
 RUN pip3 install --no-cache-dir -r requirements.txt
 COPY . /backend/
-RUN chmod +x setup.sh
+RUN chmod +x wireguard.sh
 EXPOSE 8000
 EXPOSE 51820
-CMD ["./setup.sh"]
+CMD ["./wireguard.sh"]

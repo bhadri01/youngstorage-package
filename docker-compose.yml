@@ -7,14 +7,12 @@ services:
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-    ports:
-      - "27017:27017"
+      MONGO_INITDB_ROOT_PASSWORD: Young321backend
     volumes:
-      - mongodb_data:/data/db
+      - mongodb_data:/data
     networks:
       youngstorage_heart:
-        ipv4_address: 172.32.0.2
+        ipv4_address: 10.0.0.3
 
   rabbitmq:
     image: rabbitmq:3.12-management
@@ -24,53 +22,82 @@ services:
       - "5672:5672" # AMQP
       - "15672:15672" # Management UI
       - "1883:1883" # MQTT
-      - "15674:15674" # MQTT over WebSocket
+      - "15674:15674" # MQTT over WebSocket in ws
+      - "15676:15676" # MQTT over WebSocket in wss
     command: ["sh", "-c", "rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_web_mqtt_examples && rabbitmq-server"]
     environment:
       RABBITMQ_DEFAULT_USER: guest # Default guest user credentials
       RABBITMQ_DEFAULT_PASS: guest
       RABBITMQ_USER: youngMqtt # Additional user credentials
       RABBITMQ_PASSWORD: Mqtt@321
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mq.rule=Host(`mq.youngstorage.in`)"
+      - "traefik.http.routers.mq.tls=true"
+      - "traefik.http.routers.mq.entrypoints=websecure"
+      - "traefik.http.routers.mq.tls.certresolver=custom_resolver"
+      - "traefik.http.routers.mq.service=svc_mq"
+      - "traefik.http.services.svc_mq.loadbalancer.server.port=15676"
+
     volumes:
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - /etc/letsencrypt/live/certs/chain.pem:/etc/certs/chain.pem
+      - /etc/letsencrypt/live/certs/cert.pem:/etc/certs/cert.pem
+      - /etc/letsencrypt/live/certs/privkey.pem:/etc/certs/privkey.pem
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       youngstorage_heart:
-        ipv4_address: 172.32.0.3
+        ipv4_address: 10.0.0.4
 
   youngstoragebackend:
     build:
       context: ./backend
     container_name: youngstorageBackend
     restart: always
-    privileged: true
+    cap_add:
+      - NET_ADMIN
     ports:
-      - "8000:8000"
-      - "51820:51820"
       - "51820:51820/udp"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.labs_back_end.rule=Host(`apibackend.youngstorage.in`)"
+      - "traefik.http.routers.labs_back_end.tls=true"
+      - "traefik.http.routers.labs_back_end.entrypoints=websecure"
+      - "traefik.http.routers.labs_back_end.tls.certresolver=custom_resolver"
+      - "traefik.http.routers.labs_back_end.service=svc_labs_back_end"
+      - "traefik.http.services.svc_labs_back_end.loadbalancer.server.port=8000"
     networks:
       youngstorage_heart:
-        ipv4_address: 172.32.0.4
+        ipv4_address: 10.0.0.5
     depends_on:
       - mongodb
       - rabbitmq
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - wireguard_peer:/backend/source/wgClients
+      - backend_logs:/backend/logfile.log
+      - wireguard_host:/etc/wireguard
   
   youngstoragefrontend:
     build:
       context: ./frontend
     container_name: youngstorageFrontend
     restart: always
-    privileged: true
-    ports:
-      - "3000:3000"
-    environment:
-      - API_URL=http://172.32.0.4:8000
-      - MQTT_HOST=172.32.0.3
-      - MQTT_PORT=15676
+    # environment:
+    #   - API_URL=http://172.32.0.4:8000
+    #   - MQTT_HOST=172.32.0.3
+    #   - MQTT_PORT=15676
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.labs_front_end.rule=Host(`labs.youngstorage.in`)"
+      - "traefik.http.routers.labs_front_end.tls=true"
+      - "traefik.http.routers.labs_front_end.entrypoints=websecure"
+      - "traefik.http.routers.labs_front_end.tls.certresolver=custom_resolver"
+      - "traefik.http.routers.labs_front_end.service=svc_labs_front_end"
+      - "traefik.http.services.svc_labs_front_end.loadbalancer.server.port=3000"
     networks:
       youngstorage_heart:
-        ipv4_address: 172.32.0.5
+        ipv4_address: 10.0.0.6
     depends_on:
       - youngstoragebackend
 
@@ -82,3 +109,6 @@ volumes:
   mongodb_data:
   rabbitmq_data:
     external: false
+  wireguard_peer:
+  backend_logs:
+  wireguard_host:
