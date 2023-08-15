@@ -1,0 +1,51 @@
+@import "./sassComponents.scss";
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url("/background-2.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  .header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    color: var(--white);
+    padding: 16px;
+    h1 {
+      @include flex-all-center;
+    }
+    .end {
+      @include flex-all-center;
+    }
+  }
+  .center {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+
+    a {
+      all: unset;
+    }
+  }
+  span {
+    font-size: 30px;
+    color: var(--white);
+  }
+  p {
+    font-size: 15px;
+    color: var(--input);
+  }
+
+  h4 {
+    color: var(--white);
+    font-size: 13px;
+  }
+}

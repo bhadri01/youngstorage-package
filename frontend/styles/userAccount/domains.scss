@@ -1,0 +1,195 @@
+.domain-container {
+  width: 100%;
+
+  .domain {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      font-size: 30px;
+      font-weight: 600;
+    }
+  }
+
+  .get-domains {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    background-color: var(--white);
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+
+    input {
+      border: none;
+      outline: none;
+      background-color: transparent;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .drop {
+      border: none;
+      outline: none;
+      width: fit-content;
+      font-size: 20px;
+      background-color: transparent;
+      margin-right: 16px;
+    }
+
+    button {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  .domain-add-list {
+    width: 100%;
+    display: flex;
+    // display: grid;
+    // grid-template-rows: 150px;
+    // grid-template-columns: auto auto auto;
+    justify-content: space-between;
+    padding: 24px;
+    margin-top: 24px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    gap: 16px;
+
+    .adjust {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+
+      .any {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .flex {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+
+          h3 {
+            font-size: 24px;
+            text-transform: capitalize;
+          }
+
+          b {
+            font-size: 24px;
+            text-transform: capitalize;
+            color: var(--primary);
+          }
+
+          Button {
+            display: inline-flex;
+            padding: 0px 16px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+          }
+        }
+
+        .adjustment {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+
+          img {
+            width: 32px;
+            height: 32px;
+          }
+        }
+      }
+    }
+
+    .domains-list {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+  }
+
+  .dot {
+    // width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    padding: 16px;
+    gap: 20px;
+    background-color: #8ec5fc;
+    background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+
+    .gap {
+      .domain-name {
+        width: 60%;
+        display: inline-block;
+        // white-space: nowrap;
+        // overflow: hidden;
+        // text-overflow: ellipsis;
+      }
+    }
+
+
+    .min {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+
+
+      span {
+        font-size: 10px;
+        color: rgba(0, 0, 0, 0.6);
+        font-weight: 300;
+      }
+    }
+
+    .lottie {
+      display: flex;
+      flex-direction: column;
+    }
+
+  }
+
+  @media screen and (max-width: 768px) { 
+    .dot{
+      width: 100%;
+      justify-content: space-between;
+    }
+
+      .domain-add-list{
+        .adjust {
+          .any {
+            .flex {
+              Button{
+                width: 25%;
+              }
+            }
+          }
+        }
+      }
+   
+      .get-domains{
+        flex-direction: column;
+    text-align: center;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+      }
+  }
+}

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+depend() {
+   need localmount
+   need net
+}
+
+start() {
+   ebegin "Starting wireguard"
+   /usr/bin/wg-quick up wg0
+   eend $?
+}
+
+stop() {
+   ebegin "Stopping wireguard"
+   /usr/bin/wg-quick down wg0
+   eend $?
+}

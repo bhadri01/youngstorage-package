@@ -1,0 +1,9 @@
+.venv
+__pycache__
+wgClients
+./source/Dockerfile
+code-server.sh
+Dockerfile
+log.ini
+logfile.log
+nohup.out

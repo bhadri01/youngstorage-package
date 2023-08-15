@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      youngstorage_heart:
+        ipv4_address: 172.32.0.2
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672" # AMQP
+      - "15672:15672" # Management UI
+      - "1883:1883" # MQTT
+      - "15674:15674" # MQTT over WebSocket
+    command: ["sh", "-c", "rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_web_mqtt_examples && rabbitmq-server"]
+    environment:
+      RABBITMQ_DEFAULT_USER: guest # Default guest user credentials
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_USER: youngMqtt # Additional user credentials
+      RABBITMQ_PASSWORD: Mqtt@321
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      youngstorage_heart:
+        ipv4_address: 172.32.0.3
+
+  youngstoragebackend:
+    build:
+      context: ./backend
+    container_name: youngstorageBackend
+    restart: always
+    privileged: true
+    ports:
+      - "8000:8000"
+      - "51820:51820"
+      - "51820:51820/udp"
+    networks:
+      youngstorage_heart:
+        ipv4_address: 172.32.0.4
+    depends_on:
+      - mongodb
+      - rabbitmq
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  
+  youngstoragefrontend:
+    build:
+      context: ./frontend
+    container_name: youngstorageFrontend
+    restart: always
+    privileged: true
+    ports:
+      - "3000:3000"
+    environment:
+      - API_URL=http://172.32.0.4:8000
+      - MQTT_HOST=172.32.0.3
+      - MQTT_PORT=15676
+    networks:
+      youngstorage_heart:
+        ipv4_address: 172.32.0.5
+    depends_on:
+      - youngstoragebackend
+
+networks:
+  youngstorage_heart:
+    external: true
+
+volumes:
+  mongodb_data:
+  rabbitmq_data:
+    external: false

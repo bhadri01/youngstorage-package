@@ -1,0 +1,81 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import "./components.scss";
+
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --dark: #00171f;
+  --light: #f1f3f6;
+  --input: #555;
+  --input-light: #979797;
+  --nav-font: #b4b5b7;
+  --nav-font-hover: #a3a3a3;
+  --primary: #334afd;
+  --primary-hover: #1a2dbd;
+  --secondary: #fd7401;
+  --secondary-hover: #d66101;
+  --success: #19af66;
+  --success-hover: #048748;
+  --error: #f35746;
+  --error-hover: #c83120;
+  --warning: #f2c94c;
+  --warning-hover: #caa023;
+  --info: #5458f7;
+  --info-hover: #373ada;
+  --terminal: #003459;
+  --fixed-width: calc(100% - 219px);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  max-width: 1980px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+button,
+a {
+  all: unset;
+  cursor: pointer;
+}
+
+.success {
+  background-color: var(--success);
+  &:hover {
+    background: var(--success-hover);
+  }
+}
+
+.warning {
+  background-color: var(--warning);
+  &:hover {
+    background: var(--warning-hover);
+  }
+}
+
+.error {
+  background-color: var(--error);
+  &:hover {
+    background: var(--error-hover);
+  }
+}
+.info {
+  background-color: var(--info);
+  &:hover {
+    background: var(--info-hover);
+  }
+}
+
+.totalcenter {
+  @include total-center-by-flex;
+  text-transform: capitalize;
+  a {
+    color: var(--primary);
+  }
+}

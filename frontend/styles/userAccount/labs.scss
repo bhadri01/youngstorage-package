@@ -1,0 +1,308 @@
+.lab-container {
+  width: 100%;
+
+  .lab-box {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    position: relative;
+    // z-index: -1;
+    justify-content: center;
+  }
+
+  .labs {
+    background-color: var(--white);
+    border-radius: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+    button {
+      width: 100%;
+      bottom: 0px;
+      left: 0;
+      padding: 12px 16px;
+      font-weight: 600;
+      color: var(--dark);
+      cursor: pointer;
+      font-size: 20px;
+      border: none;
+      outline: none;
+      text-align: center;
+    }
+
+    img {
+      max-width: 400px;
+      height: 100%;
+    }
+  }
+  .labs:nth-child(2){
+    position: relative;
+    &::after
+    {
+      content: 'comming soon...';
+      position: absolute;
+      background-color: #f0f2f55e;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--white);
+      backdrop-filter: blur(5px);
+
+    }
+  }
+}
+
+// ==============================================[...labs] style ===========================================
+.ubuntu-container {
+  width: 100%;
+
+  .flex {
+    width: 100%;
+    display: flex;
+    margin-top: 24px;
+    justify-content: space-between;
+    padding: 24px;
+    border-radius: 16px;
+    background: #fff;
+    /* primary shadow */
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+
+    .ubuntu {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+
+      .alter {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+        gap: 6px;
+
+        h1 {
+          font-size: 20px;
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 50px;
+    gap: 10px;
+  }
+
+  .content {
+    width: 100%;
+    display: flex;
+    padding: 20px 38px;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-radius: 16px;
+    background: var(--white);
+    gap: 50px;
+    margin-top: 30px;
+    position: relative;
+    /* primary shadow */
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 90%;
+      background-color: var(--input);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 8px;
+    }
+
+    .left {
+      width: 50%;
+
+      h3 {
+        font-size: 18px;
+        border-radius: 6px;
+        background: #f0f2f5;
+        font-weight: 400;
+        padding: 8px;
+        text-align: center;
+      }
+
+      p {
+        margin-top: 16px;
+        text-align: justify;
+        font-size: 14px;
+      }
+    }
+
+    .right {
+      width: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 0 8px;
+
+      h3 {
+        text-align: center;
+        font-size: 18px;
+        font-weight: 400;
+        padding: 8px;
+        background: #f0f2f5;
+        border-radius: 6px;
+      }
+
+      .prop {
+        display: flex;
+        padding: 2px 8px;
+
+        h4 {
+          width: 150px;
+        }
+
+        span {
+          flex: 1;
+          overflow: hidden;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          position: relative;
+
+          b {
+            overflow: hidden;
+            width: 90%;
+            font-weight: 100;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .terminal-main-box {
+    background-color: var(--terminal);
+    border-radius: 8px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 70px);
+    right: 0;
+    z-index: 20;
+
+    .terminal-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 32px;
+      background: var(--white);
+
+      h1 {
+        font-size: 18px;
+      }
+
+      svg {
+        transition: 0.3s ease-in-out;
+        transform: rotate(180deg);
+      }
+
+      svg.active {
+        transform: rotate(360deg);
+      }
+    }
+
+    .new {
+      display: flex;
+      width: 100%;
+      height: 0;
+      overflow: hidden;
+      padding: 0 16px;
+      align-items: flex-start;
+      background: var(--terminal);
+      transition: 0.3s ease-in-out;
+
+      .prompt {
+        color: var(--white);
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .new.active {
+      height: 150px;
+      padding: 16px;
+      overflow: auto;
+    }
+  }
+
+  @media screen and (max-width: 768px) { 
+    .breadcrumb{
+      display: none;
+    }
+    .terminal-main-box{
+      width: 100%;
+    }
+    .flex{
+      flex-direction: column;
+    }
+    .alter{
+      .button{
+        flex-direction: row;
+        margin: 0;
+        width: 50%;
+      }
+    }
+    .button{
+      margin: 6% auto;
+      flex-direction: column;
+      width: 100%;
+      .btn{
+        width: 70%;
+      }
+    }
+    .content{
+      margin-top: 16px;
+      flex-direction: column;
+
+      &::before{
+        content: unset ;
+      }
+
+      .left{
+        width: 100%;
+      }
+      .right{
+        width: 100%;
+        .prop{
+          span{
+            b{
+              width: 75%;
+              font-weight: 100;
+              font-size: 14px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+          h4{
+            width: 100px;
+          }
+        }
+      }
+    }
+  }
+}

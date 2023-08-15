@@ -1,0 +1,55 @@
+// Components style all here if we need to find the style just search by the className
+// that holds by the Component Parent
+// All the styles are seperated by the Special blockes
+@import "./sassComponents.scss";
+//============================= BUTTON STYLE START====================================
+.btn {
+  border: none;
+  outline: none;
+  padding: 6px 16px;
+  font-size: 16px;
+  border-radius: 4px;
+  background: var(--primary);
+  color: var(--light);
+  text-transform: capitalize;
+  box-shadow: 0px 12px 16px 0px rgba(51, 74, 253, 0.15);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: 0.3s ease-in-out;
+  &:hover {
+    background: var(--primary-hover);
+  }
+}
+//============================= BUTTON STYLE END====================================
+
+//============================= LOADINGBAR STYLE START====================================
+.loadingbar {
+  @include flex-all-center;
+}
+//============================= LOADINGBAR STYLE END====================================
+
+//============================= BREADCRUMB STYLE START====================================
+.breadcrumb {
+  display: flex;
+  stroke: var(--nav-font-hover);
+  justify-content: flex-start;
+  align-items: center;
+  .crumb-box {
+    text-transform: capitalize;
+  }
+}
+//============================= BREADCRUMB STYLE END====================================
+
+//============================= BADGE STYLE START====================================
+.badge {
+  width: fit-content;
+  padding: 2px 8px;
+  font-size: 10px;
+  border-radius: 8px;
+  background: var(--primary);
+  font-weight: 700;
+  color: var(--white);
+}
