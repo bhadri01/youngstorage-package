@@ -7,9 +7,7 @@ def GetComposeFile(username, dockerip, trafikLabels):
         # Define the named volume
         volumes_definition = {
             'volumes': {
-                f'{username}': {
-                    'external' : True
-                }
+                f'{username}':None
             }
         }
 

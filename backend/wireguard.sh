@@ -9,6 +9,7 @@ mkdir /tmp
 chmod 777 /tmp
 
 if [ -f "/etc/wireguard/wg0.conf" ] && [ -f "/etc/wireguard/private.key" ] && [ -f "/etc/wireguard/public.key" ]; then
+    sed -i "s|.*WIREGUARD_PUBLIC_KEY.*|WIREGUARD_PUBLIC_KEY=$(cat /etc/wireguard/public.key)|" /backend/.env
     echo "Configuration files already exist. Skipping setup."
 else
 
