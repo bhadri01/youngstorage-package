@@ -45,10 +45,24 @@ a {
   cursor: pointer;
 }
 
+.ubu-badge {
+  background-color: var(--secondary);
+  &:hover {
+    background: var(--secondary-hover);
+  }
+}
+
 .success {
   background-color: var(--success);
   &:hover {
     background: var(--success-hover);
+  }
+}
+
+.terminal {
+  background-color: var(--terminal);
+  &:hover {
+    background: var(--terminal);
   }
 }
 

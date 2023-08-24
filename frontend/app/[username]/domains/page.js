@@ -144,7 +144,8 @@ function Domains({ params }) {
                   <div className="dot" key={a.domainName}>
                     <div className="gap">
                       <span className="domain-name">{a.domainName}</span>
-                      <Badge value="not mapped" color="btn-error" />
+                      {/* <Badge value="Not Mapped" color="btn-error" /> */}
+                      <Badge value="Ubuntu" color="ubu-badge"/>
                     </div>
                     <div
                       className="lottie"

@@ -38,6 +38,7 @@ export default function Ubuntu({ params }) {
   useEffect(() => {
     if (username) {
       const clientId = `myclientid_${parseInt(Math.random() * 100, 10)}`;
+      // prodution
       const client = new Client(`wss://${mqtt}:${mqttport}/ws`, clientId); // Use wss:// for secure connection
       clientRef.current = client;
 

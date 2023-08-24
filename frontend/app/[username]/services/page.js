@@ -9,7 +9,8 @@ import Copy from "@/components/copy";
 import Breadcrumb from "@/components/Breadcrumb";
 import Link from "next/link";
 import ToolTips from "@/components/ToolTips";
-import "@/styles/userAccount/services.scss"
+import "@/styles/userAccount/services.scss";
+import { useRouter } from "next/navigation";
 
 const CustomWidthTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -19,6 +20,11 @@ const CustomWidthTooltip = styled(({ className, ...props }) => (
   },
 });
 function Services({ params }) {
+  const router = useRouter();
+
+  const ChangePath = (route) => {
+    router.push(route);
+  };
   return (
     <div className="serve">
       <Breadcrumb>
@@ -34,7 +40,6 @@ function Services({ params }) {
         </span>
       </div>
       <div className="main-container">
-        <h1>Coming soon</h1>
         <div className="service-container">
           <div className="service">
             <img alt="" src="/mysql.png" width={100} height={50} />
@@ -58,8 +63,11 @@ function Services({ params }) {
             <Copy value="click here to copy it and paste it in the under vscode's port to access this sercice" />
           </div>
 
-          <div className="value">
-            <Button value="Manage" color="btn-success"></Button>
+          <div
+            className="value"
+            
+          >
+            <Button onClick={() => ChangePath("services/services")}value="Manage" color="btn-success"></Button>
             <Button value="Learn More" color="btn-info  "></Button>
           </div>
         </div>
@@ -69,3 +77,6 @@ function Services({ params }) {
 }
 
 export default Services;
+
+
+

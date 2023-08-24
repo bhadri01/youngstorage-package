@@ -1,0 +1,30 @@
+services:
+  dev:
+    cap_add:
+    - NET_ADMIN
+    container_name: dev
+    cpus: '1'
+    hostname: youngstorage
+    image: dev
+    labels:
+    - traefik.enable=true
+    - traefik.http.routers.75739844440475b702d026674ec22b12.rule=Host(`75739844440475b702d026674ec22b12.youngstorage.in`)
+    - traefik.http.routers.75739844440475b702d026674ec22b12.service=75739844440475b702d026674ec22b12
+    - traefik.http.routers.75739844440475b702d026674ec22b12.tls=true
+    - traefik.http.routers.75739844440475b702d026674ec22b12.entrypoints=websecure
+    - traefik.http.services.75739844440475b702d026674ec22b12.loadbalancer.server.port=1111
+    - traefik.http.routers.75739844440475b702d026674ec22b12.tls.certresolver=custom_resolver
+    mem_limit: 1g
+    networks:
+      services:
+        ipv4_address: 172.16.200.2
+    restart: always
+    volumes:
+    - dev:/home/dev
+version: '3.8'
+volumes:
+  dev: null
+networks:
+  services:
+    external: true
+    name: services

@@ -1,6 +1,11 @@
 import axios from "axios";
 
-const API_URL = "https://apibackend.youngstorage.in";
+// production
+
+// const API_URL = "https://apibackend.youngstorage.in";
+
+// development
+const API_URL = "http://youngstorage.in:9090";
 
 export const Token = () => {
   let token = "";

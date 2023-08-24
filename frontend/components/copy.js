@@ -37,6 +37,7 @@ function copy(props) {
   return (
     <CustomWidthTooltip title={copy ? "copied" : props.value} placement="top">
       <svg
+      className="copy"
         onClick={handleCopyClick}
         xmlns="http://www.w3.org/2000/svg"
         width="19"

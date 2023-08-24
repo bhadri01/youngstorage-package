@@ -1,0 +1,16 @@
+#python venv folder
+.venv
+venv
+__pycache__
+
+#wireguard peers
+wgClients
+./source/Dockerfile
+./source/docker-compose.yml
+setup.sh
+.env
+code-server.sh
+
+#log files
+logfile.log
+nohup.out

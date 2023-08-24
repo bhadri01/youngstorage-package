@@ -301,7 +301,7 @@ def containerRun(_id: str, username: str, dockerip: str):
                 f"/topic/{username}", MqttMsg("docker compose preperation done.....", True).get())
             source = os.path.join(os.getcwd(), "source", "docker-compose.yml")
             print(source)
-            cmd = f"docker-compose -f {source} up -d"
+            cmd = f"docker compose -f {source} up -d"
             # Execute the command
             os.system(cmd)
 
