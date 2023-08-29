@@ -14,6 +14,7 @@ import { APIQuery } from "@/api/queryMethod";
 import ToolTips from "@/components/ToolTips";
 import { PageCenter, PageLoading } from "@/components/pageLoading";
 import { Toast } from "@/components/alert";
+import Alerts from "@/components/alerts";
 
 const options = [
   { label: "Laptop", value: "Laptop" },
@@ -68,6 +69,7 @@ export default function Network({ params }) {
                   <Link href={params?.username + "/networks"}>Networks</Link>
                   <ToolTips name="Network Is A Area There We Can Generate A VPN And The Lab Will Be Connected Automatically In A Single Click And We Can Make It As Seamless" />
                 </Breadcrumb>
+                <Alerts value= "Network Is A Area There We Can Generate A VPN And The Lab Will Be Connected Automatically In A Single Click And We Can Make It As Seamless"/>
                 {network ? (
                   <div className="device">
                     <div className="man">
@@ -421,8 +423,8 @@ const PeerDataGet = (props) => {
             </div>
           )}
           <span>
-            click the downloadd button to download your configurations & <br />
-            import it as your convinence
+            Click The Download Button To Download Your Configurations & <br />
+            Import It As Your Convinence
           </span>
         </pre>
       </div>
@@ -430,7 +432,7 @@ const PeerDataGet = (props) => {
   );
 };
 
-const GetCreatedTime = (time) => {
+export const GetCreatedTime = (time) => {
   // Replace 1691151014 with your Unix timestamp
   const unixTimestamp = parseInt(time);
 

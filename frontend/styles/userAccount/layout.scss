@@ -3,15 +3,16 @@
   min-height: 100vh;
   overflow: hidden;
   display: flex;
+  position: relative;
   // navbar full style
   .userAccount-menu {
     position: sticky;
     top: 0;
-    z-index: 999999;
+    z-index: 999;
     .hov-container {
       height: 100vh;
       width: fit-content;
-      padding: 16px;
+      padding: 0px 16px 16px 16px;
       background-color: var(--dark);
       color: var(--nav-font);
       stroke: var(--nav-font);
@@ -157,8 +158,9 @@
     max-height: 100vh;
     overflow-y: auto;
     overflow-x: hidden;
-    header {
-    }
+    // header {
+    //   padding: 0px;
+    // }
     section {
       padding: 24px 32px;
     }
@@ -190,23 +192,137 @@
     }
   }
 
+  header {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: flex-end;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+
+    .header-container {
+      display: flex;
+      .circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span {
+          svg{
+          height: 32px;
+          width: 32px;
+          }
+        }
+        img {
+          background-color: blue;
+          height: 32px;
+          width: 32px;
+          border-radius: 50%;
+        }
+      }
+    }
+    .hero-container {
+      border: 1px solid grey;
+      padding: 16px;
+      width: 20%;
+      border-radius: 16px;
+      position: absolute;
+      top: 7%;
+      right: 2%;
+      z-index: 999;
+      background-color: var(--dark);
+      color: var(--white);
+      .hero {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 1px solid grey;
+        padding: 16px;
+        border-radius: 20px;
+
+        img {
+          background-color: blue;
+          height: 50px;
+          width: 50px;
+          border-radius: 50%;
+        }
+        h1 {
+          font-size: 18px;
+          text-transform: capitalize;
+        }
+      }
+
+      .setting {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        flex-direction: column;
+        padding: 16px 16px;
+        gap: 8px;
+        // border-bottom: 1px solid grey;
+
+        li {
+          text-decoration: none;
+          list-style: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          text-transform: capitalize;
+          flex-direction: row-reverse;
+          cursor: pointer;
+        }
+      }
+
+      .logout {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-top: 1px solid gray;
+        border-bottom: 1px solid gray;
+        cursor: pointer;
+
+        li {
+          list-style: none;
+          padding: 8px 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          text-transform: capitalize;
+          flex-direction: row-reverse;
+          cursor: pointer;
+        }
+      }
+      .bottom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 8px;
+      }
+    }
+  }
 
   @media screen and (max-width: 768px) {
-    .userAccount-menu { 
+    .userAccount-menu {
       .hov-container {
         display: none;
       }
     }
-    .userAccount-content{
-      .home-container{
-        .breadcrumb{
+    .userAccount-content {
+      .home-container {
+        .breadcrumb {
           display: none;
         }
-        .home-overview{
-          .header{
+        .home-overview {
+          .header {
             text-align: center;
           }
-          .home-container-list{
+          .home-container-list {
             flex-direction: column;
             justify-content: space-between;
             align-items: initial;
@@ -215,18 +331,18 @@
               justify-content: space-between;
               z-index: 9999;
               width: 100%;
-              .instance{
+              .instance {
                 z-index: 9;
               }
-              .dashboard{
+              .dashboard {
                 z-index: 9;
               }
-          }
+            }
           }
         }
-        .whole{
-          .con{
-            .msger{
+        .whole {
+          .con {
+            .msger {
               font-variant: small-caps;
             }
           }
@@ -234,16 +350,12 @@
       }
     }
   }
-
-  
-
 }
 
-
-.breadcrumb{
-  .crumb-box{
+.breadcrumb {
+  .crumb-box {
     display: flex;
-    a{
+    a {
       margin-right: 5px;
     }
   }

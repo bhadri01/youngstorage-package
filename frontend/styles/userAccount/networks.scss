@@ -142,8 +142,13 @@
                         gap: 50px;
 
                         span {
+                            text-transform: capitalize;
+                        }
+
+                        span {
                             &:nth-child(2) {
                                 font-size: 12px;
+                                text-transform: capitalize;
                             }
                         }
                     }
@@ -155,7 +160,7 @@
                     width: 100%;
                     display: flex;
                     border: none;
-                    border: 1px solid #e0c3fc;
+                    border: 3px solid #e0c3fc;
                     outline: none;
                     border-radius: 5px;
                     justify-content: space-between;
@@ -209,7 +214,7 @@
 
         .spray {
             border: 1px solid rgba(0, 0, 0, 0.1);
-            // background: #fff;
+            // background: #fff;    
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
             padding: 10px;
 
@@ -265,6 +270,7 @@
                 color: var(--white);
                 font-weight: 600;
                 font-size: 20px;
+                text-transform: capitalize;
             }
         }
 

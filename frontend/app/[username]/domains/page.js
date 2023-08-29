@@ -143,7 +143,7 @@ function Domains({ params }) {
                 {domains[0]?.domainList?.map((a) => (
                   <div className="dot" key={a.domainName}>
                     <div className="gap">
-                      <span className="domain-name">{a.domainName}</span>
+                      <span className="domain-name"><Link href="{`${a.domainName}`}" target="_blank">{a.domainName}</Link></span>
                       {/* <Badge value="Not Mapped" color="btn-error" /> */}
                       <Badge value="Ubuntu" color="ubu-badge"/>
                     </div>

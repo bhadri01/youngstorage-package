@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import Link from "next/link";
 import ToolTips from "@/components/ToolTips";
+import Alerts from "@/components/alerts";
+
 // import { useQueryClient } from "@tanstack/react-query";
 
 function Labs({ params }) {
@@ -19,8 +21,9 @@ function Labs({ params }) {
       <div className="lab-container">
         <Breadcrumb>
           <Link href={params?.username + "/labs"}>labs</Link>{" "}
-          <ToolTips name="You Can Access Our Various Labs And Gain Enormous Knowledge On Multiple Domains" />
+          {/* <ToolTips name="You Can Access Our Various Labs And Gain Enormous Knowledge On Multiple Domains" /> */}
         </Breadcrumb>
+        <Alerts value="You Can Access Our Various Labs And Gain Enormous Knowledge On Multiple Domains"/>
 
         <div className="lab-box">
           <div className="labs" onClick={() => ChangePath("labs/ubuntu")}>

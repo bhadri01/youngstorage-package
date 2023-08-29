@@ -112,10 +112,10 @@
     }
 
     .domains-list {
-      width: 100%;
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: auto auto auto auto;
       gap: 24px;
+      
     }
   }
 

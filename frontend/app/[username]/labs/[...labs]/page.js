@@ -262,12 +262,12 @@ export default function Ubuntu({ params }) {
                 This server is accessible through Code or SSH. Code is
                 accessible under VPN in one click and you do not have to SSH
                 into your lab, becuase Code works on your browser without any
-                additional setup. Just ensure you are connected to VPN. <br />
+                additional setup. Just ensure you are connected to <Link href={`https://www.wireguard.com/`} target="_blank"><b>VPN</b></Link>. <br />
                 Code is an embedded VS Code that runs from within this lab and
                 let you access your lab effortlessly over web. To keep you
                 secure, this password changes during every redeploy. For a more
-                convinient development experience, consider installing Visual
-                Studio Code Desktop and connect via SSH.
+                convinient development experience, consider installing <Link href={`https://code.visualstudio.com/`} target="_blank"><b>Visual Studio Code </b></Link>
+                 Desktop and connect via SSH.
               </p>
             </div>
             <div className="right">
@@ -277,28 +277,28 @@ export default function Ubuntu({ params }) {
                 <h4>IP Address</h4>
                 <span>
                   <b>{labdata[0]?.wgipAddress}</b>
-                  <Copy />
+                  <Copy value="VPN IP Address" />
                 </span>
               </div>
               <div className="prop">
                 <h4>UserName</h4>
                 <span>
                   <b>{labdata[0]?.username}</b>
-                  <Copy />
+                  <Copy value="Instance Name"/>
                 </span>
               </div>
               <div className="prop">
                 <h4>Password</h4>
                 <span>
                   <b>{labdata[0]?.password}</b>
-                  <Copy />
+                  <Copy value="Instance Password"/>
                 </span>
               </div>
               <div className="prop">
                 <h4>SSH</h4>
                 <span>
                   <b>{`${labdata[0]?.username}@${labdata[0]?.wgipAddress}`}</b>
-                  <Copy />
+                  <Copy value="SSH Connnection"/>
                 </span>
               </div>
               <div className="prop">
@@ -309,7 +309,7 @@ export default function Ubuntu({ params }) {
                       ? labdata[0]?.vsCode
                       : "please click the code"}
                   </b>
-                  <Copy />
+                  <Copy value="Code-Server"/>
                 </span>
               </div>
               <div className="prop">
@@ -320,7 +320,7 @@ export default function Ubuntu({ params }) {
                       ? labdata[0]?.vsPassword
                       : "************"}
                   </b>
-                  <Copy />
+                  <Copy value="Code-Server Password"/>
                 </span>
               </div>
             </div>

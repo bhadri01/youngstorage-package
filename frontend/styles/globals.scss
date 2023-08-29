@@ -10,20 +10,22 @@
   --input-light: #979797;
   --nav-font: #b4b5b7;
   --nav-font-hover: #a3a3a3;
+  --primary-light: #334afd;
   --primary: #334afd;
-  --primary-hover: #1a2dbd;
+  --primary-hover: #3c52f7;
   --secondary: #fd7401;
-  --secondary-hover: #d66101;
+  --secondary-hover: #fd8421;
   --success: #19af66;
-  --success-hover: #048748;
+  --success-hover: #00c465;
   --error: #f35746;
-  --error-hover: #c83120;
+  --error-hover: #f56454;
   --warning: #f2c94c;
   --warning-hover: #caa023;
   --info: #5458f7;
   --info-hover: #373ada;
   --terminal: #003459;
   --fixed-width: calc(100% - 219px);
+  --split-line: rgba(190, 190, 190, 0.74);
 }
 
 * {

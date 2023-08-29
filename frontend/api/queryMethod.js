@@ -6,5 +6,7 @@ export const APIQuery = (key, API, interval = false) =>
     queryFn: () => API(),
     retry: 1,
     cacheTime: 1000 * 60 * 60 * 24,
-    refetchInterval: interval
+    refetchInterval: interval,
+    refetchOnWindowFocus: false,
+    interval: false,
   });

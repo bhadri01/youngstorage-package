@@ -1,83 +1,272 @@
 import Link from "next/link";
 import React from "react";
-import Button from "@/components/button";
 import Copy from "@/components/copy";
 import { useState } from "react";
-import Breadcrumb from "@/components/Breadcrumb";
-import ToolTips from "@/components/ToolTips";
+import { APIMutate, APIQuery } from "@/api/queryMethod";
+import { API } from "@/api/api";
+import { PageCenter, PageLoading } from "./pageLoading";
+import { GetCreatedTime } from "@/app/[username]/networks/page";
+import { useMutation } from "@tanstack/react-query";
+import { Toast } from "./alert";
+import Button from "./button";
+import {
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-
-function DashBoard({ params }) {
-  const [showPassword, SetShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    SetShowPassword((prevShowPassword) => !prevShowPassword);
+function DashBoard({ service, servicesUser }) {
+  const dropUser = async (database, username) => {
+    const data = await API.dropUserServices(database, username)
+      .then((res) => {
+        Toast.success(res?.data?.message);
+        servicesUser.refetch();
+      })
+      .catch((error) => {
+        Toast.error(error?.data?.message);
+      });
   };
+  const [pop, SetPop] = useState(false);
+
   return (
     <div className="dashboard">
       <div className="dashboard-container">
         <div className="left">
           <div className="heading">
-            <h3>Create Database</h3>
+            <h3>connection information</h3>
           </div>
-          <div className="db-container">
-            <span>Username</span>
-            <div className="cpy">
-              <h4>my sql Server</h4>
-            </div>
-          </div>
-          <div className="db-container">
-            <span>Database Name</span>
-            <div className="cpy">
-              <h4>badri anish </h4>
-              <Copy />
-            </div>
-          </div>
-          <div className="db-container">
-            <span>Collection</span>
-            <div className="cpy">
-              <h4>mysql.labs.youngstorage.in</h4>
-              <Copy />
-            </div>
-          </div>
-          <div className="db-container">
-            <span>port</span>
-            <div className="cpy">
-              <h4>3306</h4>
-              <Copy className="copy" />
-            </div>
-          </div>
-        </div>
-        <div className="right">
-          <h3>My Sql Server users(you can add upto 5 users)</h3>
-          <div className="small-box">
-            <div className="lbl">
-              <label>UserName:</label>
-              <span>Anish</span>
-              <div className="menu">
-                <img alt="menu" src="/dots.png" width={18} height={18} />
+          <div className="db-information">
+            <div className="db-container">
+              <span>server name</span>
+              <div className="cpy">
+                <h5>{service.service} Server</h5>
               </div>
             </div>
-            <div className="lbl">
-              <label>Password:</label>
-              <input type={showPassword ? "text" : "password"} />
-              <span onClick={togglePasswordVisibility}>
-                <img
-                  src={showPassword ? "/shared.png" : "/hide.png"}
-                  width={20}
-                  height={20}
-                />
-              </span>
+            <div className="db-container">
+              <span>IP address</span>
+              <div className="cpy">
+                <h4>{service.ipaddress}</h4>
+                <Copy value="MYSQL IP Address" />
+              </div>
             </div>
-
-            <div className="hr">
-              <span>no of database 0 / 5</span>
+            <div className="db-container">
+              <span>host</span>
+              <div className="cpy">
+                <h4>{service.host}</h4>
+                <Copy value="MYSQL DNS" />
+              </div>
+            </div>
+            <div className="db-container">
+              <span>port</span>
+              <div className="cpy">
+                <h4>{service.port[0]}</h4>
+                <Copy className="copy" value="MYSQL Port" />
+              </div>
             </div>
           </div>
         </div>
+
+        <div className="right">
+          {servicesUser.isLoading ? (
+            <PageCenter>
+              <PageLoading />
+            </PageCenter>
+          ) : servicesUser.isError ? (
+            <PageCenter>
+              <h2>{servicesUser.error?.data?.message} 🪪</h2>
+            </PageCenter>
+          ) : (
+            <>
+              <div className="table-header">
+                <h3>
+                  <b>{service.service}</b> Server users(you can add upto{" "}
+                  <b>
+                    {servicesUser.data?.data?.data?.currentUsers} /{" "}
+                    {servicesUser.data?.data?.data?.maxUsers}
+                  </b>{" "}
+                  users)
+                </h3>
+                <Button
+                  color="success"
+                  value="add"
+                  onClick={() => SetPop((a) => !a)}
+                />
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                    <th>No DBs</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {servicesUser.data?.data?.data?.dbusers?.map(
+                    (user, index) => (
+                      <tr>
+                        <td>{index + 1}</td>
+                        <td>{user.username}</td>
+                        <td>{user.password}</td>
+                        <td>
+                          {user.currentNames}/{user.maxNames}
+                        </td>
+                        <td>{GetCreatedTime(user.createdAt)}</td>
+                        <td>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            fill="currentColor"
+                            className="bi bi-trash3"
+                            viewBox="0 0 16 16"
+                            onClick={() =>
+                              dropUser(service.service, user.username)
+                            }
+                          >
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+                          </svg>
+                        </td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </>
+          )}
+        </div>
       </div>
+      {pop && (
+        <AddUser
+          service={service}
+          SetPop={SetPop}
+          servicesUser={servicesUser}
+        />
+      )}
     </div>
   );
 }
 
 export default DashBoard;
+
+const AddUser = ({ service, SetPop, servicesUser }) => {
+  const [user, setuser] = useState({
+    username: "",
+    password: "",
+    cpassword: "",
+  });
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    cpassword: false,
+  });
+
+  const changeHandler = (e) => {
+    setuser((a) => ({ ...a, [e.target.name]: e.target.value }));
+  };
+
+  const Adduser = async () => {
+    if (user.username && user.password && user.cpassword) {
+      if (user.password == user.cpassword) {
+        const adduser = await API.addUserService(service.service, user)
+          .then((res) => {
+            Toast.success(res?.data?.message);
+            servicesUser.refetch();
+            SetPop((a) => !a);
+          })
+          .catch((err) => {
+            Toast.error(err?.data?.message);
+          });
+      } else {
+        Toast.error("password and confirm not match");
+      }
+    } else {
+      Toast.error("fill all the fields");
+    }
+  };
+  return (
+    <div className="add-user-to-database">
+      <div className="add-user-content">
+        <div className="user-header">
+          add user to <b>{service.service}</b> service
+        </div>
+
+        <FormControl>
+          <InputLabel htmlFor="username">username</InputLabel>
+          <OutlinedInput
+            id="username"
+            type={"text"}
+            size="medium"
+            name="username"
+            onChange={changeHandler}
+            value={user.username}
+            label="username"
+          />
+        </FormControl>
+
+        <FormControl>
+          <InputLabel htmlFor="password">Password</InputLabel>
+          <OutlinedInput
+            id="password"
+            type={showPassword.password ? "text" : "password"}
+            size="medium"
+            name="password"
+            onChange={changeHandler}
+            value={user.password}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() =>
+                    setShowPassword((a) => ({
+                      ...a,
+                      password: !showPassword.password,
+                    }))
+                  }
+                >
+                  {showPassword.password ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl>
+
+        <FormControl>
+          <InputLabel htmlFor="cpassword">Confirm Password</InputLabel>
+          <OutlinedInput
+            id="cpassword"
+            type={showPassword.cpassword ? "text" : "password"}
+            size="medium"
+            name="cpassword"
+            onChange={changeHandler}
+            value={user.cpassword}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() =>
+                    setShowPassword((a) => ({
+                      ...a,
+                      cpassword: !showPassword.cpassword,
+                    }))
+                  }
+                >
+                  {showPassword.cpassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Confirm Password"
+          />
+        </FormControl>
+        <div className="user-add-button">
+          <Button value="cancle" onClick={() => SetPop((a) => !a)} />
+          <Button value="add user" color="success" onClick={Adduser} />
+        </div>
+      </div>
+    </div>
+  );
+};

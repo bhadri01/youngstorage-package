@@ -21,6 +21,15 @@ This one function will call all the db services by Enum Selection
 # get the entire users and database details of the userId
 
 
+@router.get("/services")
+def services(user: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
+    try:
+        database_services = DatabaseServices(user=user)
+        return JSONResponse(status_code=200, content={"message": f"all the services", "status": True, "data": database_services.services()})
+    except Exception as e:
+        return JSONResponse(content={"message": str(e), "status": False}, status_code=400)
+
+
 @router.get("/{database}/getdata")
 def get_database_details(database: DataBaseTypes, user: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
@@ -66,12 +75,30 @@ def add_user_to_database(database: DataBaseTypes, data: CreateUser, user: dict =
 @router.delete("/{database}/dropUser/{username}")
 def drop_user_from_database(database: DataBaseTypes, username: str, user: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
+        database_services = DatabaseServices(user)
+        users = database_services.get_user()
+
+        # delete all the the database that belongs to the user
+        for user in users["dbusers"]:
+            if user["username"] == username:
+                for db in user["dbNames"]:
+                    out = subprocess.run(["docker", "exec", "-it", "mysql.youngstorage.in", "bash", "-c",
+                                          f"./root/mysql_drop_db.sh {db['database']}"], capture_output=True)
+                    print(str(out))
+                    status_code_match = re.search(
+                        r'status_code=(\d+)', str(out))
+                    out_code = int(status_code_match.group(1))
+                    if (out_code == 200):
+                        continue
+                    elif (out_code == 401):
+                        raise Exception(
+                            f"{db['database']} database drop failed")
+
         out = subprocess.run(["docker", "exec", "-it", "mysql.youngstorage.in", "bash",
                              "-c", f"./root/mysql_drop_user.sh {username}"], capture_output=True)
         status_code_match = re.search(r'status_code=(\d+)', str(out))
         out_code = int(status_code_match.group(1))
         if (out_code == 200):
-            database_services = DatabaseServices(user)
             dbUsers = database_services.drop_user(username)
             if dbUsers:
                 return JSONResponse(status_code=200, content={"message": f"{username} - user removed from {database}", "status": True})
@@ -91,7 +118,7 @@ def add_database_to_user(database: DataBaseTypes, username: str, data: CreateDB,
             if not database_services.is_max_database():
                 if not database_services.check_database_exist(f"{data.username}_{data.database}"):
                     out = subprocess.run(["docker", "exec", "-it", "mysql.youngstorage.in", "bash", "-c",
-                                          f"./root/mysql_db_creation.sh {data.username}_{data.database} {data.username}"], capture_output=True)
+                                          f"./root/mysql_db_creation.sh {data.username}_{data.database} {data.charset} {data.collation} {data.username}"], capture_output=True)
                     print(str(out))
                     status_code_match = re.search(
                         r'status_code=(\d+)', str(out))

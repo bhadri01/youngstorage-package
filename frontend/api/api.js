@@ -26,6 +26,10 @@ export const Token = () => {
   }
 };
 
+const servicesData = {
+  mysql: "mysql"
+}
+
 export const API = {
   root: () => GetMethod({ url: `${API_URL}` }),
   // this function is to find the authorized user using token
@@ -111,6 +115,34 @@ export const API = {
       headers: { Authorization: `Bearer ${Token()}` },
       body,
     }),
+  // service api config
+  services: () => GetMethod({
+    url: `${API_URL}/services`,
+    headers: { Authorization: `Bearer ${Token()}` },
+  }),
+  getServices: (database) => GetMethod({
+    url: `${API_URL}/${servicesData[database]}/getdata`,
+    headers: { Authorization: `Bearer ${Token()}` },
+  }),
+  addUserService: (database, body) => PostMethod({
+    url: `${API_URL}/${servicesData[database]}/addUser`,
+    headers: { Authorization: `Bearer ${Token()}` },
+    body,
+  }),
+  dropUserServices: (database, username) => DeleteMethod({
+    url: `${API_URL}/${servicesData[database]}/dropUser/${username}`,
+    headers: { Authorization: `Bearer ${Token()}` },
+  }),
+  addDatabaseToUserService: (database, body) => PostMethod({
+    url: `${API_URL}/${servicesData[database]}/${body.username}/addDatabase`,
+    headers: { Authorization: `Bearer ${Token()}` },
+    body,
+  }),
+  dropDatabaseToUserService: (database, body) => DeleteMethod({
+    url: `${API_URL}/${servicesData[database]}/${body.username}/dropDatabase`,
+    headers: { Authorization: `Bearer ${Token()}` },
+    body,
+  }),
 };
 
 const GetMethod = async (props) => {

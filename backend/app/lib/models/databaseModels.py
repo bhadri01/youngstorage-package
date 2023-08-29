@@ -17,7 +17,8 @@ class CreateUser(BaseModel):
 class CreateDB(BaseModel):
     username: str
     database: str
-    collection: str
+    collation: str
+    charset: str
 
 
 class DatabaseServices:
@@ -41,9 +42,21 @@ class DatabaseServices:
         }
         self.dbTypes = {
             "database": "",
-            "collection": "",
+            "collation": "",
+            "charset": "",
             "createdAt": int(datetime.now().timestamp())
         }
+
+    def services(self):
+        try:
+            services = list(self.db.servicesPrimary.find())
+            if services is None:
+                return []
+            for index, _ in enumerate(services):
+                services[index]["_id"] = str(services[index]["_id"])
+            return services
+        except pymongo.errors.PyMongoError as e:
+            raise Exception(str(e))
 
     def get_user(self):
         try:
@@ -69,6 +82,7 @@ class DatabaseServices:
         try:
             db_users = self.db.services.find_one(
                 {"$expr": {"$lt": ['$currentUsers', '$maxUsers']}})
+            print(db_users)
             if db_users is None:
                 return True
             return False
@@ -129,7 +143,8 @@ class DatabaseServices:
         try:
             dbtype = self.dbTypes
             dbtype["database"] = f"{data.username}_{data.database}"
-            dbtype["collection"] = data.collection
+            dbtype["collation"] = data.collation
+            dbtype["charset"] = data.charset
             result = self.db.services.update_one(
                 {"dbusers.username": data.username},
                 {"$push": {"dbusers.$.dbNames": dbtype},

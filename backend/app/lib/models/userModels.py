@@ -1,4 +1,5 @@
-from pydantic import BaseModel, EmailStr, Field, validator
+from pydantic import BaseModel, EmailStr, validator
+from ...database import db
 import re
 from passlib.context import CryptContext
 from datetime import datetime
@@ -9,6 +10,14 @@ phone_regex = r"^[0-9]{10}$"
 
 # Create an instance of the password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+class GetPassword(BaseModel):
+    password: str
+    confirmpassword: str
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
 
 
 class Signup(BaseModel):

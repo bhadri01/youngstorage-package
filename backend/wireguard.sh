@@ -19,11 +19,11 @@ else
     sed -i "s|.*WIREGUARD_PUBLIC_KEY.*|WIREGUARD_PUBLIC_KEY=$(cat /etc/wireguard/public.key)|" /backend/.env
 
     echo "[Interface]
-Address = 172.20.0.1/16
+Address = 172.25.0.1/16
 SaveConfig = true
 PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -A FORWARD -o %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth+ -j MASQUERADE
 PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -D FORWARD -o %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth+ -j MASQUERADE
-ListenPort = 51820
+ListenPort = 41194
 PrivateKey = $(cat /etc/wireguard/private.key)" > /etc/wireguard/wg0.conf
 
 fi

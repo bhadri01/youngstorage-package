@@ -283,7 +283,7 @@ def containerRun(_id: str, username: str, dockerip: str):
 
         # if domain exist add domain lables in traefik
         network = db.network.find_one({"userId": _id})
-        if network["domainList"]:
+        if "domainList" in network:
             trafikLables += domainLableGenerator(
                 username, network["domainList"])
 
