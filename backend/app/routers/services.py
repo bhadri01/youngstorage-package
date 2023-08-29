@@ -48,7 +48,7 @@ def add_user_to_database(database: DataBaseTypes, data: CreateUser, user: dict =
         database_services = DatabaseServices(user)
         if not database_services.check_user_exist(data.username):
             if not database_services.is_max_user():
-                out = subprocess.run(["docker", "exec", "-it", "mysql.youngstorage.in", "bash", "-c",
+                out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash", "-c",
                                       f"./root/mysql_user_creation.sh {data.username} {data.password}"], capture_output=True)
 
                 print(str(out))
@@ -82,7 +82,7 @@ def drop_user_from_database(database: DataBaseTypes, username: str, user: dict =
         for user in users["dbusers"]:
             if user["username"] == username:
                 for db in user["dbNames"]:
-                    out = subprocess.run(["docker", "exec", "-it", "mysql.youngstorage.in", "bash", "-c",
+                    out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash", "-c",
                                           f"./root/mysql_drop_db.sh {db['database']}"], capture_output=True)
                     print(str(out))
                     status_code_match = re.search(
@@ -94,7 +94,7 @@ def drop_user_from_database(database: DataBaseTypes, username: str, user: dict =
                         raise Exception(
                             f"{db['database']} database drop failed")
 
-        out = subprocess.run(["docker", "exec", "-it", "mysql.youngstorage.in", "bash",
+        out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash",
                              "-c", f"./root/mysql_drop_user.sh {username}"], capture_output=True)
         status_code_match = re.search(r'status_code=(\d+)', str(out))
         out_code = int(status_code_match.group(1))
@@ -117,7 +117,7 @@ def add_database_to_user(database: DataBaseTypes, username: str, data: CreateDB,
         if database_services.check_user_exist(username):
             if not database_services.is_max_database():
                 if not database_services.check_database_exist(f"{data.username}_{data.database}"):
-                    out = subprocess.run(["docker", "exec", "-it", "mysql.youngstorage.in", "bash", "-c",
+                    out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash", "-c",
                                           f"./root/mysql_db_creation.sh {data.username}_{data.database} {data.charset} {data.collation} {data.username}"], capture_output=True)
                     print(str(out))
                     status_code_match = re.search(
@@ -146,7 +146,7 @@ def drop_database_from_user(database: DataBaseTypes, username: str, data: Create
         database_services = DatabaseServices(user)
         if database_services.check_user_exist(username):
             if database_services.check_database_exist(f"{data.username}_{data.database}"):
-                out = subprocess.run(["docker", "exec", "-it", "mysql.youngstorage.in", "bash", "-c",
+                out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash", "-c",
                                       f"./root/mysql_drop_db.sh {data.username}_{data.database}"], capture_output=True)
                 print(str(out))
                 status_code_match = re.search(r'status_code=(\d+)', str(out))

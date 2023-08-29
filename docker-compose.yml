@@ -4,7 +4,7 @@ services:
   mongodb:
     image: mongo
     container_name: mongodb
-    # restart: always
+    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: Young321backend
@@ -17,7 +17,7 @@ services:
   rabbitmq:
     image: rabbitmq:3.12-management
     container_name: rabbitmq
-    # restart: always
+    restart: always
     ports:
       - "5672:5672" # AMQP
       - "15672:15672" # Management UI
@@ -53,7 +53,7 @@ services:
     build:
       context: ./backend
     container_name: youngstorageBackend
-    # restart: always
+    restart: always
     cap_add:
       - NET_ADMIN
     ports:
@@ -82,11 +82,7 @@ services:
     build:
       context: ./frontend
     container_name: youngstorageFrontend
-    # restart: always
-    # environment:
-    #   - API_URL=http://172.32.0.4:8000
-    #   - MQTT_HOST=172.32.0.3
-    #   - MQTT_PORT=15676
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.labs_front_end.rule=Host(`labs.youngstorage.in`)"

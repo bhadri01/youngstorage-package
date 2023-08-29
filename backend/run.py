@@ -32,7 +32,7 @@ tags_metadata = [
         "description": "**Services** like database and catching system is here",
     },
 ]
-app = FastAPI(docs_url="/docs",
+app = FastAPI(docs_url=None,
               redoc_url=None,
               title="youngstorage API service",
               summary="This is the cloud servide that we can able to code and host your activity",
@@ -72,4 +72,4 @@ if __name__ == "__main__":
     # production
     # uvicorn.run("run:app", host="0.0.0.0", port=8000,log_config="log.ini",access_log=True,workers=2)
     # development
-    uvicorn.run("run:app", host="0.0.0.0", port=9090, reload=True)
+    uvicorn.run("run:app", host="0.0.0.0", port=8000, reload=True)

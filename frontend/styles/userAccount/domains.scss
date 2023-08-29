@@ -16,9 +16,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    height: 48px;
     font-size: 30px;
-    background-color: var(--white);
-    padding: 16px;
     border-radius: 16px;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
 
@@ -26,8 +25,9 @@
       border: none;
       outline: none;
       background-color: transparent;
-      font-size: 20px;
+      font-size: 24px;
       text-align: center;
+      padding: 0 4px;
     }
 
     .drop {
@@ -115,31 +115,30 @@
       display: grid;
       grid-template-columns: auto auto auto auto;
       gap: 24px;
-      
+
     }
   }
 
   .dot {
     // width: fit-content;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
     border-radius: 8px;
     box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
     padding: 16px;
     gap: 20px;
     background-color: #8ec5fc;
     background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
 
-    .gap {
-      .domain-name {
-        width: 60%;
-        display: inline-block;
-        // white-space: nowrap;
-        // overflow: hidden;
-        // text-overflow: ellipsis;
-      }
-    }
+    // .gap {
+    //   .domain-name{
+    //     font-weight: 600;
+    //   }
+    // }
 
 
     .min {
@@ -158,38 +157,50 @@
       }
     }
 
+
     .lottie {
+      transition: 0.3s ease-in-out;
+      position: absolute;
+      top: 50%;
+      right: -50px;
+      transform: translate(-50%, -50%);
       display: flex;
       flex-direction: column;
     }
 
+    &:hover {
+
+      .lottie {
+        right: 2px;
+      }
+    }
   }
 
-  @media screen and (max-width: 768px) { 
-    .dot{
+  @media screen and (max-width: 768px) {
+    .dot {
       width: 100%;
       justify-content: space-between;
     }
 
-      .domain-add-list{
-        .adjust {
-          .any {
-            .flex {
-              Button{
-                width: 25%;
-              }
+    .domain-add-list {
+      .adjust {
+        .any {
+          .flex {
+            Button {
+              width: 25%;
             }
           }
         }
       }
-   
-      .get-domains{
-        flex-direction: column;
-    text-align: center;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-      }
+    }
+
+    .get-domains {
+      flex-direction: column;
+      text-align: center;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
   }
 }

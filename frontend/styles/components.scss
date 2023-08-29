@@ -2,6 +2,7 @@
 // that holds by the Component Parent
 // All the styles are seperated by the Special blockes
 @import "./sassComponents.scss";
+
 //============================= BUTTON STYLE START====================================
 .btn {
   border: none;
@@ -19,28 +20,37 @@
   align-items: center;
   gap: 8px;
   transition: 0.3s ease-in-out;
+
   &:hover {
     background: var(--primary-hover);
   }
 }
+
 //============================= BUTTON STYLE END====================================
 
 //============================= LOADINGBAR STYLE START====================================
 .loadingbar {
   @include flex-all-center;
 }
+
 //============================= LOADINGBAR STYLE END====================================
 
 //============================= BREADCRUMB STYLE START====================================
 .breadcrumb {
-  display: flex;
-  stroke: var(--nav-font-hover);
-  justify-content: flex-start;
-  align-items: center;
+
   .crumb-box {
+    svg {
+      margin-right: 8px;
+      stroke: var(--nav-font-hover);
+    }
+    color: var(--input-light);
+    align-items: center;
+    justify-content: flex-start;
+    display: flex;
     text-transform: capitalize;
   }
 }
+
 //============================= BREADCRUMB STYLE END====================================
 
 //============================= BADGE STYLE START====================================
@@ -53,6 +63,7 @@
   font-weight: 700;
   color: var(--white);
 }
+
 //============================= BADGE STYLE END====================================
 
 //=============================  ALERT STYLE STARTS====================================
@@ -69,6 +80,7 @@
   padding-left: 24px;
   position: relative;
   text-transform: uppercase;
+
   &::before {
     content: "";
     position: absolute;
@@ -83,9 +95,11 @@
   .low {
     display: flex;
     flex-direction: column;
+
     h1 {
       text-transform: capitalize;
     }
+
     p {
       text-transform: capitalize;
     }
@@ -143,6 +157,7 @@
       background-color: var(--primary-light);
       border-radius: 4px 4px 0 0;
       padding: 8px;
+
       h3 {
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
         padding: 8px;
@@ -151,9 +166,11 @@
         text-transform: capitalize;
       }
     }
+
     .db-information {
       padding: 0 8px 8px 8px;
     }
+
     .db-container {
       display: flex;
       align-items: center;
@@ -195,6 +212,7 @@
       }
     }
   }
+
   .right {
     flex: 1;
     height: fit-content;
@@ -202,6 +220,7 @@
     flex-direction: column;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
     border-radius: 4px;
+
     .table-header {
       display: flex;
       background-color: var(--primary-light);
@@ -209,11 +228,13 @@
       justify-content: space-between;
       padding: 8px;
       border-radius: 4px 4px 0 0;
+
       h3 {
         border-radius: 4px 4px 0 0;
         text-transform: capitalize;
         color: var(--white);
         padding: 8px;
+
         b {
           text-transform: uppercase;
         }
@@ -223,6 +244,7 @@
     table {
       padding: 8px;
       border-collapse: collapse;
+
       thead {
         tr th {
           padding: 8px;
@@ -231,17 +253,20 @@
           border-bottom: 1px solid var(--split-line);
         }
       }
+
       tbody {
         tr td {
           text-align: center;
           padding: 8px;
           text-transform: none;
           border-bottom: 1px solid var(--split-line);
+
           svg {
             cursor: pointer;
             transition: 0.1s ease-in-out;
             stroke: var(--input-light);
             stroke-opacity: 0.5;
+
             &:hover {
               stroke: var(--error);
               transform: scale(1.2);
@@ -252,6 +277,7 @@
     }
   }
 }
+
 // this is for add user
 .add-user-to-database {
   position: absolute;
@@ -263,6 +289,7 @@
   justify-content: center;
   align-items: center;
   backdrop-filter: blur(5px);
+
   .add-user-content {
     display: flex;
     flex-direction: column;
@@ -271,13 +298,16 @@
     background-color: var(--white);
     box-shadow: 0 0 200px rgba(0, 0, 0, 0.2);
     border-radius: 4px;
+
     .user-header {
       text-transform: capitalize;
     }
+
     .user-add-button {
       display: flex;
       width: 100%;
       gap: 8px;
+
       button {
         flex: 1;
       }
@@ -291,6 +321,7 @@
 
 .database {
   width: 100%;
+
   .db-main-container {
     width: 100%;
     display: flex;
@@ -304,16 +335,19 @@
       background: #fff;
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
       padding: 0 0 24px 0;
+
       .heading {
         background-color: var(--primary);
         padding: 8px;
         border-radius: 4px 4px 0 0;
+
         h3 {
           color: var(--white);
           padding: 8px;
           border-radius: 2px;
         }
       }
+
       .db-container {
         width: 100%;
         display: flex;
@@ -321,15 +355,18 @@
         justify-content: space-between;
         padding: 16px;
         gap: 16px;
+
         .db-input {
           border: 1px solid black;
           width: 300px;
           display: flex;
+
           span {
             background-color: var(--info);
             padding: 2px 6px;
             color: var(--white);
           }
+
           input {
             border: none;
             outline: none;
@@ -338,6 +375,7 @@
             padding: 0 6px;
           }
         }
+
         select {
           padding: 2px 6px;
           width: 300px;
@@ -359,30 +397,36 @@
       flex-direction: column;
       box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
       border-radius: 4px;
+
       .heading {
         padding: 8px;
         background-color: var(--primary);
         border-radius: 4px 4px 0 0;
       }
+
       h3 {
         b {
           text-transform: uppercase;
         }
+
         text-transform: none;
         color: var(--white);
         padding: 8px;
       }
+
       .databse-list-for-user {
         display: flex;
         flex-wrap: wrap;
         gap: 24px;
         padding: 16px;
+
         .db-user-name-list {
           padding: 8px;
           box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
           width: fit-content;
           border: 1px solid var(--primary-light);
           border-radius: 4px;
+
           h6 {
             font-size: 24px;
             font-weight: 900;
@@ -391,20 +435,24 @@
             justify-content: space-between;
             align-items: center;
             gap: 8px;
+
             svg {
               cursor: pointer;
               transition: 0.1s ease-in-out;
               stroke: var(--input-light);
               stroke-opacity: 0.5;
+
               &:hover {
                 stroke: var(--error);
                 transform: scale(1.2);
               }
             }
           }
+
           .db-list-lables {
             display: flex;
             gap: 8px;
+
             b {
               background-color: var(--input-light);
               color: var(--white);
@@ -413,6 +461,7 @@
               font-size: 10px;
             }
           }
+
           i {
             font-size: 12px;
             margin-left: 16px;
@@ -470,6 +519,7 @@
         justify-content: center;
       }
     }
+
     .pop-btn {
       display: flex;
       align-items: center;

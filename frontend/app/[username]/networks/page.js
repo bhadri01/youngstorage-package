@@ -45,8 +45,8 @@ export default function Network({ params }) {
   } else if (networks.isError && wgpeerdata.isError) {
     return (
       <PageCenter>
-        <h2>{networks.error?.data?.detail} 🪪</h2>
-        <h2>{wgpeerdata.error?.data?.detail} 🪪</h2>
+        <h2>{networks.error?.data?.message} 🪪</h2>
+        <h2>{wgpeerdata.error?.data?.message} 🪪</h2>
       </PageCenter>
     );
   } else {
@@ -66,10 +66,21 @@ export default function Network({ params }) {
             <div className="network-container">
               <div className="network">
                 <Breadcrumb>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="28"
+                    viewBox="0 0 30 30"
+                    fill="none"
+                  >
+                    <path
+                      d="M14.75 11.25V10.25H13.75H12.5C11.6648 10.25 11 9.58522 11 8.75V5C11 4.16478 11.6648 3.5 12.5 3.5H17.5C18.3352 3.5 19 4.16478 19 5V8.75C19 9.58522 18.3352 10.25 17.5 10.25H16.25H15.25V11.25V13.75V14.75H16.25H26.5V15.25H22.5H21.5V16.25V18.75V19.75H22.5H23.75C24.5852 19.75 25.25 20.4148 25.25 21.25V25C25.25 25.8352 24.5852 26.5 23.75 26.5H18.75C17.9148 26.5 17.25 25.8352 17.25 25V21.25C17.25 20.4148 17.9148 19.75 18.75 19.75H20H21V18.75V16.25V15.25H20H10H9V16.25V18.75V19.75H10H11.25C12.0852 19.75 12.75 20.4148 12.75 21.25V25C12.75 25.8352 12.0852 26.5 11.25 26.5H6.25C5.41478 26.5 4.75 25.8352 4.75 25V21.25C4.75 20.4148 5.41478 19.75 6.25 19.75H7.5H8.5V18.75V16.25V15.25H7.5H3.5V14.75H13.75H14.75V13.75V11.25ZM12.5 4H11.5V5V8.75V9.75H12.5H17.5H18.5V8.75V5V4H17.5H12.5ZM6.25 20.25H5.25V21.25V25V26H6.25H11.25H12.25V25V21.25V20.25H11.25H6.25ZM18.75 20.25H17.75V21.25V25V26H18.75H23.75H24.75V25V21.25V20.25H23.75H18.75Z"
+                      strokeWidth="1.5"
+                    />
+                  </svg>
                   <Link href={params?.username + "/networks"}>Networks</Link>
-                  <ToolTips name="Network Is A Area There We Can Generate A VPN And The Lab Will Be Connected Automatically In A Single Click And We Can Make It As Seamless" />
                 </Breadcrumb>
-                <Alerts value= "Network Is A Area There We Can Generate A VPN And The Lab Will Be Connected Automatically In A Single Click And We Can Make It As Seamless"/>
+                <Alerts value="Network Is A Area There We Can Generate A VPN And The Lab Will Be Connected Automatically In A Single Click And We Can Make It As Seamless" />
                 {network ? (
                   <div className="device">
                     <div className="man">
@@ -92,7 +103,7 @@ export default function Network({ params }) {
                     </div>
                     <hr />
                     <div className="devices-list">
-                      {device?.map((a) => {
+                      {device?.map((a, index) => {
                         let current = wgpeer?.filter(
                           (e) => a?.publicKey == e?.peer
                         );
@@ -162,26 +173,29 @@ export default function Network({ params }) {
                                 sent
                               </span>
                             </div>
-                            <div className="png">
-                              <div
-                                onClick={() =>
-                                  setPeerAccess((i) => ({
-                                    ...i,
-                                    status: true,
-                                    publicKey: a?.publicKey,
-                                    title: "png",
-                                  }))
-                                }
-                              >
-                                <img
-                                  alt=""
-                                  src="/qr.png"
-                                  width={20}
-                                  height={20}
-                                />
-                                <span>scan</span>
-                              </div>
-                              <div
+                            {
+                              index == 0 ? "" :
+                                <div className="png">
+                                  <div
+                                    onClick={() =>
+                                      setPeerAccess((i) => ({
+                                        ...i,
+                                        status: true,
+                                        publicKey: a?.publicKey,
+                                        title: "png",
+                                      }))
+                                    }
+                                  >
+                                    <img
+                                      alt=""
+                                      src="/qr.png"
+                                      width={20}
+                                      height={20}
+                                    />
+                                    <span>scan</span>
+                                  </div>
+
+                                  {/* <div
                                 onClick={() =>
                                   setPeerAccess((i) => ({
                                     ...i,
@@ -191,33 +205,29 @@ export default function Network({ params }) {
                                   }))
                                 }
                               >
-                                {/* <img
-                                  alt=""
-                                  src="/download.png"
-                                  width={20}
-                                  height={20}
-                                /> */}
-                                {/* <span>download</span> */}
-                              </div>
-                              <div
-                                onClick={() =>
-                                  setPeerAccess((i) => ({
-                                    ...i,
-                                    status: true,
-                                    publicKey: a?.publicKey,
-                                    title: "conf",
-                                  }))
-                                }
-                              >
-                                <img
-                                  alt=""
-                                  src="/information.png"
-                                  width={20}
-                                  height={20}
-                                />
-                                <span>info</span>
-                              </div>
-                            </div>
+                              </div> */}
+
+                                  <div
+                                    onClick={() =>
+                                      setPeerAccess((i) => ({
+                                        ...i,
+                                        status: true,
+                                        publicKey: a?.publicKey,
+                                        title: "conf",
+                                      }))
+                                    }
+                                  >
+                                    <img
+                                      alt=""
+                                      src="/information.png"
+                                      width={20}
+                                      height={20}
+                                    />
+                                    <span>info</span>
+                                  </div>
+                                </div>
+
+                            }
                           </div>
                         );
                       })}

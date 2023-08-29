@@ -1,9 +1,6 @@
-import Link from "next/link";
-
 export default function Breadcrumb({ children }) {
   return (
     <div className="breadcrumb">
-      <DashIcon />
       <div className="crumb-box">
         {children}
       </div>

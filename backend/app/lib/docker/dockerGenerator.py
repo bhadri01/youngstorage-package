@@ -19,7 +19,7 @@ client = docker.from_env()
 def spawnContainer(_id: str, username: str, deviceName: str, deviceType: str, background_task: BackgroundTasks):
     try:
         mqtt_client.publish(
-            f"/topic/{username}", MqttMsg("New Instances Started.....", True).get())
+            f"/topic/{username}", MqttMsg("New lab creation Started...!", True).get())
         baselist = list(db.baselist.find())
         if len(baselist) == 1:
             ip = baselist[0]["ip"]
@@ -65,7 +65,7 @@ def spawnContainer(_id: str, username: str, deviceName: str, deviceType: str, ba
 def reDeploy(_id: str, username: str, deviceName: str, dockerip: str, background_task: BackgroundTasks):
     try:
         mqtt_client.publish(
-            f"/topic/{username}", MqttMsg(f"Container reDeploy starts.....{username}", True).get())
+            f"/topic/{username}", MqttMsg(f"lab redeploy starts {username}...!", True).get())
         # mqtt_client.publish("/topic/sample", "")
         # both image build and container run happens in single shot
         # this will happens in the background task
@@ -250,10 +250,10 @@ def imageBuild(_id: str, username: str, dockerip: str, deviceName: str):
         process = subprocess.run(cmd, shell=True, text=True)
 
         mqtt_client.publish(
-            f"/topic/{username}", MqttMsg("image build started.....", True).get())
+            f"/topic/{username}", MqttMsg("Image build started...!", True).get())
 
         mqtt_client.publish(f"/topic/{username}",
-                            MqttMsg("image build done!!", True).get())
+                            MqttMsg("Image build done...!!", True).get())
         # docker run happens
         containerRun(_id, username, dockerip)
     except Exception as e:
@@ -270,8 +270,8 @@ def containerRun(_id: str, username: str, dockerip: str):
         if exContainer.id:
             exContainer.remove(force=True)
             mqtt_client.publish(
-                f"/topic/{username}", MqttMsg(f"Removed existing container......", True).get())
-            raise NotFound(f"{username} container removed")
+                f"/topic/{username}", MqttMsg(f"Removed existing lab...!", True).get())
+            raise NotFound(f"{username} lab removed")
 
     # container not found build new one
     except NotFound:
@@ -288,25 +288,23 @@ def containerRun(_id: str, username: str, dockerip: str):
                 username, network["domainList"])
 
         mqtt_client.publish(f"/topic/{username}",
-                            MqttMsg(f"build Id {imageId}........", True).get()
+                            MqttMsg(f"build Id {imageId}...!", True).get()
                             )
-        mqtt_client.publish(
-            f"/topic/{username}", MqttMsg("container run started.....", True).get())
 
         mqtt_client.publish(
-            f"/topic/{username}", MqttMsg("docker compose preparing to star.....", True).get())
+            f"/topic/{username}", MqttMsg("lab preparing to start...!", True).get())
         # preparing the compose file
         if GetComposeFile(username, dockerip, trafikLables):
             mqtt_client.publish(
-                f"/topic/{username}", MqttMsg("docker compose preperation done.....", True).get())
+                f"/topic/{username}", MqttMsg("lab preperation done...!", True).get())
             source = os.path.join(os.getcwd(), "source", "docker-compose.yml")
             print(source)
-            cmd = f"docker compose -f {source} up -d"
+            cmd = f"docker-compose -f {source} up -d"
             # Execute the command
             os.system(cmd)
 
             mqtt_client.publish(
-                f"/topic/{username}", MqttMsg("container prepating to play.....", True).get())
+                f"/topic/{username}", MqttMsg("lab ready to play...!", True).get())
 
             container_id = client.containers.get(username).id
 
@@ -314,14 +312,14 @@ def containerRun(_id: str, username: str, dockerip: str):
             lab.upgradeContainerDetails(
                 container_id, imageId[len(imageId)-32:])
             mqtt_client.publish(f"/topic/{username}",
-                                MqttMsg(f"{container_id}", True).get())
+                                MqttMsg(f"{container_id}...!", True).get())
 
             # Wait for the process to finish
             mqtt_client.publish(
-                f"/topic/{username}", MqttMsg("container successfully running.....", True, isFinished=True).get())
+                f"/topic/{username}", MqttMsg("lab successfully running...!", True, isFinished=True).get())
         else:
             mqtt_client.publish(
-                f"/topic/{username}", MqttMsg("compose file not prepared", False, isError=False, isFinished=True).get())
+                f"/topic/{username}", MqttMsg("lab data preperation failed...!?", False, isError=False, isFinished=True).get())
 
     except Exception as e:
         mqtt_client.publish(f"/topic/{username}", str(e))
