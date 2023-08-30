@@ -4,14 +4,13 @@ import React from "react";
 import "@/styles/userAccount/networks.scss";
 import { useEffect, useState } from "react";
 import { API } from "@/api/api";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import Badge from "@/components/badge";
 import Button from "@/components/button";
 import Dropdown from "@/components/dropdown";
 import Breadcrumb from "@/components/Breadcrumb";
 import { APIQuery } from "@/api/queryMethod";
-import ToolTips from "@/components/ToolTips";
 import { PageCenter, PageLoading } from "@/components/pageLoading";
 import { Toast } from "@/components/alert";
 import Alerts from "@/components/alerts";
@@ -78,7 +77,9 @@ export default function Network({ params }) {
                       strokeWidth="1.5"
                     />
                   </svg>
-                  <Link href={params?.username + "/networks"}>Networks</Link>
+                  <Link href={"/" + params?.username + "/networks"}>
+                    Networks
+                  </Link>
                 </Breadcrumb>
                 <Alerts value="Network Is A Area There We Can Generate A VPN And The Lab Will Be Connected Automatically In A Single Click And We Can Make It As Seamless" />
                 {network ? (
@@ -173,29 +174,30 @@ export default function Network({ params }) {
                                 sent
                               </span>
                             </div>
-                            {
-                              index == 0 ? "" :
-                                <div className="png">
-                                  <div
-                                    onClick={() =>
-                                      setPeerAccess((i) => ({
-                                        ...i,
-                                        status: true,
-                                        publicKey: a?.publicKey,
-                                        title: "png",
-                                      }))
-                                    }
-                                  >
-                                    <img
-                                      alt=""
-                                      src="/qr.png"
-                                      width={20}
-                                      height={20}
-                                    />
-                                    <span>scan</span>
-                                  </div>
+                            {index == 0 ? (
+                              ""
+                            ) : (
+                              <div className="png">
+                                <div
+                                  onClick={() =>
+                                    setPeerAccess((i) => ({
+                                      ...i,
+                                      status: true,
+                                      publicKey: a?.publicKey,
+                                      title: "png",
+                                    }))
+                                  }
+                                >
+                                  <img
+                                    alt=""
+                                    src="/qr.png"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  <span>scan</span>
+                                </div>
 
-                                  {/* <div
+                                {/* <div
                                 onClick={() =>
                                   setPeerAccess((i) => ({
                                     ...i,
@@ -207,27 +209,26 @@ export default function Network({ params }) {
                               >
                               </div> */}
 
-                                  <div
-                                    onClick={() =>
-                                      setPeerAccess((i) => ({
-                                        ...i,
-                                        status: true,
-                                        publicKey: a?.publicKey,
-                                        title: "conf",
-                                      }))
-                                    }
-                                  >
-                                    <img
-                                      alt=""
-                                      src="/information.png"
-                                      width={20}
-                                      height={20}
-                                    />
-                                    <span>info</span>
-                                  </div>
+                                <div
+                                  onClick={() =>
+                                    setPeerAccess((i) => ({
+                                      ...i,
+                                      status: true,
+                                      publicKey: a?.publicKey,
+                                      title: "conf",
+                                    }))
+                                  }
+                                >
+                                  <img
+                                    alt=""
+                                    src="/information.png"
+                                    width={20}
+                                    height={20}
+                                  />
+                                  <span>info</span>
                                 </div>
-
-                            }
+                              </div>
+                            )}
                           </div>
                         );
                       })}
@@ -284,12 +285,12 @@ const Popup = (props) => {
     },
     onSuccess: (res) => {
       // Invalidate and refetch
-      Toast.success(res?.data?.message)
+      Toast.success(res?.data?.message);
       queryClient.invalidateQueries("networks");
       props.setAdd(false);
     },
     onError: (error) => {
-      Toast.error(error?.data?.message || res?.data?.detail)
+      Toast.error(error?.data?.message || res?.data?.detail);
     },
   });
 
@@ -300,7 +301,7 @@ const Popup = (props) => {
         deviceType: selectedOption,
       });
     } else {
-      Toast.error("please add the device details")
+      Toast.error("please add the device details");
     }
   };
   const [selectedOption, setSelectedOption] = useState(options[0].value);

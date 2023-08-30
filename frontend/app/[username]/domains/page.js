@@ -3,14 +3,13 @@
 import Button from "@/components/button";
 import React, { useState } from "react";
 import Dropdown from "@/components/dropdown";
-import { API, Token } from "@/api/api";
+import { API } from "@/api/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Badge from "@/components/badge";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 import { Toast } from "@/components/alert";
 import "@/styles/userAccount/domains.scss";
-import ToolTips from "@/components/ToolTips";
 import { PageCenter, PageLoading } from "@/components/pageLoading";
 
 const options = [
@@ -99,7 +98,7 @@ function Domains({ params }) {
               strokeWidth="2"
             />
           </svg>
-          <Link href={params?.username + "/domains"}>domains</Link>
+          <Link href={"/" + params?.username + "/domains"}>domains</Link>
         </Breadcrumb>
 
         {domains.length > 0 ? (
@@ -153,7 +152,11 @@ function Domains({ params }) {
                 {domains[0]?.domainList?.map((a) => (
                   <div className="dot" key={a.domainName}>
                     <div className="gap">
-                      <span className="domain-name"><Link href={`https://${a.domainName}`} target="_blank">{a.domainName}</Link></span>
+                      <span className="domain-name">
+                        <Link href={`https://${a.domainName}`} target="_blank">
+                          {a.domainName}
+                        </Link>
+                      </span>
                       {/* <Badge value="Not Mapped" color="btn-error" /> */}
                       <Badge value="Ubuntu" color="ubu-badge" />
                     </div>

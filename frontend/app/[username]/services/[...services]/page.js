@@ -2,7 +2,6 @@
 
 import React from "react";
 import Breadcrumb from "@/components/Breadcrumb";
-import ToolTips from "@/components/ToolTips";
 import Link from "next/link";
 import "@/styles/userAccount/services.scss";
 import Button from "@/components/button";
@@ -11,7 +10,6 @@ import DashBoard from "@/components/DashBoard";
 import DataBase from "@/components/DataBase";
 import { useQueryClient } from "@tanstack/react-query";
 import { PageCenter } from "@/components/pageLoading";
-import Profile from "@/components/Profile";
 import { APIQuery } from "@/api/queryMethod";
 import { API } from "@/api/api";
 

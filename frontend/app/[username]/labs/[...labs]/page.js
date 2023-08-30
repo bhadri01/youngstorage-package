@@ -2,7 +2,7 @@
 
 import Button from "@/components/button";
 import React, { useState, useEffect, useRef } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { API } from "@/api/api";
 import Link from "next/link";
 import { Client } from "paho-mqtt";
@@ -275,7 +275,7 @@ export default function Ubuntu({ params }) {
               strokeLinecap="round"
             />
           </svg>
-          <Link href={username + "/labs"}>Labs</Link>
+          <Link href={"/" + username + "/labs"}>Labs</Link>
           {params.labs.map((a) => (
             <React.Fragment key={a}>
               {" / "} {a}
@@ -359,11 +359,18 @@ export default function Ubuntu({ params }) {
                 This server is accessible through Code or SSH. Code is
                 accessible under VPN in one click and you do not have to SSH
                 into your lab, becuase Code works on your browser without any
-                additional setup. Just ensure you are connected to <Link href={`https://www.wireguard.com/`} target="_blank"><b>VPN</b></Link>. <br />
+                additional setup. Just ensure you are connected to{" "}
+                <Link href={`https://www.wireguard.com/`} target="_blank">
+                  <b>VPN</b>
+                </Link>
+                . <br />
                 Code is an embedded VS Code that runs from within this lab and
                 let you access your lab effortlessly over web. To keep you
                 secure, this password changes during every redeploy. For a more
-                convinient development experience, consider installing <Link href={`https://code.visualstudio.com/`} target="_blank"><b>Visual Studio Code </b></Link>
+                convinient development experience, consider installing{" "}
+                <Link href={`https://code.visualstudio.com/`} target="_blank">
+                  <b>Visual Studio Code </b>
+                </Link>
                 Desktop and connect via SSH.
               </p>
             </div>

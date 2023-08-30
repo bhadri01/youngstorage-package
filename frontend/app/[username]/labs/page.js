@@ -3,16 +3,12 @@
 import { useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import Link from "next/link";
-import ToolTips from "@/components/ToolTips";
 import Alerts from "@/components/alerts";
 
 // import { useQueryClient } from "@tanstack/react-query";
 
 function Labs({ params }) {
   const router = useRouter();
-  // const queryClient = useQueryClient()
-  //query data of the labs if exist we can get the data
-  // const userlabs = queryClient.getQueriesData({ queryKey: ["userlabs"] })
   const ChangePath = (route) => {
     router.push(route);
   };
@@ -117,7 +113,7 @@ function Labs({ params }) {
               strokeLinecap="round"
             />
           </svg>
-          <Link href={params?.username + "/labs"}>labs</Link>{" "}
+          <Link href={"/" + params?.username + "/labs"}>labs</Link>{" "}
         </Breadcrumb>
         <Alerts value="You Can Access Our Various Labs And Gain Enormous Knowledge On Multiple Domains" />
 
