@@ -25,7 +25,11 @@ def on_message(client, userdata, msg):
 mqtt_client.on_connect = on_connect
 mqtt_client.on_message = on_message
 
+# production
 mqtt_client.connect("rabbitmq", 1883, 60)
+
+# development
+# mqtt_client.connect("localhost", 1883, 60)
 
 # Start MQTT client loop in a separate thread
 mqtt_client.loop_start()

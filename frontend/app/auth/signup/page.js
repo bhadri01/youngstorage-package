@@ -32,8 +32,14 @@ function signup() {
     setLoading(true);
     if (data.password == data.confirmpassword) {
       const signupData = await API.signup(data).catch((err) => {
-        console.log(err?.data?.message)
-        Toast.error(err?.data?.message ? err?.data?.message : err?.data?.detail?.length ? err?.data?.detail[0]?.msg : err?.data?.detail);
+        console.log(err?.data?.message);
+        Toast.error(
+          err?.data?.message
+            ? err?.data?.message
+            : err?.data?.detail?.length
+            ? err?.data?.detail[0]?.msg
+            : err?.data?.detail
+        );
         setLoading(false);
       });
       setLoading(false);
@@ -52,6 +58,7 @@ function signup() {
       Toast.error(
         "please check the password and confirm password doesn't match"
       );
+      setLoading(false);
     }
   };
 
@@ -255,7 +262,11 @@ function signup() {
                   control={control}
                   defaultValue=""
                   render={({ field }) => (
-                    <input {...field} type="number" placeholder="Phone Number" />
+                    <input
+                      {...field}
+                      type="number"
+                      placeholder="Phone Number"
+                    />
                   )}
                   rules={{
                     required: "phoneNumber required",
