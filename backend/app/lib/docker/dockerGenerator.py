@@ -192,6 +192,7 @@ password: {username}@321
 cert: false" > config.yaml
 service apache2 start
 
+mkdir .ssh
 chown {username}:{username} /home/{username}/.ssh
 chmod go-w /home/{username}/
 chmod 700 /home/{username}/.ssh
