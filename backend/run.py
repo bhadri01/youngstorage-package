@@ -32,7 +32,11 @@ tags_metadata = [
         "description": "**Services** like database and catching system is here",
     },
 ]
-app = FastAPI(docs_url=None,
+app = FastAPI(
+              # production
+              # docs_url=None,
+              # development
+              docs_url="/docs",
               redoc_url=None,
               title="youngstorage API service",
               summary="This is the cloud servide that we can able to code and host your activity",
@@ -55,6 +59,9 @@ async def custom_auth_exception_handler(request, exc):
 app.add_exception_handler(HTTPException, custom_auth_exception_handler)
 app.add_middleware(
     CORSMiddleware,
+    # production
+    # allow_origins=["https://labs.youngstorage.in"],
+    # development
     allow_origins=["*"],
     # Set this to True if your frontend sends credentials like cookies or authorization headers.
     allow_credentials=True,

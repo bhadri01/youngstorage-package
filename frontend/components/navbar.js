@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Navhovar({ username, pathname }) {
+export default function MenuBar({ username, pathname }) {
   const [path, setPath] = useState(pathname.split("/").splice(1));
   const router = useRouter();
 

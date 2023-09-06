@@ -25,7 +25,7 @@ export default function page({ params, servicesUser, service }) {
     const [databaseName, setdatabaseName] = useState();
     const CreateDB = async () => {
       console.log(selectedCollect);
-      if (selectedOption && selectedCollect && databaseName) {
+      if (selectedOption && selectedCollect.value && selectedCollect.charset && databaseName) {
         let body = {
           username: selectedOption,
           database: databaseName,

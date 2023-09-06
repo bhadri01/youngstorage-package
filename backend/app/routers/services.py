@@ -34,7 +34,7 @@ def services(user: dict = Depends(Authenticator(True, UserRole.user).signupJWT))
 def get_database_details(database: DataBaseTypes, user: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
         database_services = DatabaseServices(user=user)
-        dbUsers = database_services.get_user()
+        dbUsers = database_services.get_user(database)
         dbUsers["_id"] = str(dbUsers["_id"])
         return JSONResponse(status_code=200, content={"message": f"{database} details", "status": True, "data": dbUsers})
     except Exception as e:
@@ -46,10 +46,10 @@ def get_database_details(database: DataBaseTypes, user: dict = Depends(Authentic
 def add_user_to_database(database: DataBaseTypes, data: CreateUser, user: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
         database_services = DatabaseServices(user)
-        if not database_services.check_user_exist(data.username):
-            if not database_services.is_max_user():
-                out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash", "-c",
-                                      f"./root/mysql_user_creation.sh {data.username} {data.password}"], capture_output=True)
+        if not database_services.check_user_exist(data.username, database):
+            if not database_services.is_max_user(database):
+                out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                                      f"./root/{database}_user_creation.sh {data.username} {data.password}"], capture_output=True)
 
                 print(str(out))
                 status_code_match = re.search(r'status_code=(\d+)', str(out))
@@ -59,7 +59,7 @@ def add_user_to_database(database: DataBaseTypes, data: CreateUser, user: dict =
                 if (out_code == 401):
                     raise Exception("User Creation Operation failed")
                 elif (out_code == 200):
-                    dbUsers = database_services.add_user(data)
+                    dbUsers = database_services.add_user(data, database)
                     dbUsers["_id"] = str(dbUsers["_id"])
                     return JSONResponse(status_code=200, content={"message": f"{data.username} user added to {database}", "status": True, "data": dbUsers})
             else:
@@ -76,14 +76,14 @@ def add_user_to_database(database: DataBaseTypes, data: CreateUser, user: dict =
 def drop_user_from_database(database: DataBaseTypes, username: str, user: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
         database_services = DatabaseServices(user)
-        users = database_services.get_user()
+        users = database_services.get_user(database)
 
         # delete all the the database that belongs to the user
         for user in users["dbusers"]:
             if user["username"] == username:
                 for db in user["dbNames"]:
-                    out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash", "-c",
-                                          f"./root/mysql_drop_db.sh {db['database']}"], capture_output=True)
+                    out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                                          f"./root/{database}_drop_db.sh {db['database']}"], capture_output=True)
                     print(str(out))
                     status_code_match = re.search(
                         r'status_code=(\d+)', str(out))
@@ -94,12 +94,12 @@ def drop_user_from_database(database: DataBaseTypes, username: str, user: dict =
                         raise Exception(
                             f"{db['database']} database drop failed")
 
-        out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash",
-                             "-c", f"./root/mysql_drop_user.sh {username}"], capture_output=True)
+        out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash",
+                             "-c", f"./root/{database}_drop_user.sh {username}"], capture_output=True)
         status_code_match = re.search(r'status_code=(\d+)', str(out))
         out_code = int(status_code_match.group(1))
         if (out_code == 200):
-            dbUsers = database_services.drop_user(username)
+            dbUsers = database_services.drop_user(username, database)
             if dbUsers:
                 return JSONResponse(status_code=200, content={"message": f"{username} - user removed from {database}", "status": True})
             else:
@@ -114,17 +114,17 @@ def drop_user_from_database(database: DataBaseTypes, username: str, user: dict =
 def add_database_to_user(database: DataBaseTypes, username: str, data: CreateDB, user: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
         database_services = DatabaseServices(user)
-        if database_services.check_user_exist(username):
-            if not database_services.is_max_database():
-                if not database_services.check_database_exist(f"{data.username}_{data.database}"):
-                    out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash", "-c",
-                                          f"./root/mysql_db_creation.sh {data.username}_{data.database} {data.charset} {data.collation} {data.username}"], capture_output=True)
+        if database_services.check_user_exist(username, database):
+            if not database_services.is_max_database(database):
+                if not database_services.check_database_exist(f"{data.username}_{data.database}", database):
+                    out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                                          f"./root/{database}_db_creation.sh {data.username}_{data.database} {data.charset} {data.collation} {data.username}"], capture_output=True)
                     print(str(out))
                     status_code_match = re.search(
                         r'status_code=(\d+)', str(out))
                     out_code = int(status_code_match.group(1))
                     if (out_code == 200):
-                        if database_services.add_database_to_user(data):
+                        if database_services.add_database_to_user(data, database):
                             return JSONResponse(content={"message": f"{data.username}_{data.database} database created successfully", "status": True}, status_code=200)
                     elif (out_code == 401):
                         raise Exception(
@@ -144,15 +144,15 @@ def add_database_to_user(database: DataBaseTypes, username: str, data: CreateDB,
 def drop_database_from_user(database: DataBaseTypes, username: str, data: CreateDB, user: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
         database_services = DatabaseServices(user)
-        if database_services.check_user_exist(username):
-            if database_services.check_database_exist(f"{data.username}_{data.database}"):
-                out = subprocess.run(["docker", "exec", "mysql.youngstorage.in", "bash", "-c",
-                                      f"./root/mysql_drop_db.sh {data.username}_{data.database}"], capture_output=True)
+        if database_services.check_user_exist(username, database):
+            if database_services.check_database_exist(f"{data.username}_{data.database}", database):
+                out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                                      f"./root/{database}_drop_db.sh {data.username}_{data.database}"], capture_output=True)
                 print(str(out))
                 status_code_match = re.search(r'status_code=(\d+)', str(out))
                 out_code = int(status_code_match.group(1))
                 if (out_code == 200):
-                    if database_services.drop_database_from_user(data):
+                    if database_services.drop_database_from_user(data, database):
                         return JSONResponse(content={"message": f"{data.username}_{data.database} database dropped successfully", "status": True}, status_code=200)
                 elif (out_code == 401):
                     raise Exception(

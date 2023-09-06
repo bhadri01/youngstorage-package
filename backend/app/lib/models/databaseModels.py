@@ -7,6 +7,7 @@ from datetime import datetime
 
 class DataBaseTypes(str, Enum):
     Mysql = "mysql"
+    Maria = "maria"
 
 
 class CreateUser(BaseModel):
@@ -49,7 +50,7 @@ class DatabaseServices:
 
     def services(self):
         try:
-            services = list(self.db.servicesPrimary.find())
+            services = list(self.db.services.find())
             if services is None:
                 return []
             for index, _ in enumerate(services):
@@ -58,19 +59,19 @@ class DatabaseServices:
         except pymongo.errors.PyMongoError as e:
             raise Exception(str(e))
 
-    def get_user(self):
+    def get_user(self, database: str):
         try:
-            db_users = self.db.services.find_one({"userId": self.userId})
+            db_users = self.db[database].find_one({"userId": self.userId})
             if db_users is None:
-                self.db.services.insert_one(self.dbUsers)
-                db_users = self.db.services.find_one({"userId": self.userId})
+                self.db[database].insert_one(self.dbUsers)
+                db_users = self.db[database].find_one({"userId": self.userId})
             return db_users
         except pymongo.errors.PyMongoError as e:
             raise Exception(str(e))
 
-    def check_user_exist(self, username: str):
+    def check_user_exist(self, username: str, database: str):
         try:
-            db_users = self.db.services.find_one(
+            db_users = self.db[database].find_one(
                 {"dbusers.username": username})
             if db_users is None:
                 return False
@@ -78,9 +79,9 @@ class DatabaseServices:
         except pymongo.errors.PyMongoError as e:
             raise Exception(str(e))
 
-    def is_max_user(self):
+    def is_max_user(self, database: str):
         try:
-            db_users = self.db.services.find_one(
+            db_users = self.db[database].find_one(
                 {"$expr": {"$lt": ['$currentUsers', '$maxUsers']}})
             print(db_users)
             if db_users is None:
@@ -89,10 +90,10 @@ class DatabaseServices:
         except pymongo.errors.PyMongoError as e:
             raise Exception(str(e))
 
-    def add_user(self, data: CreateUser):
+    def add_user(self, data: CreateUser, database: str):
         try:
-            getusers = self.get_user()
-            if self.db.services.find_one({"dbusers.username": data.username}):
+            getusers = self.get_user(database)
+            if self.db[database].find_one({"dbusers.username": data.username}):
                 raise Exception(f"username - {data.username} already exist")
             else:
                 dbuser = self.dbNames
@@ -100,38 +101,38 @@ class DatabaseServices:
                 dbuser["password"] = data.password
                 getusers["dbusers"].append(dbuser)
                 getusers["currentUsers"] += 1
-                self.db.services.update_one({"userId": self.userId},
-                                            {"$set": getusers}
-                                            )
-                return self.db.services.find_one({"userId": self.userId})
+                self.db[database].update_one({"userId": self.userId},
+                                             {"$set": getusers}
+                                             )
+                return self.db[database].find_one({"userId": self.userId})
         except pymongo.errors.PyMongoError as e:
             raise Exception(str(e))
 
-    def drop_user(self, username: str):
+    def drop_user(self, username: str, database: str):
         try:
-            if not self.db.services.find_one({"dbusers.username": username}):
+            if not self.db[database].find_one({"dbusers.username": username}):
                 raise Exception(f"username - {username} not exist")
             else:
-                self.db.services.update_one({"userId": self.userId}, {"$pull": {"dbusers": {
-                                            "username": username}}, "$inc": {"currentUsers": -1}})
-                return self.db.services.find_one({"userId": self.userId})
+                self.db[database].update_one({"userId": self.userId}, {"$pull": {"dbusers": {
+                    "username": username}}, "$inc": {"currentUsers": -1}})
+                return self.db[database].find_one({"userId": self.userId})
         except pymongo.errors.PyMongoError as e:
             raise Exception(str(e))
 
     # database function for the users
-    def check_database_exist(self, database: str):
+    def check_database_exist(self, db: str, database: str):
         try:
-            db_users = self.db.services.find_one(
-                {"dbusers.dbNames.database": database})
+            db_users = self.db[database].find_one(
+                {"dbusers.dbNames.database": db})
             if db_users is None:
                 return False
             return True
         except pymongo.errors.PyMongoError as e:
             raise Exception(str(e))
 
-    def is_max_database(self):
+    def is_max_database(self, database: str):
         try:
-            db_users = self.db.services.find_one(
+            db_users = self.db[database].find_one(
                 {"$expr": {"$lt": ['$dbusers.currentNames', '$dbusers.maxNames']}})
             if db_users is None:
                 return True
@@ -139,13 +140,13 @@ class DatabaseServices:
         except pymongo.errors.PyMongoError as e:
             raise Exception(str(e))
 
-    def add_database_to_user(self, data: CreateDB):
+    def add_database_to_user(self, data: CreateDB, database: str):
         try:
             dbtype = self.dbTypes
             dbtype["database"] = f"{data.username}_{data.database}"
             dbtype["collation"] = data.collation
             dbtype["charset"] = data.charset
-            result = self.db.services.update_one(
+            result = self.db[database].update_one(
                 {"dbusers.username": data.username},
                 {"$push": {"dbusers.$.dbNames": dbtype},
                     "$inc": {"dbusers.$.currentNames": +1}}
@@ -160,9 +161,9 @@ class DatabaseServices:
         except Exception as e:
             raise Exception(str(e))
 
-    def drop_database_from_user(self, data: CreateDB):
+    def drop_database_from_user(self, data: CreateDB, database: str):
         try:
-            result = self.db.services.update_one(
+            result = self.db[database].update_one(
                 {"dbusers.username": data.username},
                 {"$pull": {"dbusers.$.dbNames": {"database": f"{data.username}_{data.database}"}},
                     "$inc": {"dbusers.$.currentNames": -1}}
