@@ -40,10 +40,11 @@
       height: 100%;
     }
   }
-  .labs:nth-child(2){
+
+  .labs:nth-child(2) {
     position: relative;
-    &::after
-    {
+
+    &::after {
       content: 'comming soon...';
       position: absolute;
       background-color: #f0f2f55e;
@@ -62,8 +63,54 @@
 }
 
 // ==============================================[...labs] style ===========================================
-.ubuntu-container {
+.container-labs {
   width: 100%;
+  position: relative;
+
+  .action-confirm {
+    position: absolute;
+    width: 100%;
+    // height: 75vh;
+    padding: 20px;
+    background-color: var(--info-light);
+    z-index: 999;
+    top: 0;
+    left: 0;
+    display: flex;
+    // justify-content: center;
+    // align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    border-radius: 8px;
+    border: 1px solid var(--info);
+    transform: translate(0, -50px);
+    animation: action 0.8s ease-in-out forwards;
+    backdrop-filter: blur(10px);
+
+    h1 {
+      text-transform: capitalize;
+    }
+    
+
+    p {
+      padding: 20px;
+      font-size: 16px;
+    }
+
+    .action-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+    }
+  }
+
+  @keyframes action {
+    100% {
+      opacity: 1;
+      transform: translate(0, 0);
+    }
+  }
 
   .flex {
     width: 100%;
@@ -249,47 +296,55 @@
     }
   }
 
-  @media screen and (max-width: 768px) { 
-    .breadcrumb{
+  @media screen and (max-width: 768px) {
+    .breadcrumb {
       display: none;
     }
-    .terminal-main-box{
+
+    .terminal-main-box {
       width: 100%;
     }
-    .flex{
+
+    .flex {
       flex-direction: column;
     }
-    .alter{
-      .button{
+
+    .alter {
+      .button {
         flex-direction: row;
         margin: 0;
         width: 50%;
       }
     }
-    .button{
+
+    .button {
       margin: 6% auto;
       flex-direction: column;
       width: 100%;
-      .btn{
+
+      .btn {
         width: 70%;
       }
     }
-    .content{
+
+    .content {
       margin-top: 16px;
       flex-direction: column;
 
-      &::before{
-        content: unset ;
+      &::before {
+        content: unset;
       }
 
-      .left{
+      .left {
         width: 100%;
       }
-      .right{
+
+      .right {
         width: 100%;
-        .prop{
-          span{
-            b{
+
+        .prop {
+          span {
+            b {
               width: 75%;
               font-weight: 100;
               font-size: 14px;
@@ -298,7 +353,8 @@
               text-overflow: ellipsis;
             }
           }
-          h4{
+
+          h4 {
             width: 100px;
           }
         }

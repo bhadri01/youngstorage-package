@@ -20,11 +20,13 @@ def domainLableGenerator(username: str, domains: list):
             txt += f"Host(`{data['domainName']}`)"  
         elif i > 0:
             txt += f" || Host(`{data['domainName']}`)"
+    
+    Traefikname = "".join(username.split("."))
     return [
-        f"traefik.http.routers.{username}.rule={txt}",
-        f"traefik.http.routers.{username}.service={username}",
-        f"traefik.http.services.{username}.loadbalancer.server.port=80",
-        f"traefik.http.routers.{username}.tls=true",
-        f"traefik.http.routers.{username}.tls.certresolver=custom_resolver",
-        f"traefik.http.routers.{username}.entrypoints=websecure",
+        f"traefik.http.routers.{Traefikname}.rule={txt}",
+        f"traefik.http.routers.{Traefikname}.service={Traefikname}",
+        f"traefik.http.services.{Traefikname}.loadbalancer.server.port=80",
+        f"traefik.http.routers.{Traefikname}.tls=true",
+        f"traefik.http.routers.{Traefikname}.tls.certresolver=custom_resolver",
+        f"traefik.http.routers.{Traefikname}.entrypoints=websecure",
     ]

@@ -265,7 +265,7 @@ const AddUser = ({ service, SetPop, servicesUser }) => {
           />
         </FormControl>
         <div className="user-add-button">
-          <Button value="cancle" onClick={() => SetPop((a) => !a)} />
+          <Button value="cancel" onClick={() => SetPop((a) => !a)} />
           <Button value="add user" color="success" onClick={Adduser} />
         </div>
       </div>

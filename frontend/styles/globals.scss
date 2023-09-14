@@ -17,12 +17,16 @@
   --secondary-hover: #fd8421;
   --success: #19af66;
   --success-hover: #00c465;
+  --success-light: #19af6620;
   --error: #f35746;
   --error-hover: #f56454;
+  --error-light: #f3574620;
   --warning: #f2c94c;
   --warning-hover: #caa023;
+  --warning-light: #f2c84c20;
   --info: #5458f7;
   --info-hover: #373ada;
+  --info-light: #5458f720;
   --terminal: #003459;
   --fixed-width: calc(100% - 219px);
   --split-line: rgba(190, 190, 190, 0.74);
@@ -49,6 +53,7 @@ a {
 
 .ubu-badge {
   background-color: var(--secondary);
+
   &:hover {
     background: var(--secondary-hover);
   }
@@ -56,6 +61,7 @@ a {
 
 .success {
   background-color: var(--success);
+
   &:hover {
     background: var(--success-hover);
   }
@@ -63,6 +69,7 @@ a {
 
 .terminal {
   background-color: var(--terminal);
+
   &:hover {
     background: var(--terminal);
   }
@@ -70,6 +77,7 @@ a {
 
 .warning {
   background-color: var(--warning);
+
   &:hover {
     background: var(--warning-hover);
   }
@@ -77,12 +85,15 @@ a {
 
 .error {
   background-color: var(--error);
+
   &:hover {
     background: var(--error-hover);
   }
 }
+
 .info {
   background-color: var(--info);
+
   &:hover {
     background: var(--info-hover);
   }
@@ -91,6 +102,7 @@ a {
 .totalcenter {
   @include total-center-by-flex;
   text-transform: capitalize;
+
   a {
     color: var(--primary);
   }

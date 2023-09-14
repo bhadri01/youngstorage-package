@@ -14,6 +14,7 @@ import { APIQuery } from "@/api/queryMethod";
 import { API } from "@/api/api";
 
 export default function page({ params }) {
+  console.log("params:", params)
   const queryClient = useQueryClient();
   const service = queryClient.getQueryData({ queryKey: ["services"] }).data
     ?.data;

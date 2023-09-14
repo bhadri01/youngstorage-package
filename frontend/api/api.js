@@ -27,7 +27,8 @@ export const Token = () => {
 };
 
 const servicesData = {
-  mysql: "mysql"
+  mysql: "mysql",
+  maria: "maria"
 }
 
 export const API = {

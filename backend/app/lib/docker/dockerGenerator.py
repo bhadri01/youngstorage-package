@@ -116,7 +116,7 @@ COPY {os.path.join("wgClients", username, deviceName,"wg0.conf")} /etc/wireguard
 COPY setup.sh /
 RUN chmod +x setup.sh
 # username variable
-RUN adduser {username} --gecos "" --disabled-password
+RUN adduser {username} --gecos "" --disabled-password --force-badname 
 RUN echo "{username}:{username}@321" | sudo chpasswd
 RUN usermod -aG sudo {username}
 COPY .bashrc /home/{username}/
