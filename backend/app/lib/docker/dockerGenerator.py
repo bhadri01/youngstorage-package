@@ -71,7 +71,8 @@ def reDeploy(_id: str, username: str, deviceName: str, dockerip: str, background
         # this will happens in the background task
         imageid = client.images.get(f"{username}:latest").id
         if imageid:
-            background_task.add_task(containerRun, _id, username, dockerip)
+            background_task.add_task(
+                containerRun, _id, username, dockerip, deviceName)
         return {"message": "Container rebuild process in background", "status": True}
     except NotFound:
         background_task.add_task(
@@ -256,16 +257,15 @@ def imageBuild(_id: str, username: str, dockerip: str, deviceName: str):
         mqtt_client.publish(f"/topic/{username}",
                             MqttMsg("Image build done...!!", True).get())
         # docker run happens
-        containerRun(_id, username, dockerip)
+        containerRun(_id, username, dockerip, deviceName)
     except Exception as e:
         mqtt_client.publish(f"/topic/{username}", str(e))
 
 # docker container run function
 
 
-def containerRun(_id: str, username: str, dockerip: str):
+def containerRun(_id: str, username: str, dockerip: str, deviceName: str):
     try:
-
         # container already exist flesh process
         exContainer = client.containers.get(f"{username}")
         if exContainer.id:
@@ -284,9 +284,14 @@ def containerRun(_id: str, username: str, dockerip: str):
 
         # if domain exist add domain lables in traefik
         network = db.network.find_one({"userId": _id})
+        networkls = []
+        for net in network["domainList"]:
+            if net["mapstatus"] and net["mapto"] == deviceName:
+                networkls.append(net)
+
         if "domainList" in network:
             trafikLables += domainLableGenerator(
-                username, network["domainList"])
+                username, networkls)
 
         mqtt_client.publish(f"/topic/{username}",
                             MqttMsg(f"build Id {imageId}...!", True).get()
@@ -300,7 +305,7 @@ def containerRun(_id: str, username: str, dockerip: str):
                 f"/topic/{username}", MqttMsg("lab preperation done...!", True).get())
             source = os.path.join(os.getcwd(), "source", "docker-compose.yml")
             print(source)
-            cmd = f"docker-compose -f {source} up -d"
+            cmd = f"docker compose -f {source} up -d"
             # Execute the command
             os.system(cmd)
 

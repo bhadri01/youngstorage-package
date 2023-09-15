@@ -34,9 +34,9 @@ tags_metadata = [
 ]
 app = FastAPI(
               # production
-              # docs_url=None,
+              docs_url=None,
               # development
-              docs_url="/docs",
+            #   docs_url="/docs",
               redoc_url=None,
               title="youngstorage API service",
               summary="This is the cloud servide that we can able to code and host your activity",
@@ -60,9 +60,9 @@ app.add_exception_handler(HTTPException, custom_auth_exception_handler)
 app.add_middleware(
     CORSMiddleware,
     # production
-    # allow_origins=["https://labs.youngstorage.in"],
+    allow_origins=["https://labs.youngstorage.in"],
     # development
-    allow_origins=["*"],
+    # allow_origins=["*"],
     # Set this to True if your frontend sends credentials like cookies or authorization headers.
     allow_credentials=True,
     allow_methods=["*"],  # Allows all HTTP methods (GET, POST, PUT, etc.).
@@ -77,6 +77,6 @@ app.include_router(services.router, tags=["Services"])
 
 if __name__ == "__main__":
     # production
-    # uvicorn.run("run:app", host="0.0.0.0", port=8000,log_config="log.ini",access_log=True,workers=2)
+    uvicorn.run("run:app", host="0.0.0.0", port=8000,log_config="log.ini",access_log=True,workers=2)
     # development
-    uvicorn.run("run:app", host="0.0.0.0", port=8000, reload=True)
+    # uvicorn.run("run:app", host="0.0.0.0", port=8000, reload=True)

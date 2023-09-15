@@ -8,12 +8,12 @@ services:
     image: dev
     labels:
     - traefik.enable=true
-    - traefik.http.routers.f008876bb49002f0adbaf742b91957a6.rule=Host(`f008876bb49002f0adbaf742b91957a6.youngstorage.in`)
-    - traefik.http.routers.f008876bb49002f0adbaf742b91957a6.service=f008876bb49002f0adbaf742b91957a6
-    - traefik.http.routers.f008876bb49002f0adbaf742b91957a6.tls=true
-    - traefik.http.routers.f008876bb49002f0adbaf742b91957a6.entrypoints=websecure
-    - traefik.http.services.f008876bb49002f0adbaf742b91957a6.loadbalancer.server.port=1111
-    - traefik.http.routers.f008876bb49002f0adbaf742b91957a6.tls.certresolver=custom_resolver
+    - traefik.http.routers.52207b59f7f859fc1ff5b85b98a2c27a.rule=Host(`52207b59f7f859fc1ff5b85b98a2c27a.youngstorage.in`)
+    - traefik.http.routers.52207b59f7f859fc1ff5b85b98a2c27a.service=52207b59f7f859fc1ff5b85b98a2c27a
+    - traefik.http.routers.52207b59f7f859fc1ff5b85b98a2c27a.tls=true
+    - traefik.http.routers.52207b59f7f859fc1ff5b85b98a2c27a.entrypoints=websecure
+    - traefik.http.services.52207b59f7f859fc1ff5b85b98a2c27a.loadbalancer.server.port=1111
+    - traefik.http.routers.52207b59f7f859fc1ff5b85b98a2c27a.tls.certresolver=custom_resolver
     - traefik.http.routers.dev.rule=
     - traefik.http.routers.dev.service=dev
     - traefik.http.services.dev.loadbalancer.server.port=80
@@ -23,7 +23,7 @@ services:
     mem_limit: 1g
     networks:
       services:
-        ipv4_address: 172.16.100.2
+        ipv4_address: 172.16.100.8
     restart: always
     volumes:
     - dev:/home/dev

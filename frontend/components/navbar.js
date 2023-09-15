@@ -1,12 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { NavContext } from "@/app/[username]/layout";
 
-export default function MenuBar({ username, pathname }) {
-  const [path, setPath] = useState(pathname.split("/").splice(1));
+export default function MenuBar({ username }) {
+  const navpath = useContext(NavContext)
+  const [path, setPath] = useState(navpath.nav.split("/").splice(1));
+  useEffect(() => {
+    setPath(navpath.nav.split("/").splice(1))
+  }, [navpath.nav])
   const router = useRouter();
-
   const ChangePath = (path) => {
     setPath(path.split("/").splice(1));
     router.push(path);
@@ -26,20 +30,18 @@ export default function MenuBar({ username, pathname }) {
         <div className="main-menu">
           {paths.mainpath.map((a) => (
             <div
-              className={`cont ${
-                path.length > 1
-                  ? path[1] == String(a.pathname).toLocaleLowerCase() &&
-                    "active"
-                  : String(a.pathname).toLocaleLowerCase() == "home" && "active"
-              }`}
+              className={`cont ${path.length > 1
+                ? path[1] == String(a.pathname).toLocaleLowerCase() &&
+                "active"
+                : String(a.pathname).toLocaleLowerCase() == "home" && "active"
+                }`}
               key={a.pathname}
               onClick={() =>
                 ChangePath(`
-                  /${username}${
-                  String(a.pathname).toLocaleLowerCase() == "home"
+                  /${username}${String(a.pathname).toLocaleLowerCase() == "home"
                     ? ""
                     : "/" + String(a.pathname).toLocaleLowerCase()
-                }`)
+                  }`)
               }
             >
               <b className="mainnav">{a.svg}</b>
@@ -51,12 +53,11 @@ export default function MenuBar({ username, pathname }) {
         <div className="main-menu">
           {paths.subpath.map((a) => (
             <div
-              className={`cont ${
-                path.length > 1
-                  ? path[1] == String(a.pathname).toLocaleLowerCase() &&
-                    "active"
-                  : ""
-              }`}
+              className={`cont ${path.length > 1
+                ? path[1] == String(a.pathname).toLocaleLowerCase() &&
+                "active"
+                : ""
+                }`}
               key={a.pathname}
               onClick={() =>
                 ChangePath(`
@@ -251,7 +252,7 @@ const paths = {
           />
           <path
             d="M15.625 6.25V22.5C15.625 23.875 16.75 25 18.125 25H20"
-            // fill="#FBFBFB"
+          // fill="#FBFBFB"
           />
           <path
             d="M15.625 6.25V22.5C15.625 23.875 16.75 25 18.125 25H20"

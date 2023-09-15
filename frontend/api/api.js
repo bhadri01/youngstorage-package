@@ -2,10 +2,10 @@ import axios from "axios";
 
 // production
 
-// const API_URL = "https://apibackend.youngstorage.in";
+const API_URL = "https://apibackend.youngstorage.in";
 
 // development
-const API_URL = "http://youngstorage.in:8000";
+// const API_URL = "http://youngstorage.in:8000";
 
 export const Token = () => {
   let token = "";
@@ -116,6 +116,11 @@ export const API = {
       headers: { Authorization: `Bearer ${Token()}` },
       body,
     }),
+  updatedomain: (body) => PatchMethod({
+    url: `${API_URL}/updatedomain`,
+    headers: { Authorization: `Bearer ${Token()}` },
+    body,
+  }),
   // service api config
   services: () => GetMethod({
     url: `${API_URL}/services`,

@@ -1,6 +1,8 @@
 .domain-container {
   width: 100%;
 
+
+
   .domain {
     display: flex;
     align-items: center;
@@ -13,13 +15,14 @@
   }
 
   .get-domains {
-    width: 100%;
     display: flex;
     justify-content: center;
     height: 48px;
     font-size: 30px;
     border-radius: 16px;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    margin: auto;
 
     input {
       border: none;
@@ -47,9 +50,6 @@
   .domain-add-list {
     width: 100%;
     display: flex;
-    // display: grid;
-    // grid-template-rows: 150px;
-    // grid-template-columns: auto auto auto;
     justify-content: space-between;
     padding: 24px;
     margin-top: 24px;
@@ -112,7 +112,8 @@
     }
 
     .domains-list {
-      display: grid;
+      display: flex;
+      flex-wrap: wrap;
       grid-template-columns: auto auto auto auto;
       gap: 24px;
 
@@ -120,26 +121,95 @@
   }
 
   .dot {
-    // width: fit-content;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-radius: 8px;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
     padding: 16px;
     gap: 20px;
-    background-color: #8ec5fc;
-    background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
 
-    // .gap {
-    //   .domain-name{
-    //     font-weight: 600;
-    //   }
-    // }
+    .gap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
 
+      .domain-name {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+
+        .domain-view {
+          display: flex;
+          justify-content: flex-start;
+          flex-direction: column;
+          gap: 12px;
+
+          .domains-title {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 8px;
+
+            a {
+              border: 1px dashed gray;
+              padding: 0 8px;
+              border-radius: 20px;
+
+              &:nth-child(2) {
+                all: unset;
+
+                svg {
+                  cursor: pointer;
+                  transition: 0.2s ease-in-out;
+
+                  &:hover {
+                    transform: scale(1.5);
+                  }
+                }
+              }
+            }
+          }
+
+          .domain-status {
+            display: flex;
+            justify-content: flex-start;
+            gap: 8px;
+          }
+        }
+
+        .domain-edit-view {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 24px;
+          align-items: flex-end;
+
+          span {
+            font-size: 12px;
+            color: var(--input);
+          }
+
+          .domain-edit-center {
+            svg {
+              margin: 0 0 0 16px;
+              cursor: pointer;
+              transition: 0.2s ease-in-out;
+
+              &:hover {
+                transform: scale(1.5);
+              }
+
+            }
+          }
+        }
+      }
+
+
+    }
 
     .min {
       width: 100%;
@@ -154,24 +224,6 @@
         font-size: 10px;
         color: rgba(0, 0, 0, 0.6);
         font-weight: 300;
-      }
-    }
-
-
-    .lottie {
-      transition: 0.3s ease-in-out;
-      position: absolute;
-      top: 50%;
-      right: -50px;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-    }
-
-    &:hover {
-
-      .lottie {
-        right: 2px;
       }
     }
   }
@@ -201,6 +253,62 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
+    }
+  }
+
+  .map-domain-to-lab {
+    background-color: rgba(0, 0, 0, 0.171);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+
+    .domain-map-container {
+      border: 1px solid gray;
+      padding: 20px;
+      border-radius: 4px;
+      background-color: var(--white);
+      width: max(400px);
+
+      h3 {
+        b {
+          color: var(--primary);
+          font-weight: 900;
+          text-transform: lowercase;
+        }
+
+        text-transform: capitalize;
+      }
+
+      i {
+        color: var(--input);
+        font-size: 14px;
+      }
+
+      .folder-or-port {
+        margin-top: 16px;
+        text-transform: capitalize;
+
+        p {
+          b {
+            color: var(--info);
+            cursor: pointer;
+          }
+        }
+      }
+
+      .map-domain-button {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 16px;
+        margin-top: 16px;
+      }
     }
   }
 }

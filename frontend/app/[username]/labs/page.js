@@ -1,13 +1,20 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import Link from "next/link";
 import Alerts from "@/components/alerts";
+import { useContext, useEffect } from "react";
+import { NavContext } from "../layout";
 
 // import { useQueryClient } from "@tanstack/react-query";
 
 function Labs({ params }) {
+  const navpath = useContext(NavContext)
+  const pathname = usePathname()
+  useEffect(() => {
+    navpath.setNav(pathname)
+  }, [])
   const router = useRouter();
   const ChangePath = (route) => {
     router.push(route);

@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, createContext } from "react";
 import "@/styles/userAccount/layout.scss";
 import Navbar from "@/components/navbar";
 import { usePathname, redirect } from "next/navigation";
@@ -7,12 +7,14 @@ import { API } from "@/api/api";
 import { APIQuery } from "@/api/queryMethod";
 import { PageLoading, PageCenter } from "@/components/pageLoading";
 
+export const NavContext = createContext()
+
 function UserAccountLayout({ children, params }) {
   const pathname = usePathname();
   const loading = useRef(true);
   const users = APIQuery("userAccount", () => API.user(params?.username));
   const [profile, SetProfile] = useState(true);
-
+  const [nav, setNav] = useState(pathname)
   if (users.isLoading) {
     return (
       <PageCenter>
@@ -28,21 +30,23 @@ function UserAccountLayout({ children, params }) {
         {loading.current ? (
           ""
         ) : (
-          <div className="userAccount-container">
-            <div className="userAccount-menu">
-              <Navbar username={params?.username} pathname={pathname} />
-            </div>
-            <div className="userAccount-content">
-              {/* <Header SetProfile={SetProfile} profile={profile} /> */}
-              <section>{children}</section>
-              {/* <footer>
+          <NavContext.Provider value={{ nav, setNav }}>
+            <div className="userAccount-container">
+              <div className="userAccount-menu">
+                <Navbar username={params?.username} />
+              </div>
+              <div className="userAccount-content">
+                {/* <Header SetProfile={SetProfile} profile={profile} /> */}
+                <section>{children}</section>
+                {/* <footer>
             <span>
               &copy; 2023 by <b>youngstorage.in</b>
             </span>
             <i>V02.1.1</i>
           </footer> */}
+              </div>
             </div>
-          </div>
+          </NavContext.Provider>
         )}
       </>
     );

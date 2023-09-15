@@ -1,18 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Badge from "@/components/badge";
 import Button from "@/components/button";
 import Copy from "@/components/copy";
 import Breadcrumb from "@/components/Breadcrumb";
 import Link from "next/link";
 import "@/styles/userAccount/services.scss";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { PageCenter, PageLoading } from "@/components/pageLoading";
 import { useQueryClient } from "@tanstack/react-query";
 import Alerts from "@/components/alerts";
+import { NavContext } from "../layout";
 
 function Services({ params }) {
+  const navpath = useContext(NavContext)
+  const pathname = usePathname()
+  useEffect(() => {
+    navpath.setNav(pathname)
+  }, [])
   const router = useRouter();
 
   const ChangePath = (route) => {

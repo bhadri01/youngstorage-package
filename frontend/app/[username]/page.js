@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Breadcrumb from "@/components/Breadcrumb";
 import Link from "next/link";
 import "@/styles/userAccount/home.scss";
@@ -8,9 +8,15 @@ import Badge from "@/components/badge";
 import { APIQuery } from "@/api/queryMethod";
 import { API } from "@/api/api";
 import { PageCenter, PageLoading } from "@/components/pageLoading";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { NavContext } from "./layout";
 
 function UserAccount({ params }) {
+  const navpath = useContext(NavContext)
+  const pathname = usePathname()
+  useEffect(()=>{
+    navpath.setNav(pathname)
+  },[])
   const router = useRouter()
   const Chnagepath = (path) => {
     router.push(path)
@@ -55,7 +61,9 @@ function UserAccount({ params }) {
             <h1>Overview</h1>
           </div>
           <div className="home-container-list">
-            <div className="container" onClick={() => Chnagepath(`${params?.username}/networks`)}>
+            <div 
+            className="container" 
+            onClick={() => Chnagepath(`${params?.username}/networks`)}>
               <img alt="" src="/Broken.png" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"

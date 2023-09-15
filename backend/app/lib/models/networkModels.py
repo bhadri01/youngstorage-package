@@ -117,6 +117,11 @@ class DomainNetwork(NetworkModel):
                 raise ValueError(f"{self.domainName} already taken")
             self.domainList.append({
                 "domainName": self.domainName,
+                "mapstatus":False,
+                "mapto":None,
+                "port":None,
+                "folder":None,
+                "createdAt":int(datetime.now().timestamp())
             })
             self.currentDomain += 1
 
@@ -140,13 +145,25 @@ class DomainNetwork(NetworkModel):
         else:
             raise ValueError("max domain reached")
 
-    def DropDomain(self):
-        existing_domain = self.db.network.find_one(
-            {"domainList.domainName": {
-                "$regex": f'^{self.domainName}$', "$options": 'i'}}
-        )
-        if existing_domain:
-            find_domain = self.db.network.update_one(
-                {"userId": self.userId}, {"$pull": {'domainList': {'domainName': self.domainName}}, "$set": {"currentDomain": self.currentDomain - 1}})
-        else:
+    def updateDomain(self,updateDomain):
+        update = self.db.network.update_one(
+                {"userId": self.userId,"domainList.domainName": self.domainName},
+                {"$set":{
+                    "domainList.$.mapstatus":updateDomain.mapstatus,
+                    "domainList.$.mapto":updateDomain.mapto,
+                    "domainList.$.port":updateDomain.port,
+                    "domainList.$.folder":updateDomain.folder
+                }}
+            )
+        if update.matched_count == 0:
             raise ValueError(f"{self.domainName} domain name not available")
+        
+        return True
+    
+    def DropDomain(self):     
+        find_domain = self.db.network.update_one(
+                {"userId": self.userId}, {"$pull": {'domainList': {'domainName': self.domainName}}, "$set": {"currentDomain": self.currentDomain - 1}})
+        if find_domain.matched_count == 0:
+            raise ValueError(f"{self.domainName} domain name not available")
+        
+        return True

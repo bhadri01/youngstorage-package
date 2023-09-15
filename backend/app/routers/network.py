@@ -24,6 +24,13 @@ class Devices(BaseModel):
 class Domain(BaseModel):
     domainName: str
 
+class DomainMap(BaseModel):
+    domainName: str
+    mapstatus: bool = False
+    mapto : str | None = None
+    port: str | None = None
+    folder: str | None = None
+
 # this is for to get the entire network list
 
 
@@ -77,9 +84,9 @@ def addUserPeer(devices: Devices, data: dict = Depends(Authenticator(True, UserR
         return JSONResponse(content={"message": str(e), "status": False}, status_code=500)
 
 
-# this function is to add new domain
+# this function is to add new domain -- all the CURD domain stuff happens here
 @router.post("/addomain")
-def addUserPeer(domain: Domain, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
+def addDomain(domain: Domain, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
         DomainNetwork(
             str(data["_id"]), domain.domainName).addDomain()
@@ -89,9 +96,19 @@ def addUserPeer(domain: Domain, data: dict = Depends(Authenticator(True, UserRol
     except Exception as e:
         return JSONResponse(content={"message": str(e), "status": False}, status_code=500)
 
+@router.patch("/updatedomain")
+def updateDomain(domain: DomainMap, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
+    try:
+        DomainNetwork(
+            str(data["_id"]), domain.domainName).updateDomain(domain)
+        return JSONResponse(content={"message": f"{domain.domainName} update successfully", "status": True}, status_code=201)
+    except ValueError as e:
+        return JSONResponse(content={"message": str(e), "status": False}, status_code=403)
+    except Exception as e:
+        return JSONResponse(content={"message": str(e), "status": False}, status_code=500)
 
 @router.delete("/dropdomain")
-def DropDomain(domain: Domain, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
+def dropDomain(domain: Domain, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
         DomainNetwork(
             str(data["_id"]), domain.domainName).DropDomain()

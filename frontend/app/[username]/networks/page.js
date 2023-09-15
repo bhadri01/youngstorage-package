@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import "@/styles/userAccount/networks.scss";
 import { useEffect, useState } from "react";
 import { API } from "@/api/api";
@@ -14,6 +14,8 @@ import { APIQuery } from "@/api/queryMethod";
 import { PageCenter, PageLoading } from "@/components/pageLoading";
 import { Toast } from "@/components/alert";
 import Alerts from "@/components/alerts";
+import { usePathname } from "next/navigation";
+import { NavContext } from "../layout";
 
 const options = [
   { label: "Laptop", value: "Laptop" },
@@ -25,6 +27,11 @@ const options = [
 // import DeviceList from "@/components/DeviceList";
 
 export default function Network({ params }) {
+  const navpath = useContext(NavContext)
+  const pathname = usePathname()
+  useEffect(() => {
+    navpath.setNav(pathname)
+  }, [])
   const [addDevice, SetAdd] = useState(false);
   const [peerAcccess, setPeerAccess] = useState({
     status: false,
