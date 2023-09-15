@@ -30,7 +30,7 @@ COPY wgClients/dev/Ubuntu-Lab/wg0.conf /etc/wireguard/wg0.conf
 COPY setup.sh /
 RUN chmod +x setup.sh
 # username variable
-RUN adduser dev --gecos "" --disabled-password
+RUN adduser dev --gecos "" --disabled-password --force-badname 
 RUN echo "dev:dev@321" | sudo chpasswd
 RUN usermod -aG sudo dev
 COPY .bashrc /home/dev/

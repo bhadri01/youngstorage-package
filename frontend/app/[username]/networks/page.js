@@ -197,18 +197,6 @@ export default function Network({ params }) {
                                   <span>scan</span>
                                 </div>
 
-                                {/* <div
-                                onClick={() =>
-                                  setPeerAccess((i) => ({
-                                    ...i,
-                                    status: true,
-                                    publicKey: a?.publicKey,
-                                    title: "download",
-                                  }))
-                                }
-                              >
-                              </div> */}
-
                                 <div
                                   onClick={() =>
                                     setPeerAccess((i) => ({
@@ -237,7 +225,7 @@ export default function Network({ params }) {
                 ) : (
                   <>
                     <h1>first build the lab</h1>
-                    <Link href="/dashboard/labs">labs</Link>
+                    <Link href={`/${params?.username}/labs`}>labs</Link>
                   </>
                 )}
               </div>
@@ -260,7 +248,7 @@ export default function Network({ params }) {
                 </Breadcrumb>
                 <>
                   <h1>first build the lab</h1>
-                  <Link href="/dashboard/labs">labs</Link>
+                  <Link href={`/${params?.username}/labs`}>labs</Link>
                 </>
               </div>
             </div>
@@ -335,22 +323,6 @@ const Popup = (props) => {
           <div className="box">
             <div className="label">
               <label>Device type</label>
-              {/* <input
-                type="text"
-                placeholder="Desktop | Mobile | tab"
-                name="deviceType"
-                value={devicedata.deviceType}
-                onChange={(e) => {
-                  <Dropdown className="drop"
-                    options={options}
-                    selectedOption={selectedOption}
-                    setSelectedOption={setSelectedOption} />
-                  setDevicedata((a) => ({
-                    ...a,
-                    [e.target.name]: e.target.value,
-                  }));
-                }}
-              /> */}
               <Dropdown
                 className="drop"
                 options={options}

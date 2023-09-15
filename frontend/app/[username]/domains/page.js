@@ -180,7 +180,7 @@ function Domains({ params }) {
         ) : (
           <>
             <h1>first build the lab</h1>
-            <Link href="/dashboard/labs">labs</Link>
+            <Link href={`/${params?.username}/labs`}>labs</Link>
           </>
         )}
       </div>

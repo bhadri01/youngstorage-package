@@ -139,16 +139,6 @@ def upVScode(data=Depends(Authenticator(True, UserRole.user).signupJWT)):
     except Exception as e:
         return JSONResponse(content={"message": str(e), "status": False}, status_code=500)
 
-
-@router.get("/stopcontainer")
-def stopContainer(data=Depends(Authenticator(True, UserRole.user).signupJWT)):
-    try:
-        container = client.containers.get(data["username"])
-        print(container)
-    except Exception as e:
-        return JSONResponse(content={"message": str(e), "status": False}, status_code=500)
-
-
 def generate_random_alphanumeric(length):
     characters = string.ascii_letters + string.digits
     return ''.join(random.choice(characters) for _ in range(length))
