@@ -77,6 +77,6 @@ app.include_router(services.router, tags=["Services"])
 
 if __name__ == "__main__":
     # production
-    uvicorn.run("run:app", host="0.0.0.0", port=8000,log_config="log.ini",access_log=True,workers=2)
+    uvicorn.run("run:app", host="0.0.0.0", port=8000,workers=2)
     # development
     # uvicorn.run("run:app", host="0.0.0.0", port=8000, reload=True)
