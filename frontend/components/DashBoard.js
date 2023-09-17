@@ -16,6 +16,7 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -37,31 +38,41 @@ function DashBoard({ service, servicesUser }) {
       <div className="dashboard-container">
         <div className="left">
           <div className="heading">
-            <h3>connection information</h3>
+            <Typography variant="h6" color={'#fff'}>
+              connection information
+            </Typography>
           </div>
           <div className="db-information">
             <div className="db-container">
-              <span>server name</span>
+              <Typography variant="body3" >
+                <b>server name</b>
+              </Typography>
               <div className="cpy">
                 <h5>{service.service} Server</h5>
               </div>
             </div>
             <div className="db-container">
-              <span>IP address</span>
+              <Typography variant="body3" >
+                IP address
+              </Typography>
               <div className="cpy">
                 <h4>{service.ipaddress}</h4>
                 <Copy value="MYSQL IP Address" />
               </div>
             </div>
             <div className="db-container">
-              <span>host</span>
+              <Typography variant="body3" >
+                host
+              </Typography>
               <div className="cpy">
                 <h4>{service.host}</h4>
                 <Copy value="MYSQL DNS" />
               </div>
             </div>
             <div className="db-container">
-              <span>port</span>
+              <Typography variant="body3" >
+                port
+              </Typography>
               <div className="cpy">
                 <h4>{service.port[0]}</h4>
                 <Copy className="copy" value="MYSQL Port" />
@@ -84,12 +95,12 @@ function DashBoard({ service, servicesUser }) {
               <>
                 <div className="table-header">
                   <h3>
-                    <b>{service.service}</b> Server users(you can add upto{" "}
-                    <b>
-                      {servicesUser.data?.data?.data?.currentUsers} /{" "}
-                      {servicesUser.data?.data?.data?.maxUsers}
-                    </b>{" "}
-                    users)
+                    <Typography variant="h6" color={'#fff'}>
+                      {service.service} Server users (you can add upto{" "}   {servicesUser.data?.data?.data?.currentUsers} /{" "}
+                      {servicesUser.data?.data?.data?.maxUsers} {" "}
+                      users)
+                    </Typography>
+
                   </h3>
                   <Button
                     color="success"
@@ -97,7 +108,7 @@ function DashBoard({ service, servicesUser }) {
                     onClick={() => SetPop((a) => !a)}
                   />
                 </div>
-                <table>
+                <table style={{ width: '100%' }}>
                   <thead>
                     <tr>
                       <th>S.No</th>
@@ -120,19 +131,7 @@ function DashBoard({ service, servicesUser }) {
                           </td>
                           <td>{GetCreatedTime(user.createdAt)}</td>
                           <td>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              fill="currentColor"
-                              className="bi bi-trash3"
-                              viewBox="0 0 16 16"
-                              onClick={() =>
-                                dropUser(service.service, user.username)
-                              }
-                            >
-                              <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
-                            </svg>
+                            {TrashIcon(dropUser, service, user)}
                           </td>
                         </tr>
                       )
@@ -272,3 +271,17 @@ const AddUser = ({ service, SetPop, servicesUser }) => {
     </div>
   );
 };
+function TrashIcon(dropUser, service, user) {
+  return <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    className="bi bi-trash3"
+    viewBox="0 0 16 16"
+    onClick={() => dropUser(service.service, user.username)}
+  >
+    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+  </svg>;
+}
+

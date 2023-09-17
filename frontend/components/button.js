@@ -1,13 +1,27 @@
-export default function Button(props) {
-  const { children } = props;
+import { Button as ButtonTag } from "@mui/material";
+import { memo } from "react";
+
+const Button = ({
+  children,
+  color,
+  style,
+  className,
+  onClick,
+  value = "alert", // Use a default parameter here
+  disabled = false, // Use a default parameter here
+}) => {
   return (
-      <button 
-        style={props.style}
-        className={`btn ${props.color && props.color} ${props.className}`}
-        onClick={props.onClick}
-      >
-        {children}
-        {props.value ? props.value : "alert"}
-      </button>
+    <ButtonTag
+      style={style}
+      className={`btn ${color && color} ${className}`}
+      onClick={onClick}
+      variant="contained"
+      disabled={disabled}
+    >
+      {children}
+      {value}
+    </ButtonTag>
   );
-}
+};
+
+export default memo(Button);

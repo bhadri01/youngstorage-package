@@ -36,19 +36,16 @@ function copy(props) {
   };
   return (
     <CustomWidthTooltip title={copy ? "copied" : props.value} placement="top">
-      <svg
-      className="copy"
-        onClick={handleCopyClick}
-        xmlns="http://www.w3.org/2000/svg"
-        width="19"
-        height="22"
-        viewBox="0 0 19 22"
+      <svg xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 17 17"
         fill="none"
+        className="copy"
+        onClick={handleCopyClick}
       >
-        <path
-          d="M17 20H6V6H17M17 4H6C5.46957 4 4.96086 4.21071 4.58579 4.58579C4.21071 4.96086 4 5.46957 4 6V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H17C17.5304 22 18.0391 21.7893 18.4142 21.4142C18.7893 21.0391 19 20.5304 19 20V6C19 5.46957 18.7893 4.96086 18.4142 4.58579C18.0391 4.21071 17.5304 4 17 4ZM14 0H2C1.46957 0 0.960859 0.210714 0.585786 0.585786C0.210714 0.960859 0 1.46957 0 2V16H2V2H14V0Z"
-          fill="black"
-        />
+        <path fillRule="evenodd" clipRule="evenodd" d="M12.2398 10.0955C12.2398 11.1304 11.4008 11.9694 10.3658 11.9694H5.68105C4.64611 11.9694 3.80713 11.1304 3.80713 10.0955V5.41066C3.80713 4.37573 4.64611 3.53674 5.68105 3.53674H10.3658C11.4008 3.53674 12.2398 4.37573 12.2398 5.41066V10.0955Z" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M7.48877 13.7768H12.1736C13.2085 13.7768 14.0475 12.9377 14.0475 11.9029V7.21802" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </CustomWidthTooltip>
   );

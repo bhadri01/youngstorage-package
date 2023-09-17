@@ -7,6 +7,7 @@ import { useState } from "react";
 import { Toast } from "./alert";
 import { API } from "@/api/api";
 import { GetCreatedTime } from "@/app/[username]/networks/page";
+import { Typography } from "@mui/material";
 
 
 export default function page({ params, servicesUser, service }) {
@@ -61,10 +62,14 @@ export default function page({ params, servicesUser, service }) {
         <div className="db-main-container">
           <div className="left">
             <div className="heading">
-              <h3>Create Database</h3>
+              <Typography variant="h6" color={'#fff'}>
+                Create Database
+              </Typography>
             </div>
             <div className="db-container">
-              <span>Username</span>
+              <Typography variant="body1">
+                Username
+              </Typography>
               <Dropdown
                 className="drop"
                 options={options}
@@ -73,7 +78,9 @@ export default function page({ params, servicesUser, service }) {
               />
             </div>
             <div className="db-container">
-              <span>Database Name</span>
+              <Typography variant="body1">
+                Database Name
+              </Typography>
               <div className="db-input">
                 <span>{selectedOption}_</span>
                 <input
@@ -84,7 +91,9 @@ export default function page({ params, servicesUser, service }) {
               </div>
             </div>
             <div className="db-container">
-              <span>Collation</span>
+              <Typography variant="body1">
+                Collation
+              </Typography>
               <CollationOptions
                 selectedCollation={selectedCollect}
                 setSelectedCollation={setSelectedCollect}
@@ -101,7 +110,8 @@ export default function page({ params, servicesUser, service }) {
 
           <div className="right">
             <div className="heading">
-              <h3>
+
+              <Typography variant="h6" color={'#fff'}>
                 <b>{service.service}</b> Server Database ({selectedOption} -{" "}
                 {dbusers?.dbusers
                   .filter((a) => a.username == selectedOption)
@@ -111,7 +121,8 @@ export default function page({ params, servicesUser, service }) {
                   .filter((a) => a.username == selectedOption)
                   ?.map((a) => a.maxNames)}
                 )
-              </h3>
+              </Typography>
+
             </div>
             <div className="databse-list-for-user">
               {dbusers?.dbusers
@@ -121,27 +132,7 @@ export default function page({ params, servicesUser, service }) {
                     <div className="db-user-name-list">
                       <h6>
                         <span>{names?.database}</span>
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          fill="currentColor"
-                          className="bi bi-trash3"
-                          viewBox="0 0 16 16"
-                          onClick={() =>
-                            dropDatabase({
-                              username: a.username,
-                              database: names?.database
-                                .split("_")
-                                .splice(1)
-                                .join("_"),
-                              collation: names?.collation,
-                              charset: names?.charset,
-                            })
-                          }
-                        >
-                          <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
-                        </svg>
+                        {DataBaseDropBox(dropDatabase, a, names)}
                       </h6>
                       <div className="db-list-lables">
                         <b>{names?.charset}</b>
@@ -157,7 +148,13 @@ export default function page({ params, servicesUser, service }) {
       </div>
     );
   }
-  return <>there is no users.Please create a user to add database</>;
+  return <>
+    <Typography variant="h4" style={{
+      display: 'flex'
+    }} className='user-message'>
+      There is no users.Please create a user to add database
+    </Typography >
+  </>;
 }
 
 const CollationOptions = ({ selectedCollation, setSelectedCollation }) => {
@@ -172,7 +169,7 @@ const CollationOptions = ({ selectedCollation, setSelectedCollation }) => {
   return (
     <select
       name="collation"
-      class=""
+      className="collation-select"
       onChange={handleCollationChange}
       value={selectedCollation.value}
     >
@@ -548,3 +545,25 @@ const CollationOptions = ({ selectedCollation, setSelectedCollation }) => {
     </select>
   );
 };
+function DataBaseDropBox(dropDatabase, a, names) {
+  return <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    className="bi bi-trash3"
+    viewBox="0 0 16 16"
+    onClick={() => dropDatabase({
+      username: a.username,
+      database: names?.database
+        .split("_")
+        .splice(1)
+        .join("_"),
+      collation: names?.collation,
+      charset: names?.charset,
+    })}
+  >
+    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z" />
+  </svg>;
+}
+

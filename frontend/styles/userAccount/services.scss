@@ -44,8 +44,30 @@
     gap: 40px;
     margin-top: 40px;
 
+    .card-size{
+      width: 31%;
+      .MuiAvatar-circular{
+        width: 100%;
+      }
+      .cardAction{
+        display: flex;
+         justify-content : space-between; width: 80%; margin: 0 auto ;
+         Button{
+          width: 140px;
+         }
+      }
+    }
+    .gloss {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid var(--input-light);
+      border-radius: 8px;
+      padding: 8px;
+      background-color: var(--white);
+    }
+
     .service-container {
-      width: 480px;
+      // width: 480px;
       border-radius: 10px;
       background: var(--white);
       box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
@@ -105,10 +127,10 @@
       .gloss {
         display: flex;
         justify-content: space-between;
-        border: 1px solid var(--input-light);
+        border: 1px solid var(--input-light) !important;
         border-radius: 8px;
         padding: 8px;
-        background-color: var(--white);
+        background-color: var(--white) !important;
       }
 
       .value {
@@ -119,6 +141,21 @@
         margin-top: 10px;
       }
     }
+    
+  @media screen and (max-width: 768px) {
+    .card-size{
+      width: 100%;
+        .MuiAvatar-circular{
+          width: 100%;
+        }
+        .cardAction{
+        width: 100%; margin: 0 auto ;
+           Button{
+            width: 140px;
+           }
+        }
+    }
+  }
   }
 }
 
@@ -131,7 +168,7 @@
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
     margin-top: 20px;
     padding: 8px 16px;
-    border-radius: 10px;
+    border-radius: 24px;
     position: relative;
     padding-left: 24px;
 
@@ -141,8 +178,8 @@
       text-align: justify;
 
       img {
-        width: 100px;
-        height: 100px;
+        width: 5%;
+        // height: 100px;
         object-fit: contain;
         margin-right: 16px;
       }
@@ -163,13 +200,23 @@
       gap: 16px;
 
       .active {
-        background-color: var(--success);
+        background-color: var(--success) !important;
       }
 
       .unactive {
-        background-color: transparent;
-        color: var(--success);
-        border: 1px solid var(--success);
+        background-color: transparent !important;
+        color: var(--success) !important;
+        border: 1px solid var(--success) !important;
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .db-card {
+      span {
+        flex-direction: column;
+        img { 
+          width: 25%;
+        }
       }
     }
   }

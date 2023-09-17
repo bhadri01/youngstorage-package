@@ -14,6 +14,8 @@ import { PageCenter, PageLoading } from "@/components/pageLoading";
 import { Toast } from "@/components/alert";
 import { APIQuery } from "@/api/queryMethod";
 import LoadingEffect from "@/components/loadingEffect";
+import { IconButton, Tooltip } from "@mui/material";
+import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
 
 export default function Ubuntu({ params }) {
   const username = params?.username;
@@ -76,7 +78,7 @@ export default function Ubuntu({ params }) {
             setTerminalMessages((a) => [...a, host]);
             setContainerDeploy(false);
           }
-          labsdata.refetch()
+          labsdata.refetch();
         }
         // Process the received message as needed
       }
@@ -113,9 +115,9 @@ export default function Ubuntu({ params }) {
     },
     onSuccess: () => {
       Toast.success("Containers are ready to play");
-      labsdata.refetch()
+      labsdata.refetch();
       setContainerDeploy(false);
-      setAction({ state: false, type: null })
+      setAction({ state: false, type: null });
     },
   });
 
@@ -125,8 +127,8 @@ export default function Ubuntu({ params }) {
     onSuccess: (res) => {
       // Invalidate and refetch
       Toast.success("VsCode is now in web");
-      labsdata.refetch()
-      setAction({ state: false, type: null })
+      labsdata.refetch();
+      setAction({ state: false, type: null });
     },
   });
 
@@ -154,44 +156,44 @@ export default function Ubuntu({ params }) {
   const [action, setAction] = useState({
     state: false,
     type: null
-  })
+  });
 
   const DeployAction = async (actiontype) => {
     if (actiontype == "code") {
       if (action.state) {
-        UpVSCode.mutate()
+        UpVSCode.mutate();
       } else {
-        setAction({ state: true, type: actiontype })
+        setAction({ state: true, type: actiontype });
       }
     } else if (actiontype == "deploy") {
       if (action.state) {
         setContainerDeploy(true);
         DeployAndRedeploy.mutate();
       } else {
-        setAction({ state: true, type: actiontype })
+        setAction({ state: true, type: actiontype });
       }
 
     } else if (actiontype == "redeploy") {
       if (action.state) {
         setContainerDeploy(true);
-        DeployAndRedeploy.mutate()
+        DeployAndRedeploy.mutate();
       } else {
-        setAction({ state: true, type: actiontype })
+        setAction({ state: true, type: actiontype });
       }
 
     } else if (actiontype == "stop") {
       if (action.state) {
-        setAction({ state: false, type: null })
+        setAction({ state: false, type: null });
         SetContainerStop(true);
         await API.stopContainer();
         Toast.success("container stoped currently");
-        labsdata.refetch()
+        labsdata.refetch();
         SetContainerStop(false);
       } else {
-        setAction({ state: true, type: actiontype })
+        setAction({ state: true, type: actiontype });
       }
     }
-  }
+  };
 
   if (labsdata.isLoading) {
     return (
@@ -363,7 +365,7 @@ export default function Ubuntu({ params }) {
 
             {wgpeerStatus && (
               <Button
-                value={containerDeploy ? "Redeploing" : "Redeplay"}
+                value={containerDeploy ? "Redeploing" : "Redeploy"}
                 color="warning"
                 onClick={() => DeployAction("redeploy")}
               >
@@ -447,7 +449,13 @@ export default function Ubuntu({ params }) {
                         ? labdata[0]?.vsCode
                         : "please click the code"}
                     </b>
-                    <Copy value="Code-Server" />
+                    {labdata[0]?.vsCode &&
+                      <Tooltip title="Launch">
+                        <Link href={labdata[0]?.vsCode} target="_blank">
+                          <RocketLaunchOutlinedIcon />
+                        </Link>
+                      </Tooltip>
+                    }
                   </span>
                 </div>
                 <div className="prop">
@@ -590,8 +598,8 @@ const ActionConfirm = ({ type, setAction, DeployAction }) => {
         <Button value="cancel" color="error" onClick={() => setAction({ state: false, type: null })} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 const ActionContent = [
   {
@@ -617,4 +625,4 @@ const ActionContent = [
     title: "Stop Lab",
     content: "your lab will turn off and all your services will down."
   }
-]
+];

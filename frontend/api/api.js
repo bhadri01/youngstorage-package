@@ -29,7 +29,7 @@ export const Token = () => {
 const servicesData = {
   mysql: "mysql",
   maria: "maria"
-}
+};
 
 export const API = {
   root: () => GetMethod({ url: `${API_URL}` }),

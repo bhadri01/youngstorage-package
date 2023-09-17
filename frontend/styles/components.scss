@@ -10,7 +10,7 @@
   padding: 6px 16px;
   font-size: 16px;
   border-radius: 4px;
-  background: var(--primary);
+  background-color: var(--primary) !important;
   color: var(--light);
   text-transform: capitalize;
   box-shadow: 0px 12px 16px 0px rgba(51, 74, 253, 0.15);
@@ -39,17 +39,26 @@
 .breadcrumb {
 
   .crumb-box {
-    svg {
-      margin-right: 8px;
-      stroke: var(--nav-font-hover);
+    .page-icon{
+      display: flex;
+      svg {
+        margin-right: 8px;
+        stroke: var(--nav-font-hover);
+      }
+      color: var(--input-light);
+      align-items: center;
+      justify-content: flex-start;
+      display: flex;
+      text-transform: capitalize;
     }
-    color: var(--input-light);
-    align-items: center;
-    justify-content: flex-start;
-    display: flex;
-    text-transform: capitalize;
-  }
+    }
+ 
 }
+
+
+@media screen and (max-width: 768px) { 
+
+ }
 
 //============================= BREADCRUMB STYLE END====================================
 
@@ -72,14 +81,11 @@
   margin-top: 16px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 20px;
-  border-radius: 20px;
-  background: var(--info-alert-bg);
   padding: 8px 16px;
   padding-left: 24px;
   position: relative;
-  text-transform: uppercase;
+  border-radius: 12px 0 0 12px !important;
 
   &::before {
     content: "";
@@ -92,9 +98,18 @@
     border-radius: 20px 0 0 20px;
   }
 
+  .infoButton{
+    color: #fff;
+    background: #5458f7;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    padding: 9px;
+  }
+
   .low {
-    display: flex;
-    flex-direction: column;
+    // display: flex;
+    // flex-direction: column;
 
     h1 {
       text-transform: capitalize;
@@ -105,6 +120,42 @@
     }
   }
 }
+
+
+
+
+@media screen and (max-width: 768px) { 
+  .info-container {
+    margin-top: 8px;
+    // padding: unset;
+    padding-left: 16px;
+  
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 10px;
+      height: 100%;
+      background-color: var(--info);
+      border-radius: 20px 0 0 20px;
+    }
+
+    .low {
+      // display: flex;
+      // flex-direction: column;
+  
+      h1 {
+        font-size: 16px;
+      }
+  
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+ }
+
 
 //============================= ALERT STYLE END====================================
 
@@ -148,7 +199,7 @@
   text-transform: capitalize;
 
   .left {
-    width: 500px;
+    width: 40%;
     background: #fff;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 4px 4px 0 0;
@@ -182,7 +233,7 @@
       span {
         color: black;
         font-weight: 700;
-        padding: 0px 16px;
+        width: 32%;
       }
 
       .cpy {
@@ -200,7 +251,7 @@
           font-weight: 200;
           padding: 0px 8px;
 
-          font-size: 14px;
+          font-size: 13px;
         }
 
         h4 {
@@ -214,7 +265,7 @@
   }
 
   .right {
-    flex: 1;
+width: 70%;
     height: fit-content;
     display: flex;
     flex-direction: column;
@@ -276,6 +327,30 @@
       }
     }
   }
+  
+@media screen and (max-width: 768px) { 
+  flex-direction: column;
+  .left{
+    width: 100%;
+    .db-information{
+    .db-container { 
+      span{
+        width: 28%;
+      }
+        .cpy {
+          width: 75%;
+        }
+    }
+  }
+}
+  .right {
+    width: 100%;
+    table{
+      overflow-y: auto;
+      display: block
+    }
+  }
+}
 }
 
 // this is for add user
@@ -371,14 +446,13 @@
             border: none;
             outline: none;
             width: 100%;
-            flex: 1;
             padding: 0 6px;
           }
         }
 
         select {
-          padding: 2px 6px;
-          width: 300px;
+          padding: 2% 4%;
+          width: 66.5%;
         }
       }
 
@@ -391,7 +465,7 @@
     }
 
     .right {
-      flex: 1;
+     width: 58%;
       height: fit-content;
       display: flex;
       flex-direction: column;
@@ -469,9 +543,28 @@
         }
       }
     }
+    @media screen and (max-width: 768px) { 
+      .left {
+        width: 100%;
+      }
+
+      .right{
+        width: 100%;
+        .databse-list-for-user {
+          .db-user-name-list {
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 }
-
+.user-message   {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 40vh);
+        }
 .pop {
   // width: 100%;
   display: flex;

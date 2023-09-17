@@ -10,19 +10,20 @@ import { API } from "@/api/api";
 import { PageCenter, PageLoading } from "@/components/pageLoading";
 import { usePathname, useRouter } from "next/navigation";
 import { NavContext } from "./layout";
+import { Typography } from "@mui/material";
 
 function UserAccount({ params }) {
-  const navpath = useContext(NavContext)
-  const pathname = usePathname()
-  useEffect(()=>{
-    navpath.setNav(pathname)
-  },[])
-  const router = useRouter()
+  const navpath = useContext(NavContext);
+  const pathname = usePathname();
+  useEffect(() => {
+    navpath.setNav(pathname);
+  }, []);
+  const router = useRouter();
   const Chnagepath = (path) => {
-    router.push(path)
-  }
+    router.push(path);
+  };
   const network = APIQuery("networks", () => API.networks());
-  const services = APIQuery("services", () => API.services())
+  const services = APIQuery("services", () => API.services());
   if (network.isLoading || services.isLoading) {
     return (
       <PageCenter>
@@ -38,7 +39,7 @@ function UserAccount({ params }) {
     );
   } else {
     let networkList = network.data?.data?.data[0];
-    let service = services.data?.data?.data
+    let service = services.data?.data?.data;
     return (
       <div className="home-container">
         <Breadcrumb>
@@ -61,9 +62,9 @@ function UserAccount({ params }) {
             <h1>Overview</h1>
           </div>
           <div className="home-container-list">
-            <div 
-            className="container" 
-            onClick={() => Chnagepath(`${params?.username}/networks`)}>
+            <div
+              className="container"
+              onClick={() => Chnagepath(`${params?.username}/networks`)}>
               <img alt="" src="/Broken.png" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -262,6 +263,11 @@ function UserAccount({ params }) {
 
         <div className="display">
           <h1>How to Setup</h1>
+          { /*
+         <Typography variant="h4">
+         How to Setup
+       </Typography>
+        */}
           <h1>Instance Deployment Roadmap</h1>
 
           <h2>Step 1: Deploy Ubuntu Instance</h2>

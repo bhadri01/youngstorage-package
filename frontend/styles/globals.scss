@@ -51,51 +51,57 @@ a {
   cursor: pointer;
 }
 
+.Mui-disabled{
+  color: rgba(0, 0, 0, 0.26) !important;
+    box-shadow: none !important;
+    background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
 .ubu-badge {
-  background-color: var(--secondary);
+  background-color: var(--secondary)  !important;
 
   &:hover {
-    background: var(--secondary-hover);
+    background: var(--secondary-hover)  !important;
   }
 }
 
 .success {
-  background-color: var(--success);
+  background-color: var(--success)  !important;
 
   &:hover {
-    background: var(--success-hover);
+    background: var(--success-hover)  !important;
   }
 }
 
 .terminal {
-  background-color: var(--terminal);
+  background-color: var(--terminal) !important;
 
   &:hover {
-    background: var(--terminal);
+    background: var(--terminal) !important;
   }
 }
 
 .warning {
-  background-color: var(--warning);
+  background-color: var(--warning) !important;
 
   &:hover {
-    background: var(--warning-hover);
+    background: var(--warning-hover) !important;
   }
 }
 
 .error {
-  background-color: var(--error);
+  background-color: var(--error) !important;
 
   &:hover {
-    background: var(--error-hover);
+    background: var(--error-hover) !important; 
   }
 }
 
 .info {
-  background-color: var(--info);
+  background-color: var(--info) !important;
 
   &:hover {
-    background: var(--info-hover);
+    background: var(--info-hover) !important;
   }
 }
 
@@ -104,6 +110,6 @@ a {
   text-transform: capitalize;
 
   a {
-    color: var(--primary);
+    color: var(--primary) !important;
   }
 }
