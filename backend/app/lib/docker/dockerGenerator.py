@@ -286,7 +286,7 @@ def containerRun(_id: str, username: str, dockerip: str, deviceName: str):
         network = db.network.find_one({"userId": _id})
         networkls = []
         for net in network["domainList"]:
-            if net["mapstatus"] and net["mapto"] == deviceName:
+            if "mapstatus" in net and net["mapstatus"] and "mapto" in net and net["mapto"] == deviceName:
                 networkls.append(net)
 
         if "domainList" in network:
@@ -305,7 +305,7 @@ def containerRun(_id: str, username: str, dockerip: str, deviceName: str):
                 f"/topic/{username}", MqttMsg("lab preperation done...!", True).get())
             source = os.path.join(os.getcwd(), "source", "docker-compose.yml")
             print(source)
-            cmd = f"docker compose -f {source} up -d"
+            cmd = f"docker-compose -f {source} up -d"
             # Execute the command
             os.system(cmd)
 
