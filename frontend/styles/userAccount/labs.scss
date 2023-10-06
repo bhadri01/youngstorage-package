@@ -45,7 +45,7 @@
     position: relative;
 
     &::after {
-      content: 'comming soon...';
+      content: "comming soon...";
       position: absolute;
       background-color: #f0f2f55e;
       height: 100%;
@@ -57,7 +57,6 @@
       font-weight: 900;
       color: var(--white);
       backdrop-filter: blur(5px);
-
     }
   }
 }
@@ -90,7 +89,6 @@
     h1 {
       text-transform: capitalize;
     }
-    
 
     p {
       padding: 20px;
@@ -167,7 +165,7 @@
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
 
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       width: 2px;
       height: 90%;
@@ -360,5 +358,95 @@
         }
       }
     }
+  }
+}
+
+.docker-stats-chart {
+  padding: 20px;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
+  margin-top: 24px;
+  border-radius: 16px;
+  h1 {
+    color: var(--input);
+    b {
+      color: var(--info);
+    }
+  }
+}
+.wrap-circles {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  .warp-graph {
+    display: flex;
+    width: 50%;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    .warp-data{
+      text-align: center;
+      h5{
+        font-size: 20px;
+        color: var(--input);
+      }
+    }
+  }
+  .memory-graph {
+    width: 48%;
+    display: flex;
+    // flex-direction: column;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    .memory-1{
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      .memory-2{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 40px;
+      }
+      .memory-3{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 8px;
+      }
+    }
+  }
+  .circle {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0.5rem;
+    border-radius: 50%;
+    background: #ededed;
+    overflow: hidden;
+  }
+  .inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    span{
+      font-size: 12px;
+      font-weight: 500;
+    }
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 115px;
+    height: 115px;
+    background: var(--white);
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark);
   }
 }

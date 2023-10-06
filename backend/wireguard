@@ -15,3 +15,4 @@ stop() {
    ebegin "Stopping wireguard"
    /usr/bin/wg-quick down wg0
    eend $?
+}

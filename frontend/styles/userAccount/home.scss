@@ -59,18 +59,18 @@ z-index: 1;
       .instance {
         font-size: 30px;
         z-index: 9;
-        .circle {
-          position: absolute;
-          z-index: 1;
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          background: linear-gradient(225deg, #fbab7e 0%, #f7ce68 100%);
-          background-color: #c26e1f;
-          fill: #c26e1f;
-          filter: blur(150px);
-          z-index: -1;
-        }
+        // .circle {
+        //   position: absolute;
+        //   z-index: 1;
+        //   width: 200px;
+        //   height: 200px;
+        //   border-radius: 50%;
+        //   background: linear-gradient(225deg, #fbab7e 0%, #f7ce68 100%);
+        //   background-color: #c26e1f;
+        //   fill: #c26e1f;
+        //   filter: blur(150px);
+        //   z-index: -1;
+        // }
         h1 {
           z-index: 5;
         }
@@ -80,53 +80,53 @@ z-index: 1;
       border-radius: 16px;
       background: linear-gradient(225deg, #cfeaa5 0%, #f9ffb6 100%);
 
-      .circle {
-        position: absolute;
-        z-index: 1;
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        // background-color: #d2eca6;;
-        background: linear-gradient(225deg, #cfeaa5 0%, #f9ffb6 100%);
-        fill: #d2eca6;
-        filter: blur(150px);
-        z-index: 1;
-      }
+      // .circle {
+      //   position: absolute;
+      //   z-index: 1;
+      //   width: 200px;
+      //   height: 200px;
+      //   border-radius: 50%;
+      //   // background-color: #d2eca6;;
+      //   background: linear-gradient(225deg, #cfeaa5 0%, #f9ffb6 100%);
+      //   fill: #d2eca6;
+      //   filter: blur(150px);
+      //   z-index: 1;
+      // }
     }
 
     .container:nth-child(3) {
       border-radius: 16px;
       background: linear-gradient(225deg, #0396ff 0%, #abdcff 100%);
 
-      .circle {
-        position: absolute;
-        z-index: 1;
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        background: linear-gradient(225deg, #0396ff 0%, #abdcff 100%);
-        // background-color: #c26e1f;
-        fill: rgba(0, 40, 69, 0.7);
-        filter: blur(150px);
-        z-index: -1;
-      }
+      // .circle {
+      //   position: absolute;
+      //   z-index: 1;
+      //   width: 200px;
+      //   height: 200px;
+      //   border-radius: 50%;
+      //   background: linear-gradient(225deg, #0396ff 0%, #abdcff 100%);
+      //   // background-color: #c26e1f;
+      //   fill: rgba(0, 40, 69, 0.7);
+      //   filter: blur(150px);
+      //   z-index: -1;
+      // }
     }
     .container:nth-child(4) {
       border-radius: 16px;
       background: linear-gradient(225deg, #e96d71 0%, #fad7a1 100%);
 
-      .circle {
-        position: absolute;
-        z-index: 1;
-        width: 200px;
-        height: 200px;
-        border-radius: 50%;
-        background: linear-gradient(225deg, #e96d71 0%, #fad7a1 100%);
-        // background-color: #c26e1f;
-        fill: #eb7776;
-        filter: blur(150px);
-        z-index: -1;
-      }
+      // .circle {
+      //   position: absolute;
+      //   z-index: 1;
+      //   width: 200px;
+      //   height: 200px;
+      //   border-radius: 50%;
+      //   background: linear-gradient(225deg, #e96d71 0%, #fad7a1 100%);
+      //   // background-color: #c26e1f;
+      //   fill: #eb7776;
+      //   filter: blur(150px);
+      //   z-index: -1;
+      // }
     }
   }
 
@@ -220,6 +220,11 @@ z-index: 1;
     b {
       color: #06f;
       cursor: pointer;
+    }
+    ol{
+      li{
+        margin-left: 32px;
+      }
     }
   }
 }

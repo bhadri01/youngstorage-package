@@ -24,10 +24,11 @@ class Devices(BaseModel):
 class Domain(BaseModel):
     domainName: str
 
+
 class DomainMap(BaseModel):
     domainName: str
     mapstatus: bool = False
-    mapto : str | None = None
+    mapto: str | None = None
     port: str | None = None
     folder: str | None = None
 
@@ -96,6 +97,7 @@ def addDomain(domain: Domain, data: dict = Depends(Authenticator(True, UserRole.
     except Exception as e:
         return JSONResponse(content={"message": str(e), "status": False}, status_code=500)
 
+
 @router.patch("/updatedomain")
 def updateDomain(domain: DomainMap, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
@@ -106,6 +108,7 @@ def updateDomain(domain: DomainMap, data: dict = Depends(Authenticator(True, Use
         return JSONResponse(content={"message": str(e), "status": False}, status_code=403)
     except Exception as e:
         return JSONResponse(content={"message": str(e), "status": False}, status_code=500)
+
 
 @router.delete("/dropdomain")
 def dropDomain(domain: Domain, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
@@ -182,12 +185,22 @@ def getpeerconf(publicKey: PeerRequest, filetype: FileType = Path(...), data: di
 @router.get("/peerstatus/{ipaddress}")
 def getpeerconf(ipaddress: str, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
     try:
+        tx = "docker stats --no-stream | grep " + \
+            data["username"]+"  | awk '{print "'"cpu "'" $3} {print "'"Memory_Usage "'" $4 $5 $6} {print "'"Memory_Percentage "'" $7} {print "'"Net_I "'" $8 $9 $10} {print "'"Block_I "'" $11 $12 $13} {print "'"PID "'" $14}'"
+        sent = subprocess.run(
+            tx, shell=True, capture_output=True, encoding="utf-8")
+        sent2 = sent.stdout
+        memdata = {}
+        for i in sent2.split("\n"):
+            j = i.split(" ")
+            if len(j) == 2:
+                memdata[j[0]] = j[1]
         # Execute the ping command and capture the output
         result = subprocess.run(
             ["ping", "-c", "1", ipaddress, "-W", "1"], capture_output=True, text=True, timeout=5)
         # Check the return code to determine success or failure
         if result.returncode == 0:
-            return JSONResponse(content={"message": str(result.stdout), "status": True}, status_code=200)
+            return JSONResponse(content={"message": str(result.stdout), "status": True, "data": memdata}, status_code=200)
         else:
             return JSONResponse(content={"message": str(result.stderr), "status": False}, status_code=403)
     except subprocess.TimeoutExpired:

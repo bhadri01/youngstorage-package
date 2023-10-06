@@ -104,10 +104,10 @@ export default function Network({ params }) {
                         </button>
                       </div>
 
-                      <div className="ions">
+                      {/* <div className="ions">
                         <img alt="" src="/grid2.png" />
                         <img alt="" src="/alignleft.png" />
-                      </div>
+                      </div> */}
                     </div>
                     <hr />
                     <div className="devices-list">
@@ -304,7 +304,7 @@ const Popup = (props) => {
   return (
     <div className="pop-container">
       <div className="add-devices-box">
-        <div className="pop">
+        <div className="pop1">
           <span>Add new device to the network</span>
           <img alt="" src="/Close.png" onClick={() => props.setAdd(false)} />
         </div>

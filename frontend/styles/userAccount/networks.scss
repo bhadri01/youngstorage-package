@@ -106,9 +106,9 @@
                     gap: 4px;
                     flex-wrap: wrap;
                     border: none;
-                    color: white;
-                    background-color: #8ec5fc;
-                    background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
+                    color: var(--dark);
+                    background-color: #8ec5fc80;
+                    // background-image: linear-gradient(62deg, #8ec5fc 0%, #e0c3fc 100%);
 
                     &:hover .png {
                         display: flex;
@@ -161,9 +161,8 @@
                     width: 100%;
                     display: flex;
                     border: none;
-                    border: 3px solid #e0c3fc;
+                    border-top: 1px solid #000;
                     outline: none;
-                    border-radius: 5px;
                     justify-content: space-between;
                     padding: 5px;
                     transition: 0.5s ease-in-out;
@@ -173,11 +172,6 @@
                         justify-content: center;
                         align-items: center;
                         cursor: pointer;
-
-                        img {
-                            filter: contrast(20%);
-                        }
-
                         span {
                             text-align: center;
                             align-items: center;
@@ -268,19 +262,20 @@
     }
 
     .add-devices-box {
+        min-width: 380px;
         width: 40%;
-        background: linear-gradient(315deg, #5458f7 0%, #334afd 100%);
+        background: var(--white);
         padding: 16px 32px;
         border-radius: 8px;
+        color: var(--dark);
 
-        .pop {
+        .pop1 {
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
-
+            padding: 16px;
             span {
-                color: var(--white);
                 font-weight: 600;
                 font-size: 20px;
                 text-transform: capitalize;
@@ -302,12 +297,13 @@
                 width: 100%;
                 justify-content: center;
                 align-items: center;
-
+                border: 1px solid var(--input);
+                padding: 16px;
+                border-radius: 8px;
                 .label {
-                    width: 80%;
+                    width: 100%;
 
                     label {
-                        color: var(--white);
                         font-weight: 600;
                         font-size: 16px;
                         display: flex;
@@ -331,8 +327,9 @@
                         width: 100%;
                         padding: 8px 8px;
                         border: none;
-                        border-radius: 3px;
+                        // border-radius: 3px;
                         margin-top: 8px;
+                        border-bottom: 1px solid gray;
 
                         &:focus {
                             outline: none;
@@ -350,14 +347,13 @@
 
                 .button3 {
                     padding: 8px 24px;
-                    color: #fff;
+                    color: var(--white);
                     text-align: center;
                     font-size: 18px;
                     font-weight: 600;
                     border-radius: 4px;
                     border: none;
-                    border: 1.01px solid #fff;
-                    background-color: transparent;
+                    background-color: var(--error);
                 }
 
                 .button4 {
