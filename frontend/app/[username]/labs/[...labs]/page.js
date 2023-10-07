@@ -659,6 +659,22 @@ const ActionContent = [
 ];
 
 const DockerStats = ({ dockerStats }) => {
+  const originalMin = 1;
+  const originalMax = 100;
+
+  // Define your new range (0 to 250)
+  const newMin = 0;
+  const newMax = 250;
+
+  // Calculate the scaled value within the new range
+  const scaledValue = (input) => {
+    return (
+      ((input?.split("%")[0] || 0 - originalMin) /
+        (originalMax - originalMin)) *
+        (newMax - newMin) +
+      newMin
+    );
+  };
   return (
     <>
       {
@@ -669,37 +685,83 @@ const DockerStats = ({ dockerStats }) => {
           <div className="wrap-circles">
             <div className="warp-graph">
               {/* cpu usage */}
-              <div className="warp-data">
-                <div
-                  class="circle"
-                  style={{
-                    backgroundImage: `conic-gradient(#19af66 ${dockerStats?.cpu}, #ededed 0)`,
-                  }}
-                >
-                  <div class="inner">{dockerStats?.cpu}</div>
+              <div className="container-progress">
+                <div class="progress-container">
+                  <svg viewBox="5 5 90 90">
+                    <circle
+                      class="progress-background"
+                      cx="50"
+                      cy="50"
+                      r="40"
+                    />
+                    <circle
+                      class="progress-value"
+                      cx="50"
+                      cy="50"
+                      r="40"
+                      style={{
+                        strokeDasharray: `${scaledValue(
+                          dockerStats?.cpu
+                        )},1000`,
+                        stroke: `${
+                          dockerStats?.cpu?.split("%")[0] <= 50
+                            ? "var(--success)"
+                            : dockerStats?.cpu?.split("%")[0] <= 80
+                            ? "var(--warning)"
+                            : dockerStats?.cpu?.split("%")[0] >= 80 &&
+                              "var(--error)"
+                        }`,
+                      }}
+                    />
+                  </svg>
                 </div>
+                <div class="inner">{dockerStats?.cpu}</div>
                 <h5>CPU</h5>
               </div>
               {/* memory usage */}
-              <div className="warp-data">
-                <div
-                  class="circle"
-                  style={{
-                    backgroundImage: `conic-gradient(#19af66 ${dockerStats?.Memory_Percentage}, #ededed 0)`,
-                  }}
-                >
-                  <div class="inner">
-                    {dockerStats?.Memory_Percentage}
-                    <span>{dockerStats?.Memory_Usage}</span>
-                  </div>
+              <div className="container-progress">
+                <div class="progress-container">
+                  <svg viewBox="5 5 90 90">
+                    <circle
+                      class="progress-background"
+                      cx="50"
+                      cy="50"
+                      r="40"
+                    />
+                    <circle
+                      class="progress-value"
+                      cx="50"
+                      cy="50"
+                      r="40"
+                      style={{
+                        strokeDasharray: `${scaledValue(
+                          dockerStats?.Memory_Percentage
+                        )},1000`,
+                        stroke: `${
+                          dockerStats?.Memory_Percentage?.split("%")[0] <= 50
+                            ? "var(--success)"
+                            : dockerStats?.Memory_Percentage?.split("%")[0] <=
+                              80
+                            ? "var(--warning)"
+                            : dockerStats?.Memory_Percentage?.split("%")[0] >=
+                                80 && "var(--error)"
+                        }`,
+                      }}
+                    />
+                  </svg>
+                </div>
+                <div class="inner">
+                  {dockerStats?.Memory_Percentage}
+                  <span>{dockerStats?.Memory_Usage}</span>
                 </div>
                 <h5>Memory Usage</h5>
               </div>
             </div>
 
+            {/* net i/o and block i/o */}
             <div className="memory-graph">
               <div className="memory-1">
-                <h2>Net IO</h2>
+                <h2>Net I/O</h2>
                 <div className="memory-2">
                   <div className="memory-3">
                     <Image alt="input" src="/u-d.png" height={32} width={32} />
@@ -718,7 +780,7 @@ const DockerStats = ({ dockerStats }) => {
                 </div>
               </div>
               <div className="memory-1">
-                <h2>Block IO</h2>
+                <h2>Block I/O</h2>
                 <div className="memory-2">
                   <div className="memory-3">
                     <Image alt="input" src="/u-d.png" height={32} width={32} />
