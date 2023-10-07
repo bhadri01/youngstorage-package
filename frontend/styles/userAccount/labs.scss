@@ -384,13 +384,54 @@
     align-items: center;
     gap: 24px;
     flex-wrap: wrap;
-    .warp-data{
+
+    .container-progress {
+      position: relative;
       text-align: center;
+      margin-top: 16px;
+      .progress-container {
+        width: 160px;
+        height: 160px;
+        position: relative;
+        transform: rotate(-90deg);
+      }
+      .inner {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        font-size: 24px;
+        font-weight: 600;
+        display: flex;
+        flex-direction: column;
+        span{
+          font-size: 12px;
+          font-weight: 300;
+        }
+      }
       h5{
+        margin-top: 8px;
         font-size: 20px;
         color: var(--input);
       }
     }
+
+    .progress-background {
+      fill: none;
+      stroke: #ededed;
+      stroke-width: 10;
+    }
+
+    .progress-value {
+      fill: none;
+      stroke: var(--success);
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 0, 1000;
+      stroke-dashoffset: -1;
+      transition: 0.3s linear;
+    }
+
   }
   .memory-graph {
     width: 48%;
@@ -400,53 +441,27 @@
     flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
-    .memory-1{
+    h2{
+      color: var(--input);
+    }
+    .memory-1 {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      .memory-2{
+      .memory-2 {
         display: flex;
         justify-content: flex-start;
         align-items: center;
         gap: 40px;
       }
-      .memory-3{
+      .memory-3 {
         display: flex;
         justify-content: flex-start;
         align-items: center;
         gap: 8px;
+        img{
+        }
       }
     }
-  }
-  .circle {
-    position: relative;
-    width: 150px;
-    height: 150px;
-    margin: 0.5rem;
-    border-radius: 50%;
-    background: #ededed;
-    overflow: hidden;
-  }
-  .inner {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    span{
-      font-size: 12px;
-      font-weight: 500;
-    }
-    position: absolute;
-    text-align: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 115px;
-    height: 115px;
-    background: var(--white);
-    border-radius: 50%;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--dark);
   }
 }

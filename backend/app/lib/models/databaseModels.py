@@ -7,7 +7,8 @@ from datetime import datetime
 
 class DataBaseTypes(str, Enum):
     Mysql = "mysql"
-    Maria = "maria"
+    Mariadb = "mariadb"
+    Mongodb = "mongodb"
 
 
 class CreateUser(BaseModel):
