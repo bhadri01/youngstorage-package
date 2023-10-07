@@ -12,7 +12,6 @@ import { PageCenter, PageLoading } from "@/components/pageLoading";
 import { useQueryClient } from "@tanstack/react-query";
 import Alerts from "@/components/alerts";
 import { NavContext } from "../layout";
-import LanIcon from '@mui/icons-material/Lan';
 import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, IconButton, Typography } from "@mui/material";
 
 function Services({ params }) {

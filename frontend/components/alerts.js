@@ -6,7 +6,7 @@ const Alerts = (props) => {
   const { value } = props;
   console.log('value', value);
   return (
-    <Paper className="info-container" elevation={6} >
+    <div className="info-container">
       <InfoOutlinedIcon className='infoButton' />
       <Box className="low">
         <Typography variant="h5">
@@ -16,7 +16,7 @@ const Alerts = (props) => {
           {value}
         </Typography>
       </Box>
-    </Paper>
+    </div>
   );
 };
 

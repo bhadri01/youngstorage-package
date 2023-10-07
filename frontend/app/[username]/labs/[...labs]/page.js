@@ -15,12 +15,13 @@ import { Toast } from "@/components/alert";
 import { APIQuery } from "@/api/queryMethod";
 import LoadingEffect from "@/components/loadingEffect";
 import { IconButton, Tooltip } from "@mui/material";
-import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
+import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
+import Image from "next/image";
 
 export default function Ubuntu({ params }) {
   const username = params?.username;
   const [terminalMessages, setTerminalMessages] = useState([]);
-  const [Terminalstate, setTerminalstate] = useState(true);
+  const [Terminalstate, setTerminalstate] = useState(false);
   const [containerStop, SetContainerStop] = useState(false);
   const [containerDeploy, setContainerDeploy] = useState(false);
   const host = "(labs💻️youngstorage)$";
@@ -114,7 +115,7 @@ export default function Ubuntu({ params }) {
       return API.deploySpawn();
     },
     onSuccess: () => {
-      Toast.success("Containers are ready to play");
+      Toast.success("labs are ready to play");
       labsdata.refetch();
       setContainerDeploy(false);
       setAction({ state: false, type: null });
@@ -134,7 +135,7 @@ export default function Ubuntu({ params }) {
 
   const labsdata = APIQuery("labsdata", () => API.deploy(), 5000);
   const [wgpeerStatus, setwgpeerStatus] = useState(false);
-
+  const [dockerStats, setDockerStats] = useState(null);
   useEffect(() => {
     if (
       labsdata.data?.data?.data?.length > 0 &&
@@ -144,6 +145,7 @@ export default function Ubuntu({ params }) {
       API.peerstatus(labsdata.data.data.data[0].wgipAddress)
         .then((response) => {
           setwgpeerStatus(response.data?.status);
+          setDockerStats(response.data?.data);
         })
         .catch((error) => {
           // Handle any errors if needed
@@ -155,7 +157,7 @@ export default function Ubuntu({ params }) {
 
   const [action, setAction] = useState({
     state: false,
-    type: null
+    type: null,
   });
 
   const DeployAction = async (actiontype) => {
@@ -172,7 +174,6 @@ export default function Ubuntu({ params }) {
       } else {
         setAction({ state: true, type: actiontype });
       }
-
     } else if (actiontype == "redeploy") {
       if (action.state) {
         setContainerDeploy(true);
@@ -180,13 +181,12 @@ export default function Ubuntu({ params }) {
       } else {
         setAction({ state: true, type: actiontype });
       }
-
     } else if (actiontype == "stop") {
       if (action.state) {
         setAction({ state: false, type: null });
         SetContainerStop(true);
         await API.stopContainer();
-        Toast.success("container stoped currently");
+        Toast.success("labs stoped currently");
         labsdata.refetch();
         SetContainerStop(false);
       } else {
@@ -212,7 +212,13 @@ export default function Ubuntu({ params }) {
 
     return (
       <div className="container-labs">
-        {action.state && <ActionConfirm DeployAction={DeployAction} type={action.type} setAction={setAction} />}
+        {action.state && (
+          <ActionConfirm
+            DeployAction={DeployAction}
+            type={action.type}
+            setAction={setAction}
+          />
+        )}
         <Breadcrumb>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -355,9 +361,7 @@ export default function Ubuntu({ params }) {
               <Button
                 value={containerDeploy ? "deploing" : "deploy"}
                 color="success"
-                onClick={() =>
-                  DeployAction("deploy")
-                }
+                onClick={() => DeployAction("deploy")}
               >
                 {containerDeploy ? <LoadingEffect /> : <Retry />}
               </Button>
@@ -386,99 +390,102 @@ export default function Ubuntu({ params }) {
         </div>
 
         {/* if container deploy na this content will show */}
-        {
-          labdata.length > 0 ? (
-            <div className="content">
-              <div className="left">
-                <h3>Read Me</h3>
-                <p>
-                  This server is accessible through Code or SSH. Code is
-                  accessible under VPN in one click and you do not have to SSH
-                  into your lab, becuase Code works on your browser without any
-                  additional setup. Just ensure you are connected to{" "}
-                  <Link href={`https://www.wireguard.com/`} target="_blank">
-                    <b>VPN</b>
-                  </Link>
-                  . <br />
-                  Code is an embedded VS Code that runs from within this lab and
-                  let you access your lab effortlessly over web. To keep you
-                  secure, this password changes during every redeploy. For a more
-                  convinient development experience, consider installing{" "}
-                  <Link href={`https://code.visualstudio.com/`} target="_blank">
-                    <b>Visual Studio Code </b>
-                  </Link>
-                  Desktop and connect via SSH.
-                </p>
-              </div>
-              <div className="right">
-                <h3>Lab information</h3>
+        {labdata.length > 0 ? (
+          <div className="content">
+            <div className="left">
+              <h3>Read Me</h3>
+              <p>
+                This server is accessible through Code or SSH. Code is
+                accessible under VPN in one click and you do not have to SSH
+                into your lab, becuase Code works on your browser without any
+                additional setup. Just ensure you are connected to{" "}
+                <Link href={`https://www.wireguard.com/`} target="_blank">
+                  <b>VPN</b>
+                </Link>
+                . <br />
+                Code is an embedded VS Code that runs from within this lab and
+                let you access your lab effortlessly over web. To keep you
+                secure, this password changes during every redeploy. For a more
+                convinient development experience, consider installing{" "}
+                <Link href={`https://code.visualstudio.com/`} target="_blank">
+                  <b>Visual Studio Code </b>
+                </Link>
+                Desktop and connect via SSH.
+              </p>
+            </div>
+            <div className="right">
+              <h3>Lab information</h3>
 
-                <div className="prop">
-                  <h4>IP Address</h4>
-                  <span>
-                    <b>{labdata[0]?.wgipAddress}</b>
-                    <Copy value="VPN IP Address" />
-                  </span>
-                </div>
-                <div className="prop">
-                  <h4>UserName</h4>
-                  <span>
-                    <b>{labdata[0]?.username}</b>
-                    <Copy value="Instance Name" />
-                  </span>
-                </div>
-                <div className="prop">
-                  <h4>Password</h4>
-                  <span>
-                    <b>{labdata[0]?.password}</b>
-                    <Copy value="Instance Password" />
-                  </span>
-                </div>
-                <div className="prop">
-                  <h4>SSH</h4>
-                  <span>
-                    <b>{`${labdata[0]?.username}@${labdata[0]?.wgipAddress}`}</b>
-                    <Copy value="SSH Connnection" />
-                  </span>
-                </div>
-                <div className="prop">
-                  <h4>Code-Server</h4>
-                  <span>
-                    <b>
-                      {labdata[0]?.vsCode
-                        ? labdata[0]?.vsCode
-                        : "please click the code"}
-                    </b>
-                    {labdata[0]?.vsCode &&
-                      <Tooltip title="Launch">
-                        <Link href={labdata[0]?.vsCode} target="_blank">
-                          <RocketLaunchOutlinedIcon />
-                        </Link>
-                      </Tooltip>
-                    }
-                  </span>
-                </div>
-                <div className="prop">
-                  <h4>Password</h4>
-                  <span>
-                    <b>
-                      {labdata[0]?.vsPassword
-                        ? labdata[0]?.vsPassword
-                        : "************"}
-                    </b>
-                    <Copy value="Code-Server Password" />
-                  </span>
-                </div>
+              <div className="prop">
+                <h4>IP Address</h4>
+                <span>
+                  <b>{labdata[0]?.wgipAddress}</b>
+                  <Copy value="VPN IP Address" />
+                </span>
+              </div>
+              <div className="prop">
+                <h4>UserName</h4>
+                <span>
+                  <b>{labdata[0]?.username}</b>
+                  <Copy value="Instance Name" />
+                </span>
+              </div>
+              <div className="prop">
+                <h4>Password</h4>
+                <span>
+                  <b>{labdata[0]?.password}</b>
+                  <Copy value="Instance Password" />
+                </span>
+              </div>
+              <div className="prop">
+                <h4>SSH</h4>
+                <span>
+                  <b>{`${labdata[0]?.username}@${labdata[0]?.wgipAddress}`}</b>
+                  <Copy value="SSH Connnection" />
+                </span>
+              </div>
+              <div className="prop">
+                <h4>Code-Server</h4>
+                <span>
+                  <b>
+                    {labdata[0]?.vsCode
+                      ? labdata[0]?.vsCode
+                      : "please click the code"}
+                  </b>
+                  {labdata[0]?.vsCode && (
+                    <Tooltip title="Launch">
+                      <Link href={labdata[0]?.vsCode} target="_blank">
+                        <RocketLaunchOutlinedIcon />
+                      </Link>
+                    </Tooltip>
+                  )}
+                </span>
+              </div>
+              <div className="prop">
+                <h4>Password</h4>
+                <span>
+                  <b>
+                    {labdata[0]?.vsPassword
+                      ? labdata[0]?.vsPassword
+                      : "************"}
+                  </b>
+                  <Copy value="Code-Server Password" />
+                </span>
               </div>
             </div>
-          ) : (
-            <></>
-          )
-        }
-
+          </div>
+        ) : (
+          <></>
+        )}
+        {/* container stats data in graph */}
+        <DockerStats dockerStats={dockerStats} />
         {/* terminal */}
         <div className="terminal-main-box">
-          <div className="terminal-container">
+          <div
+            className="terminal-container"
+            onClick={() => setTerminalstate((a) => !a)}
+            style={{ cursor: "pointer" }}
+          >
             <h1>Terminal</h1>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -487,7 +494,6 @@ export default function Ubuntu({ params }) {
               viewBox="0 0 24 24"
               fill="none"
               className={`${Terminalstate && "active"}`}
-              onClick={() => setTerminalstate((a) => !a)}
             >
               <path
                 d="M12 2C9.34784 2 6.8043 3.05357 4.92893 4.92893C3.05357 6.8043 2 9.34784 2 12C2 13.3132 2.25866 14.6136 2.7612 15.8268C3.26375 17.0401 4.00035 18.1425 4.92893 19.0711C5.85752 19.9997 6.95991 20.7362 8.17317 21.2388C9.38642 21.7413 10.6868 22 12 22C13.3132 22 14.6136 21.7413 15.8268 21.2388C17.0401 20.7362 18.1425 19.9997 19.0711 19.0711C20.9464 17.1957 22 14.6522 22 12C22 9.34784 20.9464 6.8043 19.0711 4.92893C18.1425 4.00035 17.0401 3.26375 15.8268 2.7612C14.6136 2.25866 13.3132 2 12 2ZM12 4C14.1217 4 16.1566 4.84285 17.6569 6.34315C19.1571 7.84344 20 9.87827 20 12C20 14.1217 19.1571 16.1566 17.6569 17.6569C16.1566 19.1571 14.1217 20 12 20C9.87827 20 7.84344 19.1571 6.34315 17.6569C4.84285 16.1566 4 14.1217 4 12C4 9.87827 4.84285 7.84344 6.34315 6.34315C7.84344 4.84285 9.87827 4 12 4ZM7 10L12 15L17 10L7 10Z"
@@ -506,7 +512,7 @@ export default function Ubuntu({ params }) {
             </div>
           </div>
         </div>
-      </div >
+      </div>
     );
   }
 }
@@ -578,24 +584,47 @@ const Stop = () => {
   );
 };
 
-
 const ActionConfirm = ({ type, setAction, DeployAction }) => {
   return (
     <div className="action-confirm">
       {/* <h1>{type == "code" ? "enable vs-code" : type == "deploy" ? "start instance" : type == "redeploy" ? "restart instance" : type == "stop" && "stop instance"}</h1> */}
-      <h1>{ActionContent.filter(a => a.type == type)[0]?.title}</h1>
-      <p>{ActionContent.filter(a => a.type == type)[0]?.content}</p>
-      <h4>{ActionContent.filter(a => a.type == type)[0]?.subtitle}</h4>
-      <p>{ActionContent.filter(a => a.type == type)[0]?.features}</p>
+      <h1>{ActionContent.filter((a) => a.type == type)[0]?.title}</h1>
+      <p>{ActionContent.filter((a) => a.type == type)[0]?.content}</p>
+      <h4>{ActionContent.filter((a) => a.type == type)[0]?.subtitle}</h4>
+      <p>{ActionContent.filter((a) => a.type == type)[0]?.features}</p>
       <div className="action-button">
         <Button
           onClick={() => DeployAction(type)}
-          value={type == "code" ? "launch vs-code" : type == "deploy" ? "start instance" : type == "redeploy" ? "restart instance" : type == "stop" && "stop instance"} color="success" >
-          {type == "code" && <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 80 80">
-            <path fill="white" d="M 52.564453 7.6464844 C 52.361652 7.6419938 52.15974 7.6537058 51.958984 7.6796875 C 51.155963 7.7836143 50.384238 8.1298216 49.761719 8.703125 L 24.595703 31.890625 L 16.113281 25.365234 A 1.0001 1.0001 0 0 0 16.113281 25.363281 C 14.856958 24.397567 13.037439 24.586513 12.005859 25.791016 L 8.4882812 29.892578 C 7.4476828 31.106113 7.552215 32.95152 8.7207031 34.041016 A 1.0001 1.0001 0 0 0 8.7304688 34.048828 L 15.386719 40.095703 L 8.8046875 45.947266 C 7.5902906 47.026067 7.4616789 48.908914 8.5195312 50.142578 L 12.005859 54.208984 C 13.037439 55.413487 14.856958 55.602433 16.113281 54.636719 L 24.388672 48.273438 L 49.767578 71.326172 C 51.012865 72.457041 52.841907 72.686742 54.328125 71.900391 L 67.871094 64.730469 C 69.17869 64.038055 69.998047 62.674749 69.998047 61.195312 L 69.998047 18.806641 C 69.998047 17.327204 69.17869 15.963898 67.871094 15.271484 L 54.34375 8.109375 C 53.782992 7.8125326 53.172857 7.659956 52.564453 7.6464844 z M 52.214844 9.6601562 C 52.615322 9.6083332 53.03188 9.6777432 53.408203 9.8769531 L 66.935547 17.039062 C 67.591951 17.38665 67.998047 18.064077 67.998047 18.806641 L 67.998047 61.195312 C 67.998047 61.937877 67.591951 62.615304 66.935547 62.962891 L 53.392578 70.132812 C 52.645599 70.528036 51.739922 70.413246 51.113281 69.845703 L 51.111328 69.84375 L 10.082031 32.574219 C 9.6858156 32.201506 9.653449 31.608569 10.007812 31.195312 L 13.523438 27.091797 A 1.0001 1.0001 0 0 0 13.525391 27.091797 C 13.877367 26.680819 14.463047 26.620333 14.892578 26.949219 L 23.916016 33.890625 A 1.0001 1.0001 0 0 0 23.919922 33.894531 A 1.0001 1.0001 0 0 0 24.167969 34.083984 L 32.761719 40.695312 A 1.0001 1.0001 0 0 0 33.009766 40.886719 A 1.0001 1.0001 0 0 0 33.015625 40.888672 L 52.390625 55.792969 A 1.0001 1.0001 0 0 0 54 55 L 54 25 A 1.0001 1.0001 0 0 0 52.390625 24.207031 L 33.5 38.738281 L 26.205078 33.126953 L 51.117188 10.173828 C 51.430667 9.8851317 51.814365 9.7119795 52.214844 9.6601562 z M 53 12 C 52.45 12 52 12.440234 52 12.990234 C 52 13.550234 52.45 14 53 14 C 53.55 14 54 13.550234 54 12.990234 C 54 12.440234 53.55 12 53 12 z M 53 16 C 52.45 16 52 16.45 52 17 C 52 17.551 52.45 18 53 18 C 53.55 18 54 17.551 54 17 C 54 16.45 53.55 16 53 16 z M 53 20 C 52.45 20 52 20.438281 52 20.988281 C 52 21.549281 52.45 22 53 22 C 53.55 22 54 21.549281 54 20.988281 C 54 20.438281 53.55 20 53 20 z M 52 27.03125 L 52 52.96875 L 35.140625 40 L 52 27.03125 z M 16.876953 41.449219 L 22.884766 46.90625 L 14.892578 53.050781 C 14.463047 53.379667 13.877367 53.319181 13.525391 52.908203 A 1.0001 1.0001 0 0 0 13.523438 52.908203 L 10.037109 48.839844 C 9.6749622 48.417508 9.7172129 47.812558 10.132812 47.443359 L 16.876953 41.449219 z M 53 58 C 52.45 58 52 58.440234 52 58.990234 C 52 59.550234 52.45 60 53 60 C 53.55 60 54 59.550234 54 58.990234 C 54 58.440234 53.55 58 53 58 z M 53 62 C 52.45 62 52 62.45 52 63 C 52 63.551 52.45 64 53 64 C 53.55 64 54 63.551 54 63 C 54 62.45 53.55 62 53 62 z M 53 66 C 52.45 66 52 66.438281 52 66.988281 C 52 67.549281 52.45 68 53 68 C 53.55 68 54 67.549281 54 66.988281 C 54 66.438281 53.55 66 53 66 z"></path>
-          </svg>}
+          value={
+            type == "code"
+              ? "launch vs-code"
+              : type == "deploy"
+              ? "start instance"
+              : type == "redeploy"
+              ? "restart instance"
+              : type == "stop" && "stop instance"
+          }
+          color="success"
+        >
+          {type == "code" && (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 80 80"
+            >
+              <path
+                fill="white"
+                d="M 52.564453 7.6464844 C 52.361652 7.6419938 52.15974 7.6537058 51.958984 7.6796875 C 51.155963 7.7836143 50.384238 8.1298216 49.761719 8.703125 L 24.595703 31.890625 L 16.113281 25.365234 A 1.0001 1.0001 0 0 0 16.113281 25.363281 C 14.856958 24.397567 13.037439 24.586513 12.005859 25.791016 L 8.4882812 29.892578 C 7.4476828 31.106113 7.552215 32.95152 8.7207031 34.041016 A 1.0001 1.0001 0 0 0 8.7304688 34.048828 L 15.386719 40.095703 L 8.8046875 45.947266 C 7.5902906 47.026067 7.4616789 48.908914 8.5195312 50.142578 L 12.005859 54.208984 C 13.037439 55.413487 14.856958 55.602433 16.113281 54.636719 L 24.388672 48.273438 L 49.767578 71.326172 C 51.012865 72.457041 52.841907 72.686742 54.328125 71.900391 L 67.871094 64.730469 C 69.17869 64.038055 69.998047 62.674749 69.998047 61.195312 L 69.998047 18.806641 C 69.998047 17.327204 69.17869 15.963898 67.871094 15.271484 L 54.34375 8.109375 C 53.782992 7.8125326 53.172857 7.659956 52.564453 7.6464844 z M 52.214844 9.6601562 C 52.615322 9.6083332 53.03188 9.6777432 53.408203 9.8769531 L 66.935547 17.039062 C 67.591951 17.38665 67.998047 18.064077 67.998047 18.806641 L 67.998047 61.195312 C 67.998047 61.937877 67.591951 62.615304 66.935547 62.962891 L 53.392578 70.132812 C 52.645599 70.528036 51.739922 70.413246 51.113281 69.845703 L 51.111328 69.84375 L 10.082031 32.574219 C 9.6858156 32.201506 9.653449 31.608569 10.007812 31.195312 L 13.523438 27.091797 A 1.0001 1.0001 0 0 0 13.525391 27.091797 C 13.877367 26.680819 14.463047 26.620333 14.892578 26.949219 L 23.916016 33.890625 A 1.0001 1.0001 0 0 0 23.919922 33.894531 A 1.0001 1.0001 0 0 0 24.167969 34.083984 L 32.761719 40.695312 A 1.0001 1.0001 0 0 0 33.009766 40.886719 A 1.0001 1.0001 0 0 0 33.015625 40.888672 L 52.390625 55.792969 A 1.0001 1.0001 0 0 0 54 55 L 54 25 A 1.0001 1.0001 0 0 0 52.390625 24.207031 L 33.5 38.738281 L 26.205078 33.126953 L 51.117188 10.173828 C 51.430667 9.8851317 51.814365 9.7119795 52.214844 9.6601562 z M 53 12 C 52.45 12 52 12.440234 52 12.990234 C 52 13.550234 52.45 14 53 14 C 53.55 14 54 13.550234 54 12.990234 C 54 12.440234 53.55 12 53 12 z M 53 16 C 52.45 16 52 16.45 52 17 C 52 17.551 52.45 18 53 18 C 53.55 18 54 17.551 54 17 C 54 16.45 53.55 16 53 16 z M 53 20 C 52.45 20 52 20.438281 52 20.988281 C 52 21.549281 52.45 22 53 22 C 53.55 22 54 21.549281 54 20.988281 C 54 20.438281 53.55 20 53 20 z M 52 27.03125 L 52 52.96875 L 35.140625 40 L 52 27.03125 z M 16.876953 41.449219 L 22.884766 46.90625 L 14.892578 53.050781 C 14.463047 53.379667 13.877367 53.319181 13.525391 52.908203 A 1.0001 1.0001 0 0 0 13.523438 52.908203 L 10.037109 48.839844 C 9.6749622 48.417508 9.7172129 47.812558 10.132812 47.443359 L 16.876953 41.449219 z M 53 58 C 52.45 58 52 58.440234 52 58.990234 C 52 59.550234 52.45 60 53 60 C 53.55 60 54 59.550234 54 58.990234 C 54 58.440234 53.55 58 53 58 z M 53 62 C 52.45 62 52 62.45 52 63 C 52 63.551 52.45 64 53 64 C 53.55 64 54 63.551 54 63 C 54 62.45 53.55 62 53 62 z M 53 66 C 52.45 66 52 66.438281 52 66.988281 C 52 67.549281 52.45 68 53 68 C 53.55 68 54 67.549281 54 66.988281 C 54 66.438281 53.55 66 53 66 z"
+              ></path>
+            </svg>
+          )}
         </Button>
-        <Button value="cancel" color="error" onClick={() => setAction({ state: false, type: null })} />
+        <Button
+          value="cancel"
+          color="error"
+          onClick={() => setAction({ state: false, type: null })}
+        />
       </div>
     </div>
   );
@@ -608,21 +637,109 @@ const ActionContent = [
     content: `
    We're excited to introduce you to one of our most powerful features - Visual Studio Code integration. This feature brings the versatility and efficiency of the popular code editor, Visual Studio Code (VS Code), right to your web browser. Whether you're a developer, designer, or someone looking to experience a seamless coding environment, our VS Code feature has you covered.`,
     subtitle: "Start Coding with Confidence:",
-    features: "Experience the power of Visual Studio Code right in your browser. Whether you're a seasoned developer or just starting your coding journey, our VS Code feature will take your projects to the next level.",
+    features:
+      "Experience the power of Visual Studio Code right in your browser. Whether you're a seasoned developer or just starting your coding journey, our VS Code feature will take your projects to the next level.",
   },
   {
     type: "deploy",
     title: "Start Lab",
-    content: "Start your lab and play with your coding space"
+    content: "Start your lab and play with your coding space",
   },
   {
     type: "redeploy",
     title: "Restart lab",
-    content: "restart your labs will automatically restart all your services that you mentioned in the init.sh file"
+    content:
+      "restart your labs will automatically restart all your services that you mentioned in the init.sh file",
   },
   {
     type: "stop",
     title: "Stop Lab",
-    content: "your lab will turn off and all your services will down."
-  }
+    content: "your lab will turn off and all your services will down.",
+  },
 ];
+
+const DockerStats = ({ dockerStats }) => {
+  return (
+    <>
+      {
+        <div className="docker-stats-chart">
+          <h1>
+            Process ID : <b>{dockerStats?.PID}</b>
+          </h1>
+          <div className="wrap-circles">
+            <div className="warp-graph">
+              {/* cpu usage */}
+              <div className="warp-data">
+                <div
+                  class="circle"
+                  style={{
+                    backgroundImage: `conic-gradient(#19af66 ${dockerStats?.cpu}, #ededed 0)`,
+                  }}
+                >
+                  <div class="inner">{dockerStats?.cpu}</div>
+                </div>
+                <h5>CPU</h5>
+              </div>
+              {/* memory usage */}
+              <div className="warp-data">
+                <div
+                  class="circle"
+                  style={{
+                    backgroundImage: `conic-gradient(#19af66 ${dockerStats?.Memory_Percentage}, #ededed 0)`,
+                  }}
+                >
+                  <div class="inner">
+                    {dockerStats?.Memory_Percentage}
+                    <span>{dockerStats?.Memory_Usage}</span>
+                  </div>
+                </div>
+                <h5>Memory Usage</h5>
+              </div>
+            </div>
+
+            <div className="memory-graph">
+              <div className="memory-1">
+                <h2>Net IO</h2>
+                <div className="memory-2">
+                  <div className="memory-3">
+                    <Image alt="input" src="/u-d.png" height={32} width={32} />
+                    <span>{dockerStats?.Net_I.split("/")[0]}</span>
+                  </div>
+                  <div className="memory-3">
+                    <Image
+                      alt="input"
+                      src="/u-d.png"
+                      height={32}
+                      width={32}
+                      style={{ transform: "rotate(180deg)" }}
+                    />
+                    <span>{dockerStats?.Net_I.split("/")[1]}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="memory-1">
+                <h2>Block IO</h2>
+                <div className="memory-2">
+                  <div className="memory-3">
+                    <Image alt="input" src="/u-d.png" height={32} width={32} />
+                    <span>{dockerStats?.Block_I.split("/")[0]}</span>
+                  </div>
+                  <div className="memory-3">
+                    <Image
+                      alt="input"
+                      src="/u-d.png"
+                      height={32}
+                      width={32}
+                      style={{ transform: "rotate(180deg)" }}
+                    />
+                    <span>{dockerStats?.Block_I.split("/")[1]}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </>
+  );
+};

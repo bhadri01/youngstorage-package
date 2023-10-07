@@ -37,9 +37,8 @@
 
 //============================= BREADCRUMB STYLE START====================================
 .breadcrumb {
-
   .crumb-box {
-    .page-icon{
+    .page-icon {
       display: flex;
       svg {
         margin-right: 8px;
@@ -51,14 +50,11 @@
       display: flex;
       text-transform: capitalize;
     }
-    }
- 
+  }
 }
 
-
-@media screen and (max-width: 768px) { 
-
- }
+@media screen and (max-width: 768px) {
+}
 
 //============================= BREADCRUMB STYLE END====================================
 
@@ -85,7 +81,9 @@
   padding: 8px 16px;
   padding-left: 24px;
   position: relative;
-  border-radius: 12px 0 0 12px !important;
+  border-radius: 16px;
+  background-color: var(--info-light);
+  width: fit-content;
 
   &::before {
     content: "";
@@ -95,16 +93,16 @@
     width: 10px;
     height: 100%;
     background-color: var(--info);
-    border-radius: 20px 0 0 20px;
+    border-radius: 16px 0 0 16px;
   }
 
-  .infoButton{
+  .infoButton {
     color: #fff;
     background: #5458f7;
     border-radius: 50%;
-    width: 64px;
-    height: 64px;
-    padding: 9px;
+    width: 48px;
+    height: 48px;
+    padding: 4px;
   }
 
   .low {
@@ -121,15 +119,12 @@
   }
 }
 
-
-
-
-@media screen and (max-width: 768px) { 
+@media screen and (max-width: 768px) {
   .info-container {
     margin-top: 8px;
     // padding: unset;
     padding-left: 16px;
-  
+
     &::before {
       content: "";
       position: absolute;
@@ -144,18 +139,17 @@
     .low {
       // display: flex;
       // flex-direction: column;
-  
+
       h1 {
         font-size: 16px;
       }
-  
+
       p {
         font-size: 12px;
       }
     }
   }
- }
-
+}
 
 //============================= ALERT STYLE END====================================
 
@@ -265,7 +259,7 @@
   }
 
   .right {
-width: 70%;
+    width: 70%;
     height: fit-content;
     display: flex;
     flex-direction: column;
@@ -327,30 +321,30 @@ width: 70%;
       }
     }
   }
-  
-@media screen and (max-width: 768px) { 
-  flex-direction: column;
-  .left{
-    width: 100%;
-    .db-information{
-    .db-container { 
-      span{
-        width: 28%;
-      }
-        .cpy {
-          width: 75%;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    .left {
+      width: 100%;
+      .db-information {
+        .db-container {
+          span {
+            width: 28%;
+          }
+          .cpy {
+            width: 75%;
+          }
         }
+      }
+    }
+    .right {
+      width: 100%;
+      table {
+        overflow-y: auto;
+        display: block;
+      }
     }
   }
-}
-  .right {
-    width: 100%;
-    table{
-      overflow-y: auto;
-      display: block
-    }
-  }
-}
 }
 
 // this is for add user
@@ -465,7 +459,7 @@ width: 70%;
     }
 
     .right {
-     width: 58%;
+      width: 58%;
       height: fit-content;
       display: flex;
       flex-direction: column;
@@ -543,12 +537,12 @@ width: 70%;
         }
       }
     }
-    @media screen and (max-width: 768px) { 
+    @media screen and (max-width: 768px) {
       .left {
         width: 100%;
       }
 
-      .right{
+      .right {
         width: 100%;
         .databse-list-for-user {
           .db-user-name-list {
@@ -559,12 +553,12 @@ width: 70%;
     }
   }
 }
-.user-message   {
+.user-message {
   display: flex;
   justify-content: center;
   align-items: center;
   height: calc(100vh - 40vh);
-        }
+}
 .pop {
   // width: 100%;
   display: flex;

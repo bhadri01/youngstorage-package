@@ -10,7 +10,6 @@ import { API } from "@/api/api";
 import { PageCenter, PageLoading } from "@/components/pageLoading";
 import { usePathname, useRouter } from "next/navigation";
 import { NavContext } from "./layout";
-import { Typography } from "@mui/material";
 
 function UserAccount({ params }) {
   const navpath = useContext(NavContext);
@@ -94,7 +93,7 @@ function UserAccount({ params }) {
             </div>
 
             <div className="container" onClick={() => Chnagepath(`${params?.username}/labs`)}>
-              <img alt="" src="/Broken.png" />
+              <img alt="" src="/device-.png" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="78"
@@ -120,7 +119,7 @@ function UserAccount({ params }) {
             </div>
 
             <div className="container" onClick={() => Chnagepath(`${params?.username}/domains`)}>
-              <img alt="" src="/Broken.png" />
+              <img alt="" src="/Website-.png" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="78"
@@ -149,7 +148,7 @@ function UserAccount({ params }) {
 
             <div className="container" onClick={() => Chnagepath(`${params?.username}/services`)}>
               {/* <div className="circle"></div> */}
-              <img alt="" src="/Broken.png" />
+              <img alt="" src="/admin-.png" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="78"
@@ -174,16 +173,7 @@ function UserAccount({ params }) {
             </div>
           </div>
         </div>
-
-        {/* <div className="activity">
-        <h1>Activity</h1>
-        <div className="week">
-        <span>Day</span>
-        <span>Week</span>
-        <span>Month</span>
-      </div>
-      </div> */}
-        <div className="whole">
+        {/* <div className="whole">
           <div className="logs">
             <h1>logs</h1>
             <div className="view">
@@ -259,7 +249,7 @@ function UserAccount({ params }) {
               <span>1 minute ago</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="display">
           <h1>How to Setup</h1>
