@@ -117,8 +117,12 @@ def add_database_to_user(database: DataBaseTypes, username: str, data: CreateDB,
         if database_services.check_user_exist(username, database):
             if not database_services.is_max_database(database):
                 if not database_services.check_database_exist(f"{data.username}_{data.database}", database):
-                    out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
-                                          f"./root/{database}_db_creation.sh {data.username}_{data.database} {data.charset} {data.collation} {data.username}"], capture_output=True)
+                    if database == "mongodb":
+                        out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                                              f"./root/{database}_db_creation.sh {data.username}_{data.database} {data.username}"], capture_output=True)
+                    else:
+                        out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                                              f"./root/{database}_db_creation.sh {data.username}_{data.database} {data.charset} {data.collation} {data.username}"], capture_output=True)
                     print(str(out))
                     status_code_match = re.search(
                         r'status_code=(\d+)', str(out))
