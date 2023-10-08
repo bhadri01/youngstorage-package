@@ -19,8 +19,8 @@ class CreateUser(BaseModel):
 class CreateDB(BaseModel):
     username: str
     database: str
-    collation: str
-    charset: str
+    collation: str | None = None
+    charset: str | None = None
 
 
 class DatabaseServices:
