@@ -25,30 +25,54 @@ export default function page({ params, servicesUser, service }) {
     const [databaseName, setdatabaseName] = useState();
     const CreateDB = async () => {
       console.log(selectedCollect);
-      if (
-        selectedOption &&
-        selectedCollect.value &&
-        selectedCollect.charset &&
-        databaseName
-      ) {
-        let body = {
-          username: selectedOption,
-          database: databaseName,
-          collation: selectedCollect.value,
-          charset: selectedCollect.charset,
-        };
-        await API.addDatabaseToUserService(service.service, body)
-          .then((res) => {
-            Toast.success(res.data?.message);
-            servicesUser.refetch();
-            setdatabaseName("");
-            setSelectedCollect((a) => ({ value: "", charset: "" }));
-          })
-          .catch((err) => {
-            Toast.error(err.data?.message);
-          });
+      if (params?.services[0] == "mysql" || params?.services[0] == "mariadb") {
+        if (
+          selectedOption &&
+          selectedCollect.value &&
+          selectedCollect.charset &&
+          databaseName
+        ) {
+          let body = {
+            username: selectedOption,
+            database: databaseName,
+            collation: selectedCollect.value,
+            charset: selectedCollect.charset,
+          };
+          await API.addDatabaseToUserService(service.service, body)
+            .then((res) => {
+              Toast.success(res.data?.message);
+              servicesUser.refetch();
+              setdatabaseName("");
+              setSelectedCollect((a) => ({ value: "", charset: "" }));
+            })
+            .catch((err) => {
+              Toast.error(err.data?.message);
+            });
+        } else {
+          Toast.error("Please fill all the fields");
+        }
       } else {
-        Toast.error("Please fill all the fields");
+        if (
+          selectedOption &&
+          databaseName
+        ) {
+          let body = {
+            username: selectedOption,
+            database: databaseName,
+          };
+          await API.addDatabaseToUserService(service.service, body)
+            .then((res) => {
+              Toast.success(res.data?.message);
+              servicesUser.refetch();
+              setdatabaseName("");
+              setSelectedCollect((a) => ({ value: "", charset: "" }));
+            })
+            .catch((err) => {
+              Toast.error(err.data?.message);
+            });
+        } else {
+          Toast.error("Please fill all the fields");
+        }
       }
     };
     const dropDatabase = async (body) => {
