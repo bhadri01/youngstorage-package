@@ -150,7 +150,12 @@ def drop_database_from_user(database: DataBaseTypes, username: str, data: Create
         database_services = DatabaseServices(user)
         if database_services.check_user_exist(username, database):
             if database_services.check_database_exist(f"{data.username}_{data.database}", database):
-                out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                if(database == "mongodb"):
+                    out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                                      f"./root/{database}_drop_db.sh {data.username}_{data.database} {data.username}"], capture_output=True)
+                    print(str(out))
+                else:
+                    out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
                                       f"./root/{database}_drop_db.sh {data.username}_{data.database}"], capture_output=True)
                 print(str(out))
                 status_code_match = re.search(r'status_code=(\d+)', str(out))
