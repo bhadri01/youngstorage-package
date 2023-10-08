@@ -82,9 +82,14 @@ def drop_user_from_database(database: DataBaseTypes, username: str, user: dict =
         for user in users["dbusers"]:
             if user["username"] == username:
                 for db in user["dbNames"]:
-                    out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                    if database == "mongodb":
+                        out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
+                                          f"./root/{database}_drop_db.sh {db['database']} {username}"], capture_output=True)
+                        print(str(out))
+                    else:
+                        out = subprocess.run(["docker", "exec", f"{database}.youngstorage.in", "bash", "-c",
                                           f"./root/{database}_drop_db.sh {db['database']}"], capture_output=True)
-                    print(str(out))
+                        print(str(out))
                     status_code_match = re.search(
                         r'status_code=(\d+)', str(out))
                     out_code = int(status_code_match.group(1))
