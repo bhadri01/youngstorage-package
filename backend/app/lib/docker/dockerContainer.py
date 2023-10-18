@@ -35,7 +35,7 @@ def GetComposeFile(username, dockerip, trafikLabels):
                     },
                     'hostname': 'youngstorage',
                     'cpus': '1',
-                    'mem_limit': '1g',
+                    'mem_limit': '2g',
                     'restart': 'always',
                     'cap_add': ['NET_ADMIN'],
                     'volumes': [f'{username}:/home/{username}'],
