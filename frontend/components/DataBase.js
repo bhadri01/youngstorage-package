@@ -10,7 +10,6 @@ import { GetCreatedTime } from "@/app/[username]/networks/page";
 import { Typography } from "@mui/material";
 
 export default function page({ params, servicesUser, service }) {
-  console.log("service user:", params);
   let dbusers = servicesUser.data?.data?.data;
   if (dbusers?.dbusers?.length > 0) {
     let options = dbusers?.dbusers?.map((a) => ({
@@ -24,7 +23,6 @@ export default function page({ params, servicesUser, service }) {
     });
     const [databaseName, setdatabaseName] = useState();
     const CreateDB = async () => {
-      console.log(selectedCollect);
       if (params?.services[0] == "mysql" || params?.services[0] == "mariadb") {
         if (
           selectedOption &&

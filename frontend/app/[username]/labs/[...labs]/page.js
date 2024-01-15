@@ -136,6 +136,7 @@ export default function Ubuntu({ params }) {
   const labsdata = APIQuery("labsdata", () => API.deploy(), 5000);
   const [wgpeerStatus, setwgpeerStatus] = useState(false);
   const [dockerStats, setDockerStats] = useState(null);
+  const [LoadingStatus, setLoadingStatus] = useState(true);
   useEffect(() => {
     if (
       labsdata.data?.data?.data?.length > 0 &&
@@ -146,12 +147,15 @@ export default function Ubuntu({ params }) {
         .then((response) => {
           setwgpeerStatus(response.data?.status);
           setDockerStats(response.data?.data);
+          setLoadingStatus(false);
         })
         .catch((error) => {
           // Handle any errors if needed
           setwgpeerStatus(error.data?.status);
           console.error("API.wgpeer() error:", error);
         });
+    } else {
+      setLoadingStatus(true);
     }
   }, [labsdata.data]);
 
@@ -195,7 +199,7 @@ export default function Ubuntu({ params }) {
     }
   };
 
-  if (labsdata.isLoading) {
+  if (labsdata.isLoading || LoadingStatus) {
     return (
       <PageCenter>
         <PageLoading />
@@ -686,16 +690,16 @@ const DockerStats = ({ dockerStats }) => {
             <div className="warp-graph">
               {/* cpu usage */}
               <div className="container-progress">
-                <div class="progress-container">
+                <div className="progress-container">
                   <svg viewBox="5 5 90 90">
                     <circle
-                      class="progress-background"
+                      className="progress-background"
                       cx="50"
                       cy="50"
                       r="40"
                     />
                     <circle
-                      class="progress-value"
+                      className="progress-value"
                       cx="50"
                       cy="50"
                       r="40"
@@ -715,21 +719,21 @@ const DockerStats = ({ dockerStats }) => {
                     />
                   </svg>
                 </div>
-                <div class="inner">{dockerStats?.cpu}</div>
+                <div className="inner">{dockerStats?.cpu}</div>
                 <h5>CPU</h5>
               </div>
               {/* memory usage */}
               <div className="container-progress">
-                <div class="progress-container">
+                <div className="progress-container">
                   <svg viewBox="5 5 90 90">
                     <circle
-                      class="progress-background"
+                      className="progress-background"
                       cx="50"
                       cy="50"
                       r="40"
                     />
                     <circle
-                      class="progress-value"
+                      className="progress-value"
                       cx="50"
                       cy="50"
                       r="40"
@@ -750,7 +754,7 @@ const DockerStats = ({ dockerStats }) => {
                     />
                   </svg>
                 </div>
-                <div class="inner">
+                <div className="inner">
                   {dockerStats?.Memory_Percentage}
                   <span>{dockerStats?.Memory_Usage}</span>
                 </div>

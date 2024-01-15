@@ -17,7 +17,6 @@ import StorageIcon from "@mui/icons-material/Storage";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 
 export default function page({ params }) {
-  console.log("params:", params);
   const queryClient = useQueryClient();
   const service = queryClient.getQueryData({ queryKey: ["services"] }).data
     ?.data;

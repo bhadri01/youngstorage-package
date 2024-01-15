@@ -1,7 +1,6 @@
 import { Typography } from "@mui/material";
 
 export default function Breadcrumb({ children }) {
-  console.log('children', children);
   return (
     <div className="breadcrumb">
       <div className="crumb-box">

@@ -19,9 +19,9 @@ services:
     container_name: rabbitmq
     restart: always
     ports:
-      - "5672:5672" # AMQP
-      - "15672:15672" # Management UI
-      - "1883:1883" # MQTT
+      # - "5672:5672" # AMQP
+      # - "15672:15672" # Management UI
+      # - "1883:1883" # MQTT
       - "15674:15674" # MQTT over WebSocket in ws
       - "15676:15676" # MQTT over WebSocket in wss
     command: ["sh", "-c", "rabbitmq-plugins enable rabbitmq_mqtt rabbitmq_web_mqtt rabbitmq_web_mqtt_examples && rabbitmq-server"]
@@ -41,9 +41,9 @@ services:
 
     volumes:
       - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
-      - /etc/letsencrypt/live/certs/chain.pem:/etc/certs/chain.pem
-      - /etc/letsencrypt/live/certs/cert.pem:/etc/certs/cert.pem
-      - /etc/letsencrypt/live/certs/privkey.pem:/etc/certs/privkey.pem
+      - /etc/letsencrypt/live/youngstorage.in/chain.pem:/etc/certs/chain.pem
+      - /etc/letsencrypt/live/youngstorage.in/cert.pem:/etc/certs/cert.pem
+      - /etc/letsencrypt/live/youngstorage.in/privkey.pem:/etc/certs/privkey.pem
       - rabbitmq_data:/var/lib/rabbitmq
     networks:
       youngstorage_heart:

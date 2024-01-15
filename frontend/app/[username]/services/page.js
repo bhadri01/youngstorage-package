@@ -58,7 +58,6 @@ function Services({ params }) {
         <div className="main-container">
           {service?.map((serv, i) => (
             <Card className='card-size' key={i}>
-              {console.log('serv', serv)}
               <CardHeader
                 avatar={
                   <Avatar alt="Cindy Baker" src={`/${serv.imageurl}`} />

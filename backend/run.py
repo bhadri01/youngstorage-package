@@ -36,7 +36,7 @@ app = FastAPI(
               # production
               docs_url=None,
               # development
-            #   docs_url="/docs",
+              # docs_url="/docs",
               redoc_url=None,
               title="youngstorage API service",
               summary="This is the cloud servide that we can able to code and host your activity",

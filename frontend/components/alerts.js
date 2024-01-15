@@ -4,7 +4,6 @@ import { Box, Card, Paper, Typography } from '@mui/material';
 import { memo } from 'react';
 const Alerts = (props) => {
   const { value } = props;
-  console.log('value', value);
   return (
     <div className="info-container">
       <InfoOutlinedIcon className='infoButton' />

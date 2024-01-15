@@ -8,7 +8,6 @@ export const IpPing = ({ ipaddress }) => {
     if (ipaddress) {
       (async () => {
         const data = await API.peerstatus(ipaddress);
-        console.log("ping data:", data);
       })();
     }
   }, []);

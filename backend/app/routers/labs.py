@@ -95,7 +95,7 @@ def upVScode(data=Depends(Authenticator(True, UserRole.user).signupJWT)):
 
         # update the vscode details like link and password
         lab.upgradeVScode(
-            f"https://{imageId[len(imageId)-32:]}.{os.getenv('DOMAIN_NAME')}", random_string)
+            f"https://{imageId[len(imageId)-32:]}.{os.getenv('DOMAIN_NAME_CLOUD')}", random_string)
 
         # command to up vscode in web
         command = f"docker exec -d {username} sh -c \"sed -i 's/^password:.*/password: {random_string}/' /home/{username}/.config/code-server/config.yaml \""

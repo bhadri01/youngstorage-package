@@ -32,7 +32,6 @@ function signup() {
     setLoading(true);
     if (data.password == data.confirmpassword) {
       const signupData = await API.signup(data).catch((err) => {
-        console.log(err?.data?.message);
         Toast.error(
           err?.data?.message
             ? err?.data?.message

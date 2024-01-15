@@ -12,6 +12,8 @@ from ..lib.wg.wireguard import SanitizeFolderName
 from enum import Enum
 from fastapi import Path, Query
 import subprocess
+import socket
+expected_ip = "103.78.167.103"
 
 router = APIRouter()
 
@@ -92,6 +94,32 @@ def addDomain(domain: Domain, data: dict = Depends(Authenticator(True, UserRole.
         DomainNetwork(
             str(data["_id"]), domain.domainName).addDomain()
         return JSONResponse(content={"message": f"{domain.domainName} added successfully", "status": True}, status_code=201)
+    except ValueError as e:
+        return JSONResponse(content={"message": str(e), "status": False}, status_code=403)
+    except Exception as e:
+        return JSONResponse(content={"message": str(e), "status": False}, status_code=500)
+
+# this function is to add new domain -- all the CURD domain stuff happens here
+
+
+def verify_domain(domain, eip):
+    try:
+        ip = socket.gethostbyname(domain)
+        return ip == eip
+    except Exception as e:
+        print(f"Error resolving DNS for {domain}: {e}")
+        return False
+
+
+@router.post("/addcustomdomain")
+def addDomain(domain: Domain, data: dict = Depends(Authenticator(True, UserRole.user).signupJWT)):
+    try:
+        if (verify_domain(domain.domainName, expected_ip)):
+            DomainNetwork(
+                str(data["_id"]), domain.domainName).addDomain()
+            return JSONResponse(content={"message": f"{domain.domainName} added successfully", "status": True}, status_code=201)
+        else:
+            return JSONResponse(content={"message": "Domain name not verified", "status": False}, status_code=400)
     except ValueError as e:
         return JSONResponse(content={"message": str(e), "status": False}, status_code=403)
     except Exception as e:

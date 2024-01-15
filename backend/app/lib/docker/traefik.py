@@ -3,7 +3,7 @@ import os
 
 def labelGenerator(imageid: str):
     return ["traefik.enable=true",
-            f"traefik.http.routers.{imageid}.rule=Host(`{imageid}.{os.getenv('DOMAIN_NAME')}`)",
+            f"traefik.http.routers.{imageid}.rule=Host(`{imageid}.{os.getenv('DOMAIN_NAME_CLOUD')}`)",
             f"traefik.http.routers.{imageid}.service={imageid}",
             f"traefik.http.routers.{imageid}.tls=true",
             f"traefik.http.routers.{imageid}.entrypoints=websecure",

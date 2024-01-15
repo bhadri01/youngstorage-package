@@ -170,7 +170,6 @@ export function Domains({ params }) {
                           className="inputBox"
                           onChange={(e) => setDomainname(e.target.value)}
                         /> */}
-                            {console.log('domainname', domainname, domainname.length === 0)}
                             <TextField
                                 onChange={(e) => setDomainname(e.target.value)}
                                 id="standard-basic"

@@ -111,6 +111,12 @@ export const API = {
       headers: { Authorization: `Bearer ${Token()}` },
       body,
     }),
+    addcustomdomain: (body) =>
+    PostMethod({
+      url: `${API_URL}/addcustomdomain`,
+      headers: { Authorization: `Bearer ${Token()}` },
+      body,
+    }),
   dropDomain: (body) =>
     DeleteMethod({
       url: `${API_URL}/dropdomain`,
@@ -211,7 +217,6 @@ const DeleteMethod = async (props) => {
   try {
     const headers = props.headers ?? {};
     const body = props.body ?? {};
-    console.log("body:", body);
     const response = await axios
       .delete(props.url, { headers, data: body })
       .then((res) => {

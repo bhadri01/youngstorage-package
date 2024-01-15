@@ -85,20 +85,15 @@ def reDeploy(_id: str, username: str, deviceName: str, dockerip: str, background
 def dockerGenerator(username: str, deviceName: str):
     deviceName = SanitizeFolderName(deviceName)
     return f'''FROM ubuntu:latest
-RUN apt update
+RUN apt-get update
 ARG S6_OVERLAY_VERSION=3.1.0.1
-RUN apt install -y openssh-server nano htop lsof python3-pip
-RUN apt install -y sudo figlet lolcat bash-completion
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt install -y ufw net-tools netcat curl apache2
-RUN apt install -y inetutils-ping php libapache2-mod-php
-RUN apt install -y iproute2 default-jre bc
-RUN apt install -y build-essential git
-RUN apt install -y wireguard 
-RUN apt install -y zsh
-RUN apt -y install xz-utils
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x |sudo -E bash - && \
-    apt install -y nodejs
+RUN apt-get install -y \
+    openssh-server nano htop lsof python3-pip sudo figlet lolcat bash-completion \
+    ufw net-tools netcat curl apache2 inetutils-ping php libapache2-mod-php \
+    iproute2 default-jre bc build-essential git wireguard zsh make \
+    libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm \
+    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 RUN service ssh start
 RUN echo 'root:admin' | chpasswd
 COPY wireguard /etc/init.d/
@@ -120,6 +115,7 @@ RUN chmod +x setup.sh
 RUN adduser {username} --gecos "" --disabled-password --force-badname 
 RUN echo "{username}:{username}@321" | sudo chpasswd
 RUN usermod -aG sudo {username}
+RUN rm /home/{username}/.bashrc
 COPY .bashrc /home/{username}/
 COPY /settings.js /home/{username}/.node-red/
 CMD ["./setup.sh"]
@@ -201,9 +197,22 @@ touch /home/{username}/.ssh/authorized_keys
 chmod 600 /home/{username}/.ssh/authorized_keys
 
 
-#username variable
-su {username} <<EOF 
-cd /home/{username} && ./init.sh
+su - {username} <<EOF 
+# Install NVM (Node Version Manager)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+# Install LTS version of Node.js using NVM
+nvm install --lts
+
+# Install Pyenv
+curl https://pyenv.run | bash
+
+# Run user-specific initialization script
+if [ -f /home/{username}/init.sh ]; then
+    chmod +x /home/{username}/init.sh
+    /home/{username}/init.sh
+fi
+
 tail -f /dev/null
 EOF
 '''

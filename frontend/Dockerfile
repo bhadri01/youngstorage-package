@@ -11,10 +11,10 @@ COPY . /frontend/
 RUN npm install
 
 # Build the Next.js application
-# RUN npm run build
+RUN npm run build
 
 # Expose port 3000 to the world outside this container
 EXPOSE 3000
 
 # Run the Next.js application when the container launches
-CMD ["npm", "run","dev"]
+CMD ["npm", "start"]
